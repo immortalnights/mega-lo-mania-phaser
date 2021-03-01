@@ -15,61 +15,145 @@ const AttackComponent = {
 
 }
 
+const UnitStates = {
+  SPAWNING: 'unit:spawning',
+  WANDERING: 'unit:wandering',
+  ATTACKING: 'unit:attacking',
+  DYING: 'unit:dying'
+}
+
+
+const PROJECTILE_MULTIPLIER = new Phaser.Math.Vector2({
+  x: 6,
+  y: 6
+})
+
 export default class Unit extends Phaser.Physics.Arcade.Sprite
 {
   constructor(scene, x, y, frame)
   {
-   super(scene, x, y, 'mlm_armies', frame)
+    super(scene, x, y, 'mlm_icons', 'spawn_001')
 
-   this.unitType = 'stone'
-   this.direction = 'none'
+    this.unitType = 'stone'
+    this.direction = null
+
+    this.state = UnitStates.SPAWNING
+
+    // Do something different after 0.5s to 2s
+    this.cooldown = Phaser.Math.RND.between(500, 2000)
+    this.lastAttack = 0
+
+    this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, () => {
+      this.play('spawn', true)
+    })
+
+    this.once('animationcomplete', () => {
+      this.state = UnitStates.WANDERING
+      this.changeDirection()
+
+      const frame = `${this.unitType}_${this.direction}_000`
+      this.setTexture('mlm_units', frame)
+    })
+  }
+
+  getCanAttack(time)
+  {
+    const hasEnemiesInSector = true
+    let canAttack
+
+    if (hasEnemiesInSector === false)
+    {
+      // No enemies, no attacking
+      // console.log("No enemies")
+    }
+    // Don't attack more then every two seconds
+    else if (this.lastAttack + 2000 > time)
+    {
+      // Too soon
+      // console.log("Too soon")
+    }
+    // 25% chance of an attack
+    else if (Phaser.Math.RND.realInRange(0, 1) > 0.25)
+    {
+      // console.log("Random failure")
+    }
+    else
+    {
+      canAttack = true
+    }
+
+    return canAttack
   }
 
   // TEST allow unit type to be changed at run time
   setType(type)
   {
     this.unitType = type
-    this.setDirection(this.direction)
-    console.log(this.unitType, type, this.anims.currentAnim.key)
+    this.changeDirection()
+    // console.log(this.unitType, type, this.anims.currentAnim.key)
   }
 
-  // FIXME only valid for wondering units
-  setDirection(direction)
+  preUpdate(time, delta)
   {
-    this.direction = direction
-    switch (direction)
+    super.preUpdate(time, delta)
+
+    switch (this.state)
     {
-      case 'up':
+      case UnitStates.WANDERING:
       {
-        this.body.setVelocity(0, -UNIT_WALK_VELOCITY)
-        this.play(`${this.unitType}_walk_up`, true)
-        break
-      }
-      case 'down':
-      {
-        this.body.setVelocity(0, UNIT_WALK_VELOCITY)
-        this.play(`${this.unitType}_walk_down`, true)
-        break
-      }
-      case 'left':
-      {
-        this.body.setVelocity(-UNIT_WALK_VELOCITY, 0)
-        this.play(`${this.unitType}_walk_left`, true)
-        break
-      }
-      case 'right':
-      {
-        this.body.setVelocity(UNIT_WALK_VELOCITY, 0)
-        this.play(`${this.unitType}_walk_right`, true)
-        break
-      }
-      case 'none':
-      {
-        this.body.setVelocity(0, 0)
-        this.stop()
+        this.cooldown = Phaser.Math.MinSub(this.cooldown, delta, 0)
+
+        if (this.cooldown <= 0)
+        {
+          // can attack if there are enemies in the same sector
+          const attacking = this.getCanAttack(time)
+
+          if (attacking)
+          {
+            const velocity = this.body.velocity.clone().multiply(PROJECTILE_MULTIPLIER)
+            // console.log("Attack velocity", velocity)
+
+            this.stop()
+            this.body.stop()
+            this.setFrame(`${this.unitType}_${this.direction}_attacked_000`)
+            this.cooldown = Phaser.Math.RND.between(500, 750)
+            this.lastAttack = time
+
+            this.scene.events.emit('projectile:spawn', this, this.body.position, velocity, this.unitType)
+          }
+          else
+          {
+            this.changeDirection()
+            this.cooldown = Phaser.Math.RND.between(500, 2000)
+          }
+        }
+
         break
       }
     }
+  }
+
+  changeDirection()
+  {
+    let x = Phaser.Math.RND.between(-UNIT_WALK_VELOCITY, UNIT_WALK_VELOCITY)
+    let y = Phaser.Math.RND.between(-UNIT_WALK_VELOCITY, UNIT_WALK_VELOCITY)
+
+    if (Math.abs(x) > Math.abs(y))
+    {
+      // Left or Right
+      x = x < 0 ? x - 20 : x + 20
+      this.direction = x < 0 ? 'left' : 'right'
+    }
+    else
+    {
+      // Up or Down
+      y = y < 0 ? y - 20 : y + 20
+      this.direction = y < 0 ? 'up' : 'down'
+    }
+
+    this.body.setVelocity(x, y)
+
+    this.play(`${this.unitType}_walk_${this.direction}`, true)
   }
 
   applyComponent(name, options)

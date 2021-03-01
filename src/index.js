@@ -2,7 +2,6 @@ import Phaser from 'phaser'
 import TransparentColorsPipeline from './transparent-colors-pipeline.ts'
 import Unit from './unit.js'
 import animationFactory from './unitannimations.js'
-import UnitSpawn from './unitspawn'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
 // const renderer = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
@@ -41,14 +40,15 @@ class MyGame extends Phaser.Scene
 
   preload()
   {
-    this.load.atlas('mlm_armies', './mlm_armies.png', './mlm_armies.json')
+    this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
     this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
   }
 
   create()
   {
-    animationFactory.call(this, ['stone', 'sling', 'spear'])
+    const { width, height } = this.sys.game.canvas
 
+    animationFactory.call(this, ['stone', 'sling', 'spear'])
 
     this.anims.create({
       key: `spawn`,
@@ -59,60 +59,66 @@ class MyGame extends Phaser.Scene
       }),
       frameRate: 12,
       yoyo: true,
-      repeat: 0,
-      hideOnComplete: true
+      repeat: 0
     });
 
-    const spawner = new UnitSpawn(this, 100, 100)
-    spawner.setScale(2)
-    spawner.on('animationcomplete', () => {
-      const u = new Unit(this, 100, 100, 'stone_down_000')
+    this.anims.create({
+      key: `stone_projectile`,
+      frames: this.anims.generateFrameNames('mlm_units', {
+        prefix: `stone_projectile_`,
+        end: 3,
+        zeroPad: 3,
+      }),
+      frameRate: 12,
+      yoyo: false,
+      repeat: 0
+    });
+
+    const units = this.physics.add.group()
+    this.units = units
+    const projectiles = this.physics.add.group()
+
+    // Use a zone to spawn in a specific location
+    for (let i = 0; i < 100; i++)
+    {
+      const u = new Unit(this, 0, 0, 'stone')
+      u.setRandomPosition()
       u.setScale(2)
-      this.add.existing(u)
-      this.physics.add.existing(u)
-      this.u = u
+      units.add(u, true)
+    }
+
+    this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
+      const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'stone_projectile_000')
+      p.setScale(2)
+      p.play('stone_projectile')
+      projectiles.add(p, true)
+      p.body.setVelocity(velocity.x, velocity.y)
     })
-    this.add.existing(spawner)
 
     this.bindings = this.input.keyboard.addKeys(DefaultKeys)
   }
 
   update()
   {
+    let newType = ''
     if (this.bindings.one.isDown)
     {
-      this.u.setType('stone')
+      newType = 'stone'
     }
     else if (this.bindings.two.isDown)
     {
-      this.u.setType('sling')
+      newType = 'sling'
     }
     else if (this.bindings.three.isDown)
     {
-      this.u.setType('spear')
+      newType = 'spear'
     }
 
-    if (this.bindings.left.isDown)
+    if (newType)
     {
-      this.u.setDirection('left')
-    }
-    else if (this.bindings.right.isDown)
-    {
-      this.u.setDirection('right')
-    }
-
-    if (this.bindings.up.isDown)
-    {
-      this.u.setDirection('up')
-    }
-    else if (this.bindings.down.isDown)
-    {
-      this.u.setDirection('down')
-    }
-
-    if (this.bindings.space.isDown)
-    {
-      this.u.setDirection('none')
+      this.units.getChildren().forEach(u => {
+        u.setType(newType)
+      })
     }
   }
 }
@@ -123,6 +129,7 @@ const config = {
   height: 600,
   scene: MyGame,
   seed: [ 'T' ],
+  backgroundColor: 0x005500,
   loader: {
     baseUrl: '.',
     path: process.env.NODE_ENV === 'production' ? './assets' : './src/assets'
