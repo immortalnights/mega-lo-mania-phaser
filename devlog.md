@@ -20,3 +20,9 @@
 * Added a GameObject for the spawner (animation) and, upon completing the animation spawn an actual unit
 
 End of day 1.
+
+### Day 2 : 28-02-21
+* Improved unit movement to better represent end-goal movement
+* Fixed movement frames to remove Attack frame
+* Implemented basic attack into Unit cycle
+* Instead of spawner class, just change the sprite texture and animation
