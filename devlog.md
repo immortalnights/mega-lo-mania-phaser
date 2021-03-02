@@ -26,3 +26,10 @@ End of day 1.
 * Fixed movement frames to remove Attack frame
 * Implemented basic attack into Unit cycle
 * Instead of spawner class, just change the sprite texture and animation
+
+
+### Day 3 : 01-03-21
+* Add Building and define all building images
+* Handle defender placement on buildings
+* Implement "click" marker to help position the defenders, still manual process, but better
+* add const Object to define all units and teams, use these in the animation factory to (later) set up all animations

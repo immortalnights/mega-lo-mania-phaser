@@ -27,6 +27,22 @@
     {
       "filename": "spawn_006",
       "frame": { "x": 305, "y": 184, "w": 15, "h": 19 }
+    },
+    {
+      "filename": "red_flag_00",
+      "frame": { "x": 160, "y": 157, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "red_flag_01",
+      "frame": { "x": 224, "y": 157, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "red_flag_02",
+      "frame": { "x": 160, "y": 172, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "red_flag_03",
+      "frame": { "x": 240, "y": 189, "w": 10, "h": 16 }
     }
   ],
   "meta": {

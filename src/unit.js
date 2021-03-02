@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { Teams, UnitTypes } from './defines.js'
 
 const UNIT_WALK_VELOCITY = 20
 const UNIT_FLY_VELOCITY = 220
@@ -30,12 +31,13 @@ const PROJECTILE_MULTIPLIER = new Phaser.Math.Vector2({
 
 export default class Unit extends Phaser.Physics.Arcade.Sprite
 {
-  constructor(scene, x, y, frame)
+  constructor(scene, x, y, options)
   {
     super(scene, x, y, 'mlm_icons', 'spawn_001')
 
-    this.unitType = 'stone'
-    this.direction = null
+    this.unitType = options.type
+    this.team = options.team
+    this.direction = 'left'
 
     this.state = UnitStates.SPAWNING
 
@@ -48,11 +50,16 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
     })
 
     this.once('animationcomplete', () => {
-      this.state = UnitStates.WANDERING
-      this.changeDirection()
-
-      const frame = `${this.unitType}_${this.direction}_000`
-      this.setTexture('mlm_units', frame)
+      if (!options.defender)
+      {
+        this.state = UnitStates.WANDERING
+        this.changeDirection()
+      }
+      else
+      {
+        const frame = `${this.team}_${this.unitType}_${this.direction}_000`
+        this.setTexture('mlm_units', frame)
+      }
     })
   }
 
@@ -89,7 +96,7 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
   setType(type)
   {
     this.unitType = type
-    this.changeDirection()
+    this.setFrame(`${this.team}_${this.unitType}_${this.direction}_000`)
     // console.log(this.unitType, type, this.anims.currentAnim.key)
   }
 
@@ -115,7 +122,7 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
 
             this.stop()
             this.body.stop()
-            this.setFrame(`${this.unitType}_${this.direction}_attacked_000`)
+            this.setFrame(`${this.team}_${this.unitType}_${this.direction}_attacked_000`)
             this.cooldown = Phaser.Math.RND.between(500, 750)
             this.lastAttack = time
 
@@ -153,7 +160,7 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
 
     this.body.setVelocity(x, y)
 
-    this.play(`${this.unitType}_walk_${this.direction}`, true)
+    this.play(`${this.team}_${this.unitType}_walk_${this.direction}`, true)
   }
 
   applyComponent(name, options)

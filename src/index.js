@@ -1,7 +1,9 @@
 import Phaser from 'phaser'
 import TransparentColorsPipeline from './transparent-colors-pipeline.ts'
 import Unit from './unit.js'
-import animationFactory from './unitannimations.js'
+import Building from './building.js'
+import { DefaultKeys, BuildingTypes, Teams, UnitTypes } from './defines.js'
+import animationFactory from './animationfactory.js'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
 // const renderer = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
@@ -11,16 +13,6 @@ import animationFactory from './unitannimations.js'
 // image.setPipeline('transparent-colors');
 // this.add.existing(image);
 
-const DefaultKeys = {
-  up: 'up',
-  down: 'down',
-  left: 'left',
-  right: 'right',
-  space: 'space',
-  one: 'one',
-  two: 'two',
-  three: 'three',
-}
 
 class MyGame extends Phaser.Scene
 {
@@ -42,25 +34,16 @@ class MyGame extends Phaser.Scene
   {
     this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
     this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
+    this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')
   }
 
   create()
   {
     const { width, height } = this.sys.game.canvas
 
-    animationFactory.call(this, ['stone', 'sling', 'spear'])
-
-    this.anims.create({
-      key: `spawn`,
-      frames: this.anims.generateFrameNames('mlm_icons', {
-        prefix: `spawn_`,
-        end: 6,
-        zeroPad: 3,
-      }),
-      frameRate: 12,
-      yoyo: true,
-      repeat: 0
-    });
+    animationFactory.createUnitAnimations(this)
+    animationFactory.createSpawnAnimation(this)
+    animationFactory.createFlagAnimations(this)
 
     this.anims.create({
       key: `stone_projectile`,
@@ -79,20 +62,43 @@ class MyGame extends Phaser.Scene
     const projectiles = this.physics.add.group()
 
     // Use a zone to spawn in a specific location
-    for (let i = 0; i < 100; i++)
+    for (let i = 0; i < 1; i++)
     {
-      const u = new Unit(this, 0, 0, 'stone')
+      const u = new Unit(this, 0, 0, {
+        team: Teams.RED,
+        type: UnitTypes.STONE,
+      })
       u.setRandomPosition()
-      u.setScale(2)
       units.add(u, true)
     }
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
       const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'stone_projectile_000')
-      p.setScale(2)
       p.play('stone_projectile')
       projectiles.add(p, true)
       p.body.setVelocity(velocity.x, velocity.y)
+    })
+
+    let tech = 6
+    const building = new Building(this, 100, 100, {
+      type: BuildingTypes.CASTLE,
+      team: Teams.RED,
+      techLevel: tech
+    })
+    this.add.existing(building)
+    this.physics.add.existing(building)
+
+    this.input.keyboard.on('keydown', event => {
+      if (event.key === '+')
+      {
+        building.advance(++tech)
+      }
+      else if (event.key === '-')
+      {
+        building.advance(--tech)
+      }
+
+      console.log(tech)
     })
 
     this.bindings = this.input.keyboard.addKeys(DefaultKeys)
@@ -125,8 +131,9 @@ class MyGame extends Phaser.Scene
 
 const config = {
   type: Phaser.WEBGL,
-  width: 800,
-  height: 600,
+  width: 400,
+  height: 300,
+  zoom: 2,
   scene: MyGame,
   seed: [ 'T' ],
   backgroundColor: 0x005500,

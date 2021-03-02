@@ -1,5 +1,185 @@
 {
   "frames": [
+    {
+      "filename": "castle_1",
+      "frame": { "x": 0, "y": 0, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 10, "y": 7 },
+        { "x": 37, "y": 7 },
+        { "x": 10, "y": 32 },
+        { "x": 37, "y": 32 }
+      ]
+    },
+    {
+      "filename": "castle_2",
+      "frame": { "x": 0, "y": 60, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 8, "y": 6 },
+        { "x": 35, "y": 6 },
+        { "x": 8, "y": 31 },
+        { "x": 35, "y": 31 }
+      ]
+    },
+    {
+      "filename": "castle_3",
+      "frame": { "x": 0, "y": 120, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 10, "y": 7 },
+        { "x": 37, "y": 7 },
+        { "x": 10, "y": 32 },
+        { "x": 37, "y": 32 }
+      ]
+    },
+    {
+      "filename": "castle_4",
+      "frame": { "x": 0, "y": 180, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 10, "y": 7 },
+        { "x": 37, "y": 7 },
+        { "x": 10, "y": 32 },
+        { "x": 37, "y": 32 }
+      ]
+    },
+    {
+      "filename": "castle_5",
+      "frame": { "x": 0, "y": 240, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 10, "y": 7 },
+        { "x": 37, "y": 7 },
+        { "x": 10, "y": 32 },
+        { "x": 37, "y": 32 }
+      ]
+    },
+    {
+      "filename": "castle_6",
+      "frame": { "x": 0, "y": 300, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 10, "y": 7 },
+        { "x": 37, "y": 7 },
+        { "x": 10, "y": 32 },
+        { "x": 37, "y": 32 }
+      ]
+    },
+    {
+      "filename": "castle_7",
+      "frame": { "x": 0, "y": 360, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 10, "y": 7 },
+        { "x": 37, "y": 7 },
+        { "x": 10, "y": 32 },
+        { "x": 37, "y": 32 }
+      ]
+    },
+    {
+      "filename": "castle_8",
+      "frame": { "x": 0, "y": 420, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 10, "y": 7 },
+        { "x": 37, "y": 7 },
+        { "x": 10, "y": 32 },
+        { "x": 37, "y": 32 }
+      ]
+    },
+    {
+      "filename": "castle_9",
+      "frame": { "x": 0, "y": 480, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": [
+        { "x": 10, "y": 7 },
+        { "x": 37, "y": 7 },
+        { "x": 10, "y": 32 },
+        { "x": 37, "y": 32 }
+      ]
+    },
+    {
+      "filename": "castle_10",
+      "frame": { "x": 0, "y": 540, "w": 59, "h": 59 },
+      "flag": { "x": 24, "y": 16 },
+      "defenders": []
+    },
+
+    {
+      "filename": "mine_4",
+      "frame": { "x": 60, "y": 180, "w": 59, "h": 59 }
+    },
+    {
+      "filename": "mine_5",
+      "frame": { "x": 60, "y": 240, "w": 59, "h": 59 }
+    },
+    {
+      "filename": "mine_6",
+      "frame": { "x": 60, "y": 300, "w": 59, "h": 59 }
+    },
+    {
+      "filename": "mine_7",
+      "frame": { "x": 60, "y": 360, "w": 59, "h": 59 }
+    },
+    {
+      "filename": "mine_8",
+      "frame": { "x": 60, "y": 420, "w": 59, "h": 59 }
+    },
+    {
+      "filename": "mine_9",
+      "frame": { "x": 60, "y": 480, "w": 59, "h": 59 }
+    },
+
+    {
+      "filename": "factory_5",
+      "frame": { "x": 192, "y": 240, "w": 62, "h": 59 }
+    },
+    {
+      "filename": "factory_6",
+      "frame": { "x": 192, "y": 300, "w": 62, "h": 59 }
+    },
+    {
+      "filename": "factory_7",
+      "frame": { "x": 192, "y": 360, "w": 62, "h": 59 }
+    },
+    {
+      "filename": "factory_8",
+      "frame": { "x": 192, "y": 420, "w": 62, "h": 59 }
+    },
+    {
+      "filename": "factory_9",
+      "frame": { "x": 192, "y": 480, "w": 62, "h": 59 }
+    },
+
+    {
+      "filename": "laboratory_6",
+      "frame": { "x": 128, "y": 300, "w": 52, "h": 50 },
+      "defenders": [
+        { "x": 17, "y": 10 }
+      ]
+    },
+    {
+      "filename": "laboratory_7",
+      "frame": { "x": 128, "y": 360, "w": 52, "h": 50 },
+      "defenders": [
+        { "x": 20, "y": 15 }
+      ]
+    },
+    {
+      "filename": "laboratory_8",
+      "frame": { "x": 128, "y": 420, "w": 52, "h": 50 },
+      "defenders": [
+        { "x": 17, "y": 5 }
+      ]
+    },
+    {
+      "filename": "laboratory_9",
+      "frame": { "x": 128, "y": 480, "w": 52, "h": 50 },
+      "defenders": [
+        { "x": 20, "y": 5 }
+      ]
+    }
   ],
   "meta": {
     "app": "",

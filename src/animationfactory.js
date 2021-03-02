@@ -1,6 +1,8 @@
+import { Teams, UnitTypes } from './defines.js'
+
 const WALK_ANIMATION_FRAMERATE = 12
 
-const createAnnimations = (manager, prefix) => {
+const createUnitAnimationSet = (manager, prefix) => {
   const frames = 2
   const padding = 3
 
@@ -51,8 +53,46 @@ const createAnnimations = (manager, prefix) => {
 }
 
 
-export default function(names) {
-  names.forEach(name => {
-    createAnnimations(this.anims, name)
+export const createUnitAnimations = scene => {
+  Object.values(Teams).forEach(team => {
+    Object.values(UnitTypes).forEach(unit => {
+      createUnitAnimationSet(scene.anims, `${team}_${unit}`)
+    })
   })
+}
+
+export const createSpawnAnimation = scene => {
+  scene.anims.create({
+    key: `spawn`,
+    frames: scene.anims.generateFrameNames('mlm_icons', {
+      prefix: `spawn_`,
+      end: 6,
+      zeroPad: 3,
+    }),
+    frameRate: 12,
+    yoyo: true,
+    repeat: 0
+  });
+}
+
+export const createFlagAnimations = scene => {
+  Object.values(Teams).forEach(team => {
+    scene.anims.create({
+      key: `${team}_flag`,
+      frames: scene.anims.generateFrameNames('mlm_icons', {
+        prefix: `${team}_flag_`,
+        end: 3,
+        zeroPad: 2,
+      }),
+      frameRate: 12,
+      yoyo: true,
+      repeat: -1
+    });
+  })
+}
+
+export default {
+  createUnitAnimations,
+  createSpawnAnimation,
+  createFlagAnimations,
 }
