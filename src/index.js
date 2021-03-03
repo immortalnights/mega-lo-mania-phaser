@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import TransparentColorsPipeline from './transparent-colors-pipeline.ts'
 import Unit from './unit.js'
 import Building from './building.js'
+import MiniMap from './minimap.js'
 import { DefaultKeys, BuildingTypes, Teams, UnitTypes } from './defines.js'
 import animationFactory from './animationfactory.js'
 
@@ -35,6 +36,7 @@ class MyGame extends Phaser.Scene
     this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
     this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
     this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')
+    this.load.atlas('mlm_smallmap', './mlm_smallmap.png', './mlm_smallmap.json')
   }
 
   create()
@@ -56,6 +58,9 @@ class MyGame extends Phaser.Scene
       yoyo: false,
       repeat: 0
     });
+
+    const map = new MiniMap(this, 300, 100, 'Cilla')
+    this.add.existing(map)
 
     const units = this.physics.add.group()
     this.units = units

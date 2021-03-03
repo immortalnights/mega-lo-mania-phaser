@@ -1,5 +1,255 @@
 {
   "frames": [
+    {
+      "filename": "desert_0111",
+      "frame": { "x": 0, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "desert_0011",
+      "frame": { "x": 32, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "desert_1111",
+      "frame": { "x": 64, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "desert_1100",
+      "frame": { "x": 96, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "desert_1101",
+      "frame": { "x": 128, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "desert_1001",
+      "frame": { "x": 160, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "desert_0010",
+      "frame": { "x": 192, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "desert_1000",
+      "frame": { "x": 224, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "grass_0100",
+      "frame": { "x": 256, "y": 0, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "grass_0101",
+      "frame": { "x": 288, "y": 0, "w": 22, "h": 22 }
+    },
+
+    {
+      "filename": "grass_0111",
+      "frame": { "x": 0, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "grass_0011",
+      "frame": { "x": 32, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "grass_1111",
+      "frame": { "x": 64, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "grass_1100",
+      "frame": { "x": 96, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "mud_0110",
+      "frame": { "x": 128, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "mud_0010",
+      "frame": { "x": 160, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "mud_1000",
+      "frame": { "x": 192, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "mud_0001",
+      "frame": { "x": 224, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "mud_0000",
+      "frame": { "x": 256, "y": 22, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_0110",
+      "frame": { "x": 288, "y": 22, "w": 22, "h": 22 }
+    },
+
+    {
+      "filename": "snow_0111",
+      "frame": { "x": 0, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_0011",
+      "frame": { "x": 32, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_1111",
+      "frame": { "x": 64, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_1100",
+      "frame": { "x": 96, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_1101",
+      "frame": { "x": 128, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_1001",
+      "frame": { "x": 160, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_0010",
+      "frame": { "x": 192, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_1000",
+      "frame": { "x": 224, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_0100",
+      "frame": { "x": 256, "y": 44, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "snow_0101",
+      "frame": { "x": 288, "y": 44, "w": 22, "h": 22 }
+    },
+
+    {
+      "filename": "snow_0001",
+      "frame": { "x": 0, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_0011",
+      "frame": { "x": 32, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_1111",
+      "frame": { "x": 64, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_1100",
+      "frame": { "x": 96, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_1101",
+      "frame": { "x": 128, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_1001",
+      "frame": { "x": 160, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_0010",
+      "frame": { "x": 192, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_1000",
+      "frame": { "x": 224, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_0100",
+      "frame": { "x": 256, "y": 66, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_0101",
+      "frame": { "x": 288, "y": 66, "w": 22, "h": 22 }
+    },
+
+    {
+      "filename": "volcanic_0001",
+      "frame": { "x": 0, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_0011",
+      "frame": { "x": 32, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "volcanic_1111",
+      "frame": { "x": 64, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "forsest_1100",
+      "frame": { "x": 96, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "forsest_1101",
+      "frame": { "x": 128, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "forsest_1001",
+      "frame": { "x": 160, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "forsest_0010",
+      "frame": { "x": 192, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "forsest_1000",
+      "frame": { "x": 224, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "forsest_0100",
+      "frame": { "x": 256, "y": 88, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "forsest_0101",
+      "frame": { "x": 288, "y": 88, "w": 22, "h": 22 }
+    },
+
+    {
+      "filename": "forest_0001",
+      "frame": { "x": 0, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "forest_0011",
+      "frame": { "x": 32, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "ash_1111",
+      "frame": { "x": 64, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "ash_1100",
+      "frame": { "x": 96, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "ash_1101",
+      "frame": { "x": 128, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "ash_1001",
+      "frame": { "x": 160, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "ash_0010",
+      "frame": { "x": 192, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "ash_1000",
+      "frame": { "x": 224, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "ash_0100",
+      "frame": { "x": 256, "y": 110, "w": 22, "h": 22 }
+    },
+    {
+      "filename": "ash_0101",
+      "frame": { "x": 288, "y": 110, "w": 22, "h": 22 }
+    },
+
+    {
+      "filename": "ash_0000",
+      "frame": { "x": 0, "y": 132, "w": 22, "h": 22 }
+    }
   ],
   "meta": {
     "app": "",

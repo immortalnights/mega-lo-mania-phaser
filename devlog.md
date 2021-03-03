@@ -33,3 +33,8 @@ End of day 1.
 * Handle defender placement on buildings
 * Implement "click" marker to help position the defenders, still manual process, but better
 * add const Object to define all units and teams, use these in the animation factory to (later) set up all animations
+
+### Day 4 : 02-03-21
+* Added minimap and rendered map
+* Defined the first three islands
+* Added atlas for minimap images
