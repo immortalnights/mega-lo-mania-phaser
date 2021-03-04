@@ -12,9 +12,9 @@ export const DefaultKeys = {
 
 export const Teams = {
   RED: 'red',
-  // GREEN: 'green',
-  // BLUE: 'blue',
-  // YELLOW: 'yellow',
+  GREEN: 'green',
+  BLUE: 'blue',
+  YELLOW: 'yellow',
 }
 
 export const UnitTypes = {
@@ -49,4 +49,17 @@ export const BuildingTypes = {
   MINE: 'mine',
   FACTORY: 'factory',
   LABORATORY: 'laboratory',
+}
+
+// Game Sector events
+export const GameEvents = {
+  SECTOR_SELECT: 'game:sector:select',
+  SECTOR_ALERT: 'game:sector:alert',
+  SECTOR_ADD_CASTLE: 'game:sector:add_castle',
+  SECTOR_REMOVE_CASTLE: 'game:sector:remove_castle',
+  SECTOR_ADD_ARMY: 'game:sector:add_army',
+  SECTOR_REMOVE_ARMY: 'game:sector:remove_army',
+  SECTOR_START_CLAIM: 'game:sector:start_claim',
+  SECTOR_STOP_CLAIM: 'game:sector:stop_claim',
+  SECTOR_NUKE: 'game:sector:nuke',
 }

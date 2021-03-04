@@ -54,7 +54,9 @@ const createUnitAnimationSet = (manager, prefix) => {
 
 
 export const createUnitAnimations = scene => {
-  Object.values(Teams).forEach(team => {
+  const supportedTeams = [ Teams.RED ]
+
+  supportedTeams.forEach(team => {
     Object.values(UnitTypes).forEach(unit => {
       createUnitAnimationSet(scene.anims, `${team}_${unit}`)
     })

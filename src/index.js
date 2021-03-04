@@ -59,7 +59,7 @@ class MyGame extends Phaser.Scene
       repeat: 0
     });
 
-    const map = new MiniMap(this, 300, 100, 'Cilla')
+    const map = new MiniMap(this, 300, 100, 'Quota')
     this.add.existing(map)
 
     const units = this.physics.add.group()
@@ -84,26 +84,84 @@ class MyGame extends Phaser.Scene
       p.body.setVelocity(velocity.x, velocity.y)
     })
 
-    let tech = 6
+    let epoch = 6
     const building = new Building(this, 100, 100, {
       type: BuildingTypes.CASTLE,
       team: Teams.RED,
-      techLevel: tech
+      epoch: epoch
     })
     this.add.existing(building)
     this.physics.add.existing(building)
 
+    let sector = 1;
+    const teams = [ Teams.RED, Teams.YELLOW, Teams.BLUE, Teams.GREEN ]
+    let team = 0
+
+    this.debugText = this.add.text(0, 0, `Sector ${sector}, Team ${teams[team]}`);
     this.input.keyboard.on('keydown', event => {
       if (event.key === '+')
       {
-        building.advance(++tech)
+        building.advance(++epoch)
+        console.log("Epoch", epoch)
       }
       else if (event.key === '-')
       {
-        building.advance(--tech)
+        building.advance(--epoch)
+        console.log("Epoch", epoch)
       }
 
-      console.log(tech)
+      if (event.key === 'PageUp')
+      {
+        sector++
+      }
+      else if (event.key === 'PageDown')
+      {
+        sector--
+      }
+
+      sector = Phaser.Math.Wrap(sector, 0, 16)
+
+      if (event.key === 'Home')
+      {
+        team++
+      }
+      else if (event.key === 'End')
+      {
+        team--
+      }
+
+      team = Phaser.Math.Wrap(team, 0, 4)
+
+      this.debugText.setText(`Sector ${sector}, Team ${teams[team]}`)
+
+      this.events.emit('game:sector:select', sector)
+
+      if (event.key === 'z')
+      {
+        this.events.emit('game:sector:add_castle', sector, teams[team])
+      }
+      else if (event.key === 'x')
+      {
+        this.events.emit('game:sector:remove_castle', sector, teams[team])
+      }
+
+      if (event.key === 'c')
+      {
+        this.events.emit('game:sector:add_army', sector, teams[team])
+      }
+      else if (event.key === 'v')
+      {
+        this.events.emit('game:sector:remove_army', sector, teams[team])
+      }
+
+      if (event.key === 'b')
+      {
+        this.events.emit('game:sector:start_claim', sector, teams[team])
+      }
+      else if (event.key === 'n')
+      {
+        this.events.emit('game:sector:stop_claim', sector, teams[team])
+      }
     })
 
     this.bindings = this.input.keyboard.addKeys(DefaultKeys)

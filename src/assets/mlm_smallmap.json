@@ -5,56 +5,56 @@
       "frame": { "x": 0, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "desert_0011",
+      "filename": "desert_1110",
       "frame": { "x": 32, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "desert_1111",
+      "filename": "desert_1101",
       "frame": { "x": 64, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "desert_1100",
+      "filename": "desert_0010",
       "frame": { "x": 96, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "desert_1101",
+      "filename": "desert_1010",
       "frame": { "x": 128, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "desert_1001",
+      "filename": "desert_1000",
       "frame": { "x": 160, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "desert_0010",
+      "filename": "desert_0100",
       "frame": { "x": 192, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "desert_1000",
+      "filename": "desert_0001",
       "frame": { "x": 224, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "grass_0100",
+      "filename": "grass_0110",
       "frame": { "x": 256, "y": 0, "w": 22, "h": 22 }
     },
     {
-      "filename": "grass_0101",
+      "filename": "grass_0011",
       "frame": { "x": 288, "y": 0, "w": 22, "h": 22 }
     },
 
     {
-      "filename": "grass_0111",
+      "filename": "grass_1100",
       "frame": { "x": 0, "y": 22, "w": 22, "h": 22 }
     },
     {
-      "filename": "grass_0011",
+      "filename": "grass_1001",
       "frame": { "x": 32, "y": 22, "w": 22, "h": 22 }
     },
     {
-      "filename": "grass_1111",
+      "filename": "grass_1010",
       "frame": { "x": 64, "y": 22, "w": 22, "h": 22 }
     },
     {
-      "filename": "grass_1100",
+      "filename": "grass_0101",
       "frame": { "x": 96, "y": 22, "w": 22, "h": 22 }
     },
     {
@@ -115,11 +115,11 @@
       "frame": { "x": 224, "y": 44, "w": 22, "h": 22 }
     },
     {
-      "filename": "snow_0100",
+      "filename": "snow_1011",
       "frame": { "x": 256, "y": 44, "w": 22, "h": 22 }
     },
     {
-      "filename": "snow_0101",
+      "filename": "snow_1010",
       "frame": { "x": 288, "y": 44, "w": 22, "h": 22 }
     },
 
@@ -128,121 +128,121 @@
       "frame": { "x": 0, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_0011",
+      "filename": "volcanic_0110",
       "frame": { "x": 32, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_1111",
+      "filename": "volcanic_0011",
       "frame": { "x": 64, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_1100",
+      "filename": "volcanic_1110",
       "frame": { "x": 96, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_1101",
+      "filename": "volcanic_1011",
       "frame": { "x": 128, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_1001",
+      "filename": "volcanic_1100",
       "frame": { "x": 160, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_0010",
+      "filename": "volcanic_1101",
       "frame": { "x": 192, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_1000",
+      "filename": "volcanic_100",
       "frame": { "x": 224, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_0100",
+      "filename": "volcanic_0010",
       "frame": { "x": 256, "y": 66, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_0101",
+      "filename": "volcanic_1010",
       "frame": { "x": 288, "y": 66, "w": 22, "h": 22 }
     },
 
     {
-      "filename": "volcanic_0001",
+      "filename": "volcanic_1000",
       "frame": { "x": 0, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_0011",
+      "filename": "volcanic_0100",
       "frame": { "x": 32, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "volcanic_1111",
+      "filename": "volcanic_0101",
       "frame": { "x": 64, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "forsest_1100",
+      "filename": "forsest_0110",
       "frame": { "x": 96, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "forsest_1101",
+      "filename": "forsest_0111",
       "frame": { "x": 128, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "forsest_1001",
+      "filename": "forsest_0011",
       "frame": { "x": 160, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "forsest_0010",
+      "filename": "forsest_1110",
       "frame": { "x": 192, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "forsest_1000",
+      "filename": "forsest_1111",
       "frame": { "x": 224, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "forsest_0100",
+      "filename": "forsest_1011",
       "frame": { "x": 256, "y": 88, "w": 22, "h": 22 }
     },
     {
-      "filename": "forsest_0101",
+      "filename": "forsest_1100",
       "frame": { "x": 288, "y": 88, "w": 22, "h": 22 }
     },
 
     {
-      "filename": "forest_0001",
+      "filename": "forest_1101",
       "frame": { "x": 0, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "forest_0011",
+      "filename": "forest_1001",
       "frame": { "x": 32, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "ash_1111",
+      "filename": "ash_0011",
       "frame": { "x": 64, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "ash_1100",
+      "filename": "ash_1111",
       "frame": { "x": 96, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "ash_1101",
+      "filename": "ash_0010",
       "frame": { "x": 128, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "ash_1001",
+      "filename": "ash_1010",
       "frame": { "x": 160, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "ash_0010",
+      "filename": "ash_1000",
       "frame": { "x": 192, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "ash_1000",
+      "filename": "ash_0100",
       "frame": { "x": 224, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "ash_0100",
+      "filename": "ash_0101",
       "frame": { "x": 256, "y": 110, "w": 22, "h": 22 }
     },
     {
-      "filename": "ash_0101",
+      "filename": "ash_0001",
       "frame": { "x": 288, "y": 110, "w": 22, "h": 22 }
     },
 

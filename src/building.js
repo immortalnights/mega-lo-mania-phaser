@@ -9,25 +9,25 @@ export default class Building extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
-    this.team = options.team
     this.buildingType = options.type
 
     // Tech level can change
     this.setData({
-      techLevel: options.techLevel
+      epoch: options.epoch,
+      team: options.team
     })
 
-    this.building = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_buildings', `${this.buildingType}_${options.techLevel}`);
+    this.building = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_buildings', `${this.buildingType}_${options.epoch}`);
     this.add(this.building)
 
-    this.on('changedata-techLevel', (obj, current, previous) => {
+    this.on('changedata-epoch', (obj, current, previous) => {
       this.building.setFrame(`${this.buildingType}_${current}`)
       this.updateDefenderMarkers()
     })
 
     if (this.buildingType === BuildingTypes.CASTLE)
     {
-      const flag = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_icons', `${this.team}_flag_00`);
+      const flag = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_icons', `${options.team}_flag_00`);
       flag.play(`${options.team}_flag`)
       this.add(flag)
 
@@ -36,7 +36,7 @@ export default class Building extends Phaser.GameObjects.Container
         flag.setPosition(this.getInnerPositionX(flagPosition.x), this.getInnerPositionY(flagPosition.y))
       }
 
-      this.on('changedata-techLevel', repositionFlag)
+      this.on('changedata-epoch', repositionFlag)
       repositionFlag()
     }
 
@@ -89,9 +89,9 @@ export default class Building extends Phaser.GameObjects.Container
     return localY - (this.building.displayHeight / 2)
   }
 
-  advance(techLevel)
+  advance(epoch)
   {
-    this.setData('techLevel', techLevel)
+    this.setData('epoch', epoch)
   }
 
   updateDefenderMarkers()
