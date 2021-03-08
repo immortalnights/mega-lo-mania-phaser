@@ -1,5 +1,77 @@
 {
   "frames": [
+    {
+      "filename": "cliff_00",
+      "frame": { "x": 0, "y": 0, "w": 31, "h": 101 }
+    },
+    {
+      "filename": "cliff_01",
+      "frame": { "x": 33, "y": 0, "w": 42, "h": 101 }
+    },
+    {
+      "filename": "cliff_02",
+      "frame": { "x": 80, "y": 0, "w": 224, "h": 11 }
+    },
+    {
+      "filename": "cliff_03",
+      "frame": { "x": 80, "y": 12, "w": 144, "h": 36 }
+    },
+    {
+      "filename": "cliff_04",
+      "frame": { "x": 224, "y": 12, "w": 15, "h": 35 }
+    },
+    {
+      "filename": "cliff_05",
+      "frame": { "x": 249, "y": 11, "w": 19, "h": 32 }
+    },
+    {
+      "filename": "cliff_06",
+      "frame": { "x": 273, "y": 11, "w": 28, "h": 32 }
+    },
+    {
+      "filename": "cliff_07",
+      "frame": { "x": 80, "y": 47, "w": 48, "h": 49 }
+    },
+    {
+      "filename": "cliff_08",
+      "frame": { "x": 128, "y": 47, "w": 48, "h": 49 }
+    },
+    {
+      "filename": "cliff_09",
+      "frame": { "x": 176, "y": 47, "w": 48, "h": 49 }
+    },
+    {
+      "filename": "cliff_10",
+      "frame": { "x": 224, "y": 47, "w": 37, "h": 32 }
+    },
+    {
+      "filename": "cliff_11",
+      "frame": { "x": 272, "y": 44, "w": 40, "h": 43 }
+    },
+    {
+      "filename": "cliff_12",
+      "frame": { "x": 224, "y": 79, "w": 37, "h": 32 }
+    },
+    {
+      "filename": "cliff_13",
+      "frame": { "x": 289, "y": 86, "w": 28, "h": 32 }
+    },
+    {
+      "filename": "cliff_14",
+      "frame": { "x": 0, "y": 101, "w": 40, "h": 43 }
+    },
+    {
+      "filename": "cliff_15",
+      "frame": { "x": 48, "y": 101, "w": 40, "h": 43 }
+    },
+    {
+      "filename": "cliff_16",
+      "frame": { "x": 96, "y": 96, "w": 124, "h": 18 }
+    },
+    {
+      "filename": "cliff_17",
+      "frame": { "x": 224, "y": 111, "w": 17, "h": 32 }
+    }
   ],
   "meta": {
     "app": "",

@@ -5,6 +5,7 @@ import Building from './building.js'
 import MiniMap from './minimap.js'
 import { DefaultKeys, BuildingTypes, Teams, UnitTypes } from './defines.js'
 import animationFactory from './animationfactory.js'
+import Sector from './sector'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
 // const renderer = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
@@ -37,6 +38,12 @@ class MyGame extends Phaser.Scene
     this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
     this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')
     this.load.atlas('mlm_smallmap', './mlm_smallmap.png', './mlm_smallmap.json')
+    this.load.image('mlm_slab', './mlm_slabs.png')
+    this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
+    // this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')
+
+    // templates
+    this.load.image('1010_sector', './1010_sector.png')
   }
 
   create()
@@ -59,39 +66,41 @@ class MyGame extends Phaser.Scene
       repeat: 0
     });
 
-    const map = new MiniMap(this, 300, 100, 'Quota')
+    const map = new MiniMap(this, 20, 40, 'Quota')
     this.add.existing(map)
 
     const units = this.physics.add.group()
     this.units = units
     const projectiles = this.physics.add.group()
 
+    this.add.existing(new Sector(this, 300, 150))
+
     // Use a zone to spawn in a specific location
-    for (let i = 0; i < 1; i++)
-    {
-      const u = new Unit(this, 0, 0, {
-        team: Teams.RED,
-        type: UnitTypes.STONE,
-      })
-      u.setRandomPosition()
-      units.add(u, true)
-    }
+    // for (let i = 0; i < 1; i++)
+    // {
+    //   const u = new Unit(this, 0, 0, {
+    //     team: Teams.RED,
+    //     type: UnitTypes.STONE,
+    //   })
+    //   u.setRandomPosition()
+    //   units.add(u, true)
+    // }
 
-    this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
-      const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'stone_projectile_000')
-      p.play('stone_projectile')
-      projectiles.add(p, true)
-      p.body.setVelocity(velocity.x, velocity.y)
-    })
+    // this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
+    //   const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'stone_projectile_000')
+    //   p.play('stone_projectile')
+    //   projectiles.add(p, true)
+    //   p.body.setVelocity(velocity.x, velocity.y)
+    // })
 
-    let epoch = 6
-    const building = new Building(this, 100, 100, {
-      type: BuildingTypes.CASTLE,
-      team: Teams.RED,
-      epoch: epoch
-    })
-    this.add.existing(building)
-    this.physics.add.existing(building)
+    // let epoch = 6
+    // const building = new Building(this, 100, 100, {
+    //   type: BuildingTypes.CASTLE,
+    //   team: Teams.RED,
+    //   epoch: epoch
+    // })
+    // this.add.existing(building)
+    // this.physics.add.existing(building)
 
     let sector = 1;
     const teams = [ Teams.RED, Teams.YELLOW, Teams.BLUE, Teams.GREEN ]
@@ -161,6 +170,26 @@ class MyGame extends Phaser.Scene
       else if (event.key === 'n')
       {
         this.events.emit('game:sector:stop_claim', sector, teams[team])
+      }
+
+      // Show / hide template
+      if (event.key === 'q')
+      {
+        this.events.emit('sector:show:template')
+      }
+      else if (event.key === 'w')
+      {
+        this.events.emit('sector:hide:template')
+      }
+
+      // Show / hide features
+      if (event.key === 'e')
+      {
+        this.events.emit('sector:show:features')
+      }
+      else if (event.key === 'r')
+      {
+        this.events.emit('sector:hide:features')
       }
     })
 
