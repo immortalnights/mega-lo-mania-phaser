@@ -3,7 +3,7 @@ import TransparentColorsPipeline from './transparent-colors-pipeline.ts'
 import Unit from './unit.js'
 import Building from './building.js'
 import MiniMap from './minimap.js'
-import { DefaultKeys, BuildingTypes, Teams, UnitTypes } from './defines.js'
+import { DefaultKeys, GameEvents, BuildingTypes, Teams, UnitTypes } from './defines.js'
 import animationFactory from './animationfactory.js'
 import Sector from './sector'
 
@@ -39,8 +39,8 @@ class MyGame extends Phaser.Scene
     this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')
     this.load.atlas('mlm_smallmap', './mlm_smallmap.png', './mlm_smallmap.json')
     this.load.image('mlm_slab', './mlm_slabs.png')
-    this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
-    // this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')
+    // this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
+    this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')
 
     // templates
     this.load.image('1010_sector', './1010_sector.png')
@@ -53,18 +53,7 @@ class MyGame extends Phaser.Scene
     animationFactory.createUnitAnimations(this)
     animationFactory.createSpawnAnimation(this)
     animationFactory.createFlagAnimations(this)
-
-    this.anims.create({
-      key: `stone_projectile`,
-      frames: this.anims.generateFrameNames('mlm_units', {
-        prefix: `stone_projectile_`,
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 12,
-      yoyo: false,
-      repeat: 0
-    });
+    animationFactory.createProjectileAnimations(this)
 
     const map = new MiniMap(this, 20, 40, 'Quota')
     this.add.existing(map)
@@ -73,7 +62,15 @@ class MyGame extends Phaser.Scene
     this.units = units
     const projectiles = this.physics.add.group()
 
-    this.add.existing(new Sector(this, 300, 150))
+    this.add.existing(new Sector(this, 250, 120, { key: '0010' }))
+
+    this.events.on(GameEvents.SECTOR_SELECT, (index, key) => {
+      console.debug(GameEvents.SECTOR_SELECT, index, key)
+      // Find the sector data from the game data...
+
+      this.events.emit('game:view:sector', index, key, {/*buildings*/}, {/*armies*/})
+    })
+
 
     // Use a zone to spawn in a specific location
     // for (let i = 0; i < 1; i++)
@@ -143,7 +140,8 @@ class MyGame extends Phaser.Scene
 
       this.debugText.setText(`Sector ${sector}, Team ${teams[team]}`)
 
-      this.events.emit('game:sector:select', sector)
+      // Select the first sector
+      this.events.emit(GameEvents.SECTOR_SELECT, sector)
 
       if (event.key === 'z')
       {
@@ -228,7 +226,7 @@ const config = {
   zoom: 2,
   scene: MyGame,
   seed: [ 'T' ],
-  backgroundColor: 0x005500,
+  // backgroundColor: 0x005500,
   loader: {
     baseUrl: '.',
     path: process.env.NODE_ENV === 'production' ? './assets' : './src/assets'

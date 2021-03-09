@@ -50,6 +50,10 @@ export default class MiniMap extends Phaser.GameObjects.Container
 
         const position = this.sectorXY(i)
         sector.setPosition(position.x, position.y)
+        sector.setInteractive()
+        sector.on('pointerup', () => {
+          this.scene.events.emit(GameEvents.SECTOR_SELECT, i, key)
+        })
         this.sectors.add(sector, true)
         this.add(sector)
       }
@@ -63,12 +67,12 @@ export default class MiniMap extends Phaser.GameObjects.Container
       if (island.map[sector])
       {
         const position = this.sectorXYCenter(sector)
-        marker.setPosition(position.x, position.y)
+        marker.setPosition(position.x, position.y - 1)
         marker.setData('sector', sector)
       }
     }
 
-    this.scene.events.on(GameEvents.SECTOR_SELECT, markSector)
+    this.scene.events.on('game:view:sector', markSector)
     markSector(island.map.findIndex(i => i === 1))
 
     this.scene.events.on(GameEvents.SECTOR_ALERT, sector => {
@@ -115,10 +119,10 @@ export default class MiniMap extends Phaser.GameObjects.Container
       else
       {
         const position = this.sectorXYCenter(sector)
-  
+
         position.x += armyIconOffset[team].x
         position.y += armyIconOffset[team].y
-  
+
         const icon = new Phaser.GameObjects.Sprite(this.scene, position.x, position.y, 'mlm_icons', `${team}_army_icon`)
         icon.setData('team', team)
         sectorData[sector].armies.push(icon)
@@ -187,7 +191,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
       x = x % 4
     }
 
-    return { x: x * 18, y:  y * 18 }
+    return { x: x * 16, y:  y * 16 }
   }
 
   sectorXYCenter(x, y)

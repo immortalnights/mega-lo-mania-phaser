@@ -93,8 +93,23 @@ export const createFlagAnimations = scene => {
   })
 }
 
+export const createProjectileAnimations = scene => {
+  scene.anims.create({
+    key: `stone_projectile`,
+    frames: scene.anims.generateFrameNames('mlm_units', {
+      prefix: `stone_projectile_`,
+      end: 3,
+      zeroPad: 3,
+    }),
+    frameRate: 12,
+    yoyo: false,
+    repeat: 0
+  });
+}
+
 export default {
   createUnitAnimations,
   createSpawnAnimation,
   createFlagAnimations,
+  createProjectileAnimations,
 }
