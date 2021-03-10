@@ -1,7 +1,5 @@
 import { Game } from 'phaser'
-import Islands from './assets/islands.json'
 import { Teams, GameEvents } from './defines.js'
-
 
 const offsetValue = 5
 const armyIconOffset = {
@@ -11,29 +9,24 @@ const armyIconOffset = {
   [Teams.YELLOW]: { x: -offsetValue, y:  offsetValue},
 }
 
+const getKeyForSector = (index, data) => {
+  const at = id => data[id] || 0
+  return '' + at(index - 4) + at(index + 1) + at(index + 4) + at(index - 1)
+}
+
 export default class MiniMap extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y, island)
   {
     super(scene, x, y)
 
-    if (typeof island === 'string')
-    {
-      island = Islands[island]
-    }
-
     this.sectors = new Phaser.GameObjects.Group(scene)
-
     this.name = island.name
 
-    const at = id => {
-      return island.map[id] || 0
-    }
+    // Sector data provides a cache for the current state
+    const sectorData = {}
 
-    const sectorData = {
-
-    }
-
+    // Build the map
     for (let i = 0; i < 16; i++)
     {
       if (island.map[i])
@@ -44,7 +37,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
           nuked: false
         }
 
-        const key = '' + at(i - 4) + at(i + 1) + at(i + 4) + at(i - 1)
+        const key = getKeyForSector(i, island.map)
 
         const sector = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_smallmap', `${island.style}_${key}`)
 
@@ -72,8 +65,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
       }
     }
 
-    this.scene.events.on('game:view:sector', markSector)
-    markSector(island.map.findIndex(i => i === 1))
+    this.scene.events.on(GameEvents.SECTOR_VIEW, markSector)
 
     this.scene.events.on(GameEvents.SECTOR_ALERT, sector => {
       // Do not alert the sector, if the sector is being viewed

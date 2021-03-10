@@ -53,6 +53,7 @@ export const BuildingTypes = {
 
 // Game Sector events
 export const GameEvents = {
+  SECTOR_VIEW: 'game:view:sector',
   SECTOR_SELECT: 'game:sector:select',
   SECTOR_ALERT: 'game:sector:alert',
   SECTOR_ADD_CASTLE: 'game:sector:add_castle',

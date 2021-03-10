@@ -1,5 +1,6 @@
-{
-  "Aloha": {
+[
+  {
+    "name": "Aloha",
     "epoch": 1,
     "style": "mud",
     "map": [
@@ -9,7 +10,19 @@
       0, 0, 0, 0
     ]
   },
-  "Dracula": {
+  {
+    "name": "Bazooka",
+    "epoch": 1,
+    "style": "grass",
+    "map": [
+      0, 0, 0, 0,
+      0, 1, 1, 0,
+      0, 1, 1, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Dracula",
     "epoch": 1,
     "style": "snow",
     "map": [
@@ -19,7 +32,8 @@
       0, 0, 0, 0
     ]
   },
-  "Cilla": {
+  {
+    "name": "Cilla",
     "epoch": 1,
     "style": "snow",
     "map": [
@@ -32,7 +46,8 @@
 
 
 
-  "Quota": {
+  {
+    "name": "Quota",
     "epoch": 1,
     "style": "ash",
     "map": [
@@ -42,4 +57,4 @@
       0, 1, 0, 0
     ]
   }
-}
+]

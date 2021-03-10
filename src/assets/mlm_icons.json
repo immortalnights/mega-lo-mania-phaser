@@ -89,6 +89,54 @@
       "filename": "red_flag_03",
       "frame": { "x": 240, "y": 189, "w": 10, "h": 16 }
     },
+    {
+      "filename": "green_flag_00",
+      "frame": { "x": 176, "y": 157, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "green_flag_01",
+      "frame": { "x": 240, "y": 157, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "green_flag_02",
+      "frame": { "x": 176, "y": 172, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "green_flag_03",
+      "frame": { "x": 256, "y": 189, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "yellow_flag_00",
+      "frame": { "x": 192, "y": 157, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "yellow_flag_01",
+      "frame": { "x": 256, "y": 157, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "yellow_flag_02",
+      "frame": { "x": 192, "y": 172, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "yellow_flag_03",
+      "frame": { "x": 272, "y": 189, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "blue_flag_00",
+      "frame": { "x": 208, "y": 157, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "blue_flag_01",
+      "frame": { "x": 272, "y": 157, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "blue_flag_02",
+      "frame": { "x": 208, "y": 172, "w": 10, "h": 16 }
+    },
+    {
+      "filename": "blue_flag_03",
+      "frame": { "x": 288, "y": 189, "w": 10, "h": 16 }
+    },
     
     {
       "filename": "ground_explosion_00",

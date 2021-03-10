@@ -6,6 +6,7 @@ import MiniMap from './minimap.js'
 import { DefaultKeys, GameEvents, BuildingTypes, Teams, UnitTypes } from './defines.js'
 import animationFactory from './animationfactory.js'
 import Sector from './sector'
+import Store from './store'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
 // const renderer = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
@@ -15,8 +16,7 @@ import Sector from './sector'
 // image.setPipeline('transparent-colors');
 // this.add.existing(image);
 
-
-class MyGame extends Phaser.Scene
+class IslandGameScene extends Phaser.Scene
 {
   constructor(config)
   {
@@ -41,9 +41,6 @@ class MyGame extends Phaser.Scene
     this.load.image('mlm_slab', './mlm_slabs.png')
     // this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
     this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')
-
-    // templates
-    this.load.image('1010_sector', './1010_sector.png')
   }
 
   create()
@@ -55,22 +52,48 @@ class MyGame extends Phaser.Scene
     animationFactory.createFlagAnimations(this)
     animationFactory.createProjectileAnimations(this)
 
-    const map = new MiniMap(this, 20, 40, 'Quota')
-    this.add.existing(map)
+    // game data could be scene.data or scene.game.registry?
+    let sector = -1;
+    const teams = Object.values(Teams)
+    let team = 0
+    let epoch = 0
+
+    const store = new Store(this)
+    store.setIsland("Aloha")
+
+    // Create the minimap
+    this.add.existing(new MiniMap(this, 20, 40, store.island))
+
+    // Create the Sector  view
+    this.add.existing(new Sector(this, 250, 120, { style: store.island.style }))
 
     const units = this.physics.add.group()
-    this.units = units
     const projectiles = this.physics.add.group()
+    this.units = units
 
-    this.add.existing(new Sector(this, 250, 120, { key: '0010' }))
+    // debug text
+    this.debugText = this.add.text(0, 0, ``);
+    const updateDebugText = () => {
+      this.debugText.setText(`Sector ${sector}, Team ${teams[team]}, Epoch ${epoch}`)
+    }
 
+    // Listen to the sector selection event (emitted by the minimap)
+    // TODO should this be emitted on the map to which the Scene listens?
     this.events.on(GameEvents.SECTOR_SELECT, (index, key) => {
       console.debug(GameEvents.SECTOR_SELECT, index, key)
-      // Find the sector data from the game data...
 
-      this.events.emit('game:view:sector', index, key, {/*buildings*/}, {/*armies*/})
+      sector = index
+
+      // Find the sector data from the game data...
+      const sec = store.sectors[sector]
+      this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings.map(), {/*armies*/})
+
+      updateDebugText()
     })
 
+    // Trigger the selection of first sector of the island
+    // FIXME!
+    this.events.emit(GameEvents.SECTOR_SELECT, 6, '0010')
 
     // Use a zone to spawn in a specific location
     // for (let i = 0; i < 1; i++)
@@ -99,22 +122,17 @@ class MyGame extends Phaser.Scene
     // this.add.existing(building)
     // this.physics.add.existing(building)
 
-    let sector = 1;
-    const teams = [ Teams.RED, Teams.YELLOW, Teams.BLUE, Teams.GREEN ]
-    let team = 0
-
-    this.debugText = this.add.text(0, 0, `Sector ${sector}, Team ${teams[team]}`);
     this.input.keyboard.on('keydown', event => {
       if (event.key === '+')
       {
-        building.advance(++epoch)
-        console.log("Epoch", epoch)
+        epoch++
       }
       else if (event.key === '-')
       {
-        building.advance(--epoch)
-        console.log("Epoch", epoch)
+        epoch--
       }
+
+      epoch = Phaser.Math.Wrap(epoch, 0, 9)
 
       if (event.key === 'PageUp')
       {
@@ -138,18 +156,13 @@ class MyGame extends Phaser.Scene
 
       team = Phaser.Math.Wrap(team, 0, 4)
 
-      this.debugText.setText(`Sector ${sector}, Team ${teams[team]}`)
-
-      // Select the first sector
-      this.events.emit(GameEvents.SECTOR_SELECT, sector)
-
       if (event.key === 'z')
       {
-        this.events.emit('game:sector:add_castle', sector, teams[team])
+        store.buildBuilding(sector, 'castle', teams[team])
       }
       else if (event.key === 'x')
       {
-        this.events.emit('game:sector:remove_castle', sector, teams[team])
+        store.destroyBuilding(sector, 'castle')
       }
 
       if (event.key === 'c')
@@ -170,25 +183,7 @@ class MyGame extends Phaser.Scene
         this.events.emit('game:sector:stop_claim', sector, teams[team])
       }
 
-      // Show / hide template
-      if (event.key === 'q')
-      {
-        this.events.emit('sector:show:template')
-      }
-      else if (event.key === 'w')
-      {
-        this.events.emit('sector:hide:template')
-      }
-
-      // Show / hide features
-      if (event.key === 'e')
-      {
-        this.events.emit('sector:show:features')
-      }
-      else if (event.key === 'r')
-      {
-        this.events.emit('sector:hide:features')
-      }
+      updateDebugText()
     })
 
     this.bindings = this.input.keyboard.addKeys(DefaultKeys)
@@ -224,7 +219,7 @@ const config = {
   width: 400,
   height: 300,
   zoom: 2,
-  scene: MyGame,
+  scene: IslandGameScene,
   seed: [ 'T' ],
   // backgroundColor: 0x005500,
   loader: {

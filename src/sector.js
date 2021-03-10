@@ -1,4 +1,7 @@
 import Phaser from 'phaser'
+import Building from './building'
+import { GameEvents } from './defines'
+import sectorConfig from './assets/sectorconfig.json'
 
 // slab = 224 x 173
 
@@ -22,24 +25,12 @@ const featurePositions = {
   'f17': { x: -105, y: 72 }, // left bottom
 }
 
-const sectorFeatures = {
-  's0000': [ '02', '00', '01', '03', '07', '11', '12', '13', '16' ],
-  's0001': [ '02', '00', '03', '05', '09', '10', '11', '13', '16' ],
-  's0010': [ '02', '00', '01', '05', '07', '11', '16', '17' ],
-  's0011': [ '02', '00', '05', '09', '11', '16' ],
-  's0100': [ '02', '01', '03', '06', '07', '12', '14', '16' ],
-  's0101': [ '02', '03', '06', '09', '10', '14', '16' ],
-  's0110': [ '02', '01', '09', '14', '16', '17' ],
-  's0111': [ '02', '09', '14', '16' ],
-  's1000': [ '02', '00', '01', '03', '08', '12', '13', '15' ],
-  's1001': [ '02', '00', '03', '10', '13', '15' ],
-  's1010': [ '02', '00', '01', '05', '08', '15', '17' ],
-  's1011': [ '02', '00', '05', '15' ],
-  's1100': [ '02', '01', '03', '06', '08', '12' ],
-  's1101': [ '02', '03', '06', '10' ],
-  's1111': [ '02' ],
+const tints = {
+  "grass": 0x228822,
+  "snow": 0xFFFFFF,
+  "ash": 0xAAAAAA,
+  "mud": 0xAA4400,
 }
-
 
 export default class Sector extends Phaser.GameObjects.Container
 {
@@ -49,7 +40,7 @@ export default class Sector extends Phaser.GameObjects.Container
 
     // Slab image
     const land = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_slab')
-    land.setTint(options.tint || 0x228822)
+    land.setTint(tints[options.style])
     this.add(land)
 
     // Features
@@ -68,10 +59,12 @@ export default class Sector extends Phaser.GameObjects.Container
     })
     features.setVisible(false)
 
+    let config = null
+
     // Update features based on sector key
-    const displaySectorByKey = key => {
+    const displaySectorByKey = () => {
       features.setVisible(false)
-      const keys = sectorFeatures['s' + key]
+      const keys = config.features
       keys.forEach(k => {
         const feature = features.getChildren().find(f => {
           return f.getData('key') === 'f' + k
@@ -81,12 +74,69 @@ export default class Sector extends Phaser.GameObjects.Container
       })
     }
 
-    // Display the initial sector type
-    displaySectorByKey(options.key)
+    this.buildings = {
+      castle: null,
+      mine: null,
+      factory: null,
+      laboratory: null
+    }
+
+    const buildBuilding = (type, team, defenders) => {
+      const position = getPosition(type)
+
+      const b = new Building(this.scene, position.x, position.y, {
+        type,
+        team,
+        epoch: this.getData('epoch')
+      })
+      this.add(b, true)
+
+      return b
+    }
 
     // Handle view sector event
-    scene.events.on('game:view:sector', (index, key, buildings, armies) => {
-      displaySectorByKey(key)
+    scene.events.on(GameEvents.SECTOR_VIEW, (index, key, buildings, armies) => {
+      config = sectorConfig['s' + key]
+      displaySectorByKey()
+
+      for (const [k, v] of Object.entries(this.buildings))
+      {
+        if (v)
+        {
+          v.destroy()
+          this.buildings[k] = null
+        }
+      }
+
+      for (const [k, v] of Object.entries(buildings))
+      {
+        if (v)
+        {
+          this.buildings[k] = buildBuilding(k, v.team, v.defenders)
+        }
+      }
+    })
+
+    const getPosition = (type) => {
+      return config.buildings[type]
+    }
+
+    this.scene.events.on(GameEvents.SECTOR_ADD_CASTLE, (sector, team) => {
+      console.assert(this.buildings.castle === null, "Attempted to build castle on sector which already contains one")
+      this.buildings.castle = buildBuilding('castle', team)
+    })
+    this.scene.events.on(GameEvents.SECTOR_REMOVE_CASTLE, (sector, team) => {
+      console.assert(this.buildings.castle, "Attempted to destroy castle on a sector that does not have one")
+
+      if (this.buildings.castle)
+      {
+        this.buildings.castle.destroy()
+        this.buildings.castle = null
+      }
+    })
+    this.scene.events.on(GameEvents.SECTOR_ADD_ARMY, (sector, team) => {
+    })
+    this.scene.events.on(GameEvents.SECTOR_REMOVE_ARMY, (sector, team) => {
     })
   }
 }
