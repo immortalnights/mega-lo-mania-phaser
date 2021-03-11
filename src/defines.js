@@ -51,13 +51,18 @@ export const BuildingTypes = {
   LABORATORY: 'laboratory',
 }
 
+export const UserEvents = {
+  SECTOR_SELECT: 'user:sector:select',
+  BUILDING_PLACE_DEFENDER: 'user:building:place_defender',
+  BUILDING_REMOVE_DEFENDER: 'user:building:remove_defender',
+}
+
 // Game Sector events
 export const GameEvents = {
   SECTOR_VIEW: 'game:view:sector',
-  SECTOR_SELECT: 'game:sector:select',
   SECTOR_ALERT: 'game:sector:alert',
-  SECTOR_ADD_CASTLE: 'game:sector:add_castle',
-  SECTOR_REMOVE_CASTLE: 'game:sector:remove_castle',
+  SECTOR_ADD_BUILDING: 'game:sector:add_building',
+  SECTOR_REMOVE_BUILDING: 'game:sector:remove_building',
   SECTOR_ADD_ARMY: 'game:sector:add_army',
   SECTOR_REMOVE_ARMY: 'game:sector:remove_army',
   SECTOR_START_CLAIM: 'game:sector:start_claim',

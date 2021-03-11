@@ -1,5 +1,7 @@
-import { Game } from 'phaser'
-import { Teams, GameEvents } from './defines.js'
+import Phaser from 'phaser'
+import { getKeyForSector } from './utilities'
+import { Teams, BuildingTypes, GameEvents, UserEvents } from './defines.js'
+
 
 const offsetValue = 5
 const armyIconOffset = {
@@ -9,10 +11,6 @@ const armyIconOffset = {
   [Teams.YELLOW]: { x: -offsetValue, y:  offsetValue},
 }
 
-const getKeyForSector = (index, data) => {
-  const at = id => data[id] || 0
-  return '' + at(index - 4) + at(index + 1) + at(index + 4) + at(index - 1)
-}
 
 export default class MiniMap extends Phaser.GameObjects.Container
 {
@@ -20,181 +18,93 @@ export default class MiniMap extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
-    this.sectors = new Phaser.GameObjects.Group(scene)
+    // this.sectors = new Phaser.GameObjects.Group(scene)
     this.name = island.name
 
-    // Sector data provides a cache for the current state
-    const sectorData = {}
+    this.icons = new Phaser.GameObjects.Group(scene)
 
     // Build the map
     for (let i = 0; i < 16; i++)
     {
       if (island.map[i])
       {
-        sectorData[i] = {
-          castle: null,
-          armies: [],
-          nuked: false
-        }
-
         const key = getKeyForSector(i, island.map)
 
-        const sector = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_smallmap', `${island.style}_${key}`)
+        const sector = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_smallmap', `${island.style}_${key}`)
 
-        const position = this.sectorXY(i)
+        const position = this.getSectorXY(i)
         sector.setPosition(position.x, position.y)
         sector.setInteractive()
         sector.on('pointerup', () => {
-          this.scene.events.emit(GameEvents.SECTOR_SELECT, i, key)
+          this.scene.events.emit(UserEvents.SECTOR_SELECT, i, key)
         })
-        this.sectors.add(sector, true)
+        // this.sectors.add(sector, true)
         this.add(sector)
       }
     }
 
-    const marker = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_icons', 'sector_selected_icon')
+    const marker = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_icons', 'sector_selected_icon')
     marker.setData('sector', undefined)
     this.add(marker)
 
-    const markSector = sector => {
+    scene.events.on(GameEvents.SECTOR_VIEW, sector => {
       if (island.map[sector])
       {
-        const position = this.sectorXYCenter(sector)
+        const position = this.getSectorXY(sector)
         marker.setPosition(position.x, position.y - 1)
         marker.setData('sector', sector)
       }
-    }
+    })
 
-    this.scene.events.on(GameEvents.SECTOR_VIEW, markSector)
+    scene.events.on(GameEvents.SECTOR_ADD_BUILDING, this.onAddBuilding, this)
+    scene.events.on(GameEvents.SECTOR_REMOVE_BUILDING, this.onRemoveBuilding, this)
+    scene.events.on(GameEvents.SECTOR_ADD_ARMY, this.onAddArmy, this)
+    scene.events.on(GameEvents.SECTOR_REMOVE_ARMY, this.onRemoveArmy, this)
+    scene.events.on(GameEvents.SECTOR_START_CLAIM, this.onStartClaim, this)
+    scene.events.on(GameEvents.SECTOR_STOP_CLAIM, this.onStopClaim, this)
+    scene.events.on(GameEvents.SECTOR_NUKED, this.onNuked, this)
 
-    this.scene.events.on(GameEvents.SECTOR_ALERT, sector => {
+    scene.events.on(GameEvents.SECTOR_ALERT, sector => {
       // Do not alert the sector, if the sector is being viewed
       if (marker.getData('sector') !== sector)
       {
         // TODO
       }
     })
-
-    this.scene.events.on(GameEvents.SECTOR_ADD_CASTLE, (sector, team) => {
-      if (sectorData[sector].castle != null)
-      {
-        console.warn(`Attempted to add castle for ${team} on sector ${sector} where a castle already exists`)
-      }
-      else
-      {
-        const position = this.sectorXYCenter(sector)
-        const icon = new Phaser.GameObjects.Sprite(this.scene, position.x, position.y, 'mlm_icons', `${team}_castle_icon`)
-        icon.setData('team', team)
-        sectorData[sector].castle = icon
-        this.add(icon)
-      }
-    })
-
-    this.scene.events.on(GameEvents.SECTOR_REMOVE_CASTLE, (sector, team) => {
-      if (sectorData[sector].castle == null)
-      {
-        console.warn(`Attempted to remove ${team} castle from sector ${sector} where it does not exist`)
-      }
-      else
-      {
-        sectorData[sector].castle.destroy()
-        sectorData[sector].castle = null
-      }
-    })
-
-    this.scene.events.on(GameEvents.SECTOR_ADD_ARMY, (sector, team) => {
-      const index = sectorData[sector].armies.findIndex(a => a.getData('team') === team)
-      if (index !== -1)
-      {
-        console.warn(`Attempted to add duplicate army for ${team} team to sector ${sector}`)
-      }
-      else
-      {
-        const position = this.sectorXYCenter(sector)
-
-        position.x += armyIconOffset[team].x
-        position.y += armyIconOffset[team].y
-
-        const icon = new Phaser.GameObjects.Sprite(this.scene, position.x, position.y, 'mlm_icons', `${team}_army_icon`)
-        icon.setData('team', team)
-        sectorData[sector].armies.push(icon)
-        this.add(icon)
-      }
-    })
-
-    this.scene.events.on(GameEvents.SECTOR_REMOVE_ARMY, (sector, team) => {
-      const index = sectorData[sector].armies.findIndex(a => a.getData('team') === team)
-      if (index === -1)
-      {
-        console.warn(`Attempted to remove army for ${team} team from sector ${sector} that does not exist`)
-      }
-      else
-      {
-        const icon = sectorData[sector].armies[index]
-        icon.destroy()
-        sectorData[sector].armies.splice(index, 1)
-      }
-    })
-
-    this.scene.events.on(GameEvents.SECTOR_START_CLAIM, (sector, team) => {
-      const index = sectorData[sector].armies.findIndex(a => a.getData('team') === team)
-
-      if (index === -1)
-      {
-        console.warn(`Attempted to start claiming sector ${sector} with ${team} army not present`)
-      }
-      else
-      {
-        const icon = sectorData[sector].armies[index]
-        const position = this.sectorXYCenter(sector)
-        icon.setPosition(position.x, position.y)
-      }
-    })
-
-    // Can emit claim immediately with no visual "movement" of the icon
-    this.scene.events.on(GameEvents.SECTOR_STOP_CLAIM, (sector, team) => {
-      const index = sectorData[sector].armies.findIndex(a => a.getData('team') === team)
-
-      if (index === -1)
-      {
-        console.warn(`Attempted to stop claiming sector ${sector} with ${team} army not present`)
-      }
-      else
-      {
-        const icon = sectorData[sector].armies[index]
-        const iconTeam = icon.getData('team')
-        const position = this.sectorXYCenter(sector)
-        position.x += armyIconOffset[iconTeam].x
-        position.y += armyIconOffset[iconTeam].y
-        icon.setPosition(position.x, position.y)
-      }
-    })
-
-    this.scene.events.on(GameEvents.SECTOR_NUKE, (sector, team) => {
-      
-    })
   }
 
-  sectorXY(x, y)
+  /**
+   * Return (local) X Y position of sector at grid location x, y
+   * @param {integer} index Sector index
+   * @returns {Object}
+   */
+  getSectorXY(index)
   {
-    if (y === undefined)
-    {
-      y = Math.floor(x / 4)
-      x = x % 4
-    }
+    let x = (index % 4) * 16
+    let y = Math.floor(index / 4) * 16
 
-    return { x: x * 16, y:  y * 16 }
+    return { x, y }
   }
 
-  sectorXYCenter(x, y)
+  /**
+   * 
+   * @param {integer} index Sector index
+   * @returns {Object}
+   */
+  getSectorCenterXY(index)
   {
-    const sectorXY = this.sectorXY(x, y)
-    sectorXY.x + 9
-    sectorXY.y + 9
-    return sectorXY
+    const position = this.getSectorXY(index)
+    position.x += 9
+    position.y += 9
+    return position
   }
 
-  sector(x, y)
+  /**
+   * 
+   * @param {integer} index Sector index
+   * @returns {Phaser.GameObjects.Image}
+   */
+  getSectorImage(x, y)
   {
     if (y === undefined)
     {
@@ -209,5 +119,90 @@ export default class MiniMap extends Phaser.GameObjects.Container
 
     console.log(x, y, sectorIndex, sector)
     return sector
+  }
+
+  onAddBuilding(sector, building, team)
+  {
+    if (building === BuildingTypes.CASTLE)
+    {
+      const position = this.getSectorXY(sector)
+
+      const icon = new Phaser.GameObjects.Image(this.scene, position.x, position.y, 'mlm_icons', `${team}_castle_icon`)
+      icon.name = BuildingTypes.CASTLE
+      icon.setData({
+        sector,
+        team,
+      })
+
+      this.icons.add(icon)
+      this.add(icon)
+    }
+  }
+
+  onRemoveBuilding(sector, building, team)
+  {
+    if (building === BuildingTypes.CASTLE)
+    {
+      const icon = this.icons.getChildren().find(child => {
+        return child.name === BuildingTypes.CASTLE && child.getData('sector') === sector
+      })
+
+      if (icon)
+      {
+        icon.destroy()
+      }
+    }
+  }
+
+  onAddArmy(sector, team, units)
+  {
+    const position = this.getSectorXY(sector)
+
+    position.x += armyIconOffset[team].x
+    position.y += armyIconOffset[team].y
+
+    const icon = new Phaser.GameObjects.Image(this.scene, position.x, position.y, 'mlm_icons', `${team}_army_icon`)
+    icon.name = 'army'
+    icon.setData({
+      sector,
+      team,
+    })
+
+    this.icons.add(icon)
+    this.add(icon)
+  }
+
+  onRemoveArmy(sector, team)
+  {
+    const icon = this.icons.getChildren().find(child => {
+      return child.name === 'army' && child.getData('sector') === sector && child.getData('team') === team
+    })
+
+    if (icon)
+    {
+      icon.destroy()
+    }
+  }
+
+  onStartClaim(sector, team)
+  {
+    const icon = sectorData[sector].armies[index]
+    const position = this.getSectorCenterXT(sector)
+    icon.setPosition(position.x, position.y)
+  }
+
+  onStopClaim(sector, team)
+  {
+    const icon = sectorData[sector].armies[index]
+    const iconTeam = icon.getData('team')
+    const position = this.getSectorCenterXY(sector)
+    position.x += armyIconOffset[iconTeam].x
+    position.y += armyIconOffset[iconTeam].y
+    icon.setPosition(position.x, position.y)
+  }
+
+  onNuked(sector)
+  {
+    console.warn("Nuke unimplemented")
   }
 }

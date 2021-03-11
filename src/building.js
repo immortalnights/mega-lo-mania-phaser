@@ -1,5 +1,5 @@
 import Unit from './unit.js'
-import { Teams, DefenderUnitTypes, BuildingTypes } from './defines.js'
+import { Teams, DefenderUnitTypes, BuildingTypes, GameEvents, UserEvents } from './defines.js'
 
 const SCALE = 2
 
@@ -9,10 +9,18 @@ export default class Building extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
-    this.buildingType = options.type
+    Object.defineProperties(this, {
+      buildingType: {
+        get()
+        {
+          return this.getData('type')
+        }
+      },
+    })
 
     // Tech level can change
     this.setData({
+      type: options.type,
       epoch: options.epoch,
       team: options.team
     })
@@ -46,22 +54,17 @@ export default class Building extends Phaser.GameObjects.Container
     for (let i = 0; i < 4; i++)
     {
       const marker = new Phaser.GameObjects.Arc(this.scene, 0, 0, 4, 0, 360, false, 0x0000FF, 1)
+      marker.setData('index', i)
       marker.setVisible(false)
       this.markers.add(marker)
       this.add(marker)
-    }
-
-    for (let i = 0; i < 4; i++)
-    {
-      const defender = new Unit(scene, 35, 10, {
-        team: this.team,
-        type: DefenderUnitTypes.STICK,
-        defender: true,
+      marker.setInteractive()
+      marker.on('pointerdown', () => {
+        this.scene.events.emit(UserEvents.BUILDING_PLACE_DEFENDER, this.buildingType, i)
       })
-
-      this.defenders.add(defender, true)
-      this.add(defender)
     }
+
+    //BUILDING_REMOVE_DEFENDER
 
     this.setSize(this.building.displayWidth, this.building.displayHeight)
     this.setInteractive()
@@ -77,6 +80,11 @@ export default class Building extends Phaser.GameObjects.Container
     })
 
     this.updateDefenderMarkers()
+  }
+
+  addDefender()
+  {
+
   }
 
   getInnerPositionX(localX)

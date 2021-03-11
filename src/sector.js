@@ -3,7 +3,6 @@ import Building from './building'
 import { GameEvents } from './defines'
 import sectorConfig from './assets/sectorconfig.json'
 
-// slab = 224 x 173
 
 const featurePositions = {
   'f02': { x: 0, y: 81 }, // bottom
@@ -25,6 +24,7 @@ const featurePositions = {
   'f17': { x: -105, y: 72 }, // left bottom
 }
 
+
 const tints = {
   "grass": 0x228822,
   "snow": 0xFFFFFF,
@@ -32,19 +32,34 @@ const tints = {
   "mud": 0xAA4400,
 }
 
+
 export default class Sector extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y, options)
   {
     super(scene, x, y)
 
+    this.setData('epoch', options.epoch)
+
+    Object.defineProperties(this, {
+      index: {
+        get()
+        {
+          return this.getData('index')
+        }
+      },
+    })
+
     // Slab image
     const land = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_slab')
     land.setTint(tints[options.style])
     this.add(land)
 
-    // Features
-    const features = new Phaser.GameObjects.Group(scene)
+    this.features = new Phaser.GameObjects.Group(scene)
+    this.buildings = new Phaser.GameObjects.Group(scene)
+    this.armies = new Phaser.GameObjects.Group(scene)
+
+    // Add all feature images
     Object.keys(featurePositions).forEach(key => {
       const position = featurePositions[key]
 
@@ -53,90 +68,127 @@ export default class Sector extends Phaser.GameObjects.Container
         const image = new Phaser.GameObjects.Image(scene, position.x, position.y, 'mlm_features', key)
         image.setData({ key })
         this.add(image)
-        features.add(image)
+        this.features.add(image)
         // console.debug(key, position.x, position.y)
       }
     })
-    features.setVisible(false)
-
-    let config = null
-
-    // Update features based on sector key
-    const displaySectorByKey = () => {
-      features.setVisible(false)
-      const keys = config.features
-      keys.forEach(k => {
-        const feature = features.getChildren().find(f => {
-          return f.getData('key') === 'f' + k
-        })
-
-        feature.setVisible(true)
-      })
-    }
-
-    this.buildings = {
-      castle: null,
-      mine: null,
-      factory: null,
-      laboratory: null
-    }
-
-    const buildBuilding = (type, team, defenders) => {
-      const position = getPosition(type)
-
-      const b = new Building(this.scene, position.x, position.y, {
-        type,
-        team,
-        epoch: this.getData('epoch')
-      })
-      this.add(b, true)
-
-      return b
-    }
+    // Hide all features
+    this.features.setVisible(false)
 
     // Handle view sector event
-    scene.events.on(GameEvents.SECTOR_VIEW, (index, key, buildings, armies) => {
-      config = sectorConfig['s' + key]
-      displaySectorByKey()
+    scene.events.on(GameEvents.SECTOR_VIEW, this.onSectorSelected, this)
+    scene.events.on(GameEvents.SECTOR_ADD_BUILDING, this.onAddBuilding, this)
+    scene.events.on(GameEvents.SECTOR_REMOVE_BUILDING, this.onRemoveBuilding, this)
+    scene.events.on(GameEvents.SECTOR_ADD_ARMY, this.onAddArmy, this)
+    scene.events.on(GameEvents.SECTOR_REMOVE_ARMY, this.onRemoveArmy, this)
+  }
 
-      for (const [k, v] of Object.entries(this.buildings))
-      {
-        if (v)
-        {
-          v.destroy()
-          this.buildings[k] = null
-        }
-      }
+  // Update features based on sector key
+  renderFeatures(keys)
+  {
+    // Hide all the features
+    this.features.setVisible(false)
 
-      for (const [k, v] of Object.entries(buildings))
-      {
-        if (v)
-        {
-          this.buildings[k] = buildBuilding(k, v.team, v.defenders)
-        }
-      }
+    keys.forEach(k => {
+      const feature = this.features.getChildren().find(f => {
+        return f.getData('key') === 'f' + k
+      })
+
+      feature.setVisible(true)
+    })
+  }
+
+  buildBuilding(type, team, defenders)
+  {
+    const position = this.getData('positions')[type]
+
+    const b = new Building(this.scene, position.x, position.y, {
+      type,
+      team,
+      epoch: this.getData('epoch')
     })
 
-    const getPosition = (type) => {
-      return config.buildings[type]
+    if (defenders)
+    {
+      defenders.forEach(defender => {
+        b.addDefender(defender)
+      })
     }
 
-    this.scene.events.on(GameEvents.SECTOR_ADD_CASTLE, (sector, team) => {
-      console.assert(this.buildings.castle === null, "Attempted to build castle on sector which already contains one")
-      this.buildings.castle = buildBuilding('castle', team)
-    })
-    this.scene.events.on(GameEvents.SECTOR_REMOVE_CASTLE, (sector, team) => {
-      console.assert(this.buildings.castle, "Attempted to destroy castle on a sector that does not have one")
+    this.add(b)
+    this.buildings.add(b)
 
-      if (this.buildings.castle)
+    return b
+  }
+
+  /**
+   * @param {integer} index Sector index
+   * @param {string} key Sector key for features and building positions
+   * @param {Object} buildings Building on sector
+   * @param {Object} armies Armies on sector
+   */
+  onSectorSelected(index, key, buildings, armies)
+  {
+    this.setData('index', index)
+    const config = sectorConfig['s' + key]
+    // Remember where the buildings are positions for this sector
+    this.setData({ positions: config.buildings })
+
+    this.renderFeatures(config.features)
+
+    // Destroy all buildings
+    this.buildings.clear(true, true)
+
+    for (const [type, value] of Object.entries(buildings))
+    {
+      if (value)
       {
-        this.buildings.castle.destroy()
-        this.buildings.castle = null
+        this.buildBuilding(type, value.team, value.defenders)
       }
-    })
-    this.scene.events.on(GameEvents.SECTOR_ADD_ARMY, (sector, team) => {
-    })
-    this.scene.events.on(GameEvents.SECTOR_REMOVE_ARMY, (sector, team) => {
-    })
+    }
+  }
+
+  onAddBuilding(sector, type, team, defenders)
+  {
+    if (this.index === sector)
+    {
+      this.buildBuilding(type, team, defenders)
+    }
+  }
+
+  onRemoveBuilding(sector, type)
+  {
+    if (this.index === sector)
+    {
+      const b = this.buildings.getChildren().find(building => {
+        return building.getData('type') === type
+      })
+
+      if (b)
+      {
+        b.destroy()
+      }
+    }
+  }
+
+  onAdvanceTechnologyLevel()
+  {
+
+  }
+
+  onAddArmy(sector, team) 
+  {
+    if (this.index === sector)
+    {
+
+    }
+  }
+
+  onRemoveArmy(sector, team) 
+  {
+    if (this.index === sector)
+    {
+
+    }
   }
 }

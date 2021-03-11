@@ -3,7 +3,8 @@ import TransparentColorsPipeline from './transparent-colors-pipeline.ts'
 import Unit from './unit.js'
 import Building from './building.js'
 import MiniMap from './minimap.js'
-import { DefaultKeys, GameEvents, BuildingTypes, Teams, UnitTypes } from './defines.js'
+import { DefaultKeys, GameEvents, BuildingTypes, Teams, UnitTypes, UserEvents } from './defines.js'
+import { getKeyForSector } from './utilities'
 import animationFactory from './animationfactory.js'
 import Sector from './sector'
 import Store from './store'
@@ -59,7 +60,7 @@ class IslandGameScene extends Phaser.Scene
     let epoch = 0
 
     const store = new Store(this)
-    store.setIsland("Aloha")
+    store.setIsland("Quota")
 
     // Create the minimap
     this.add.existing(new MiniMap(this, 20, 40, store.island))
@@ -79,8 +80,8 @@ class IslandGameScene extends Phaser.Scene
 
     // Listen to the sector selection event (emitted by the minimap)
     // TODO should this be emitted on the map to which the Scene listens?
-    this.events.on(GameEvents.SECTOR_SELECT, (index, key) => {
-      console.debug(GameEvents.SECTOR_SELECT, index, key)
+    this.events.on(UserEvents.SECTOR_SELECT, (index, key) => {
+      console.debug(UserEvents.SECTOR_SELECT, index, key)
 
       sector = index
 
@@ -91,9 +92,46 @@ class IslandGameScene extends Phaser.Scene
       updateDebugText()
     })
 
+    this.events.on(UserEvents.BUILDING_PLACE_DEFENDER, (building, position) => {
+      console.debug(UserEvents.BUILDING_PLACE_DEFENDER, building, position)
+
+    })
+
+    this.events.on(UserEvents.BUILDING_REMOVE_DEFENDER, (building, position) => {
+      console.debug(UserEvents.SECTOR_SELECTBUILDING_REMOVE_DEFENDER, building, position)
+
+    })
+
     // Trigger the selection of first sector of the island
     // FIXME!
-    this.events.emit(GameEvents.SECTOR_SELECT, 6, '0010')
+
+    // Place player and AI in random locations; select the player sector
+    const indexes = []
+    store.island.map.forEach((value, index) => {
+      if (value)
+      {
+        indexes.push(index)
+      }
+    })
+
+    // random player castle (red)
+    let position = Phaser.Math.RND.pick(indexes)
+    // store.sectors[position].buildings.build('castle', Teams.RED)
+    store.buildBuilding(position, 'castle', Teams.RED)
+
+
+    // not ideal
+    const key = getKeyForSector(position, store.island.map)
+
+    this.events.emit(UserEvents.SECTOR_SELECT, position, key)
+
+    indexes.splice(indexes.findIndex(v => v === position), 1)
+
+    // random AI castle (blue)
+    position = Phaser.Math.RND.pick(indexes)
+    store.buildBuilding(position, 'castle', Teams.BLUE)
+
+
 
     // Use a zone to spawn in a specific location
     // for (let i = 0; i < 1; i++)

@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { GameEvents } from './defines.js'
+import { Teams, GameEvents } from './defines.js'
 import Islands from './assets/islands.json'
 
 // TODO maybe sector manager rather then specific for buildings?
@@ -62,8 +62,7 @@ export default class Store extends Phaser.Events.EventEmitter
     console.assert(sec.buildings.has(building) === false, `Attempted to build another ${building} in sector ${sector}`)
     sec.buildings.build(building, team)
 
-    // this.scene.events.emit(GameEvents.SECTOR_BUILD_BUILDING, sector, building, team)
-    this.scene.events.emit(GameEvents.SECTOR_ADD_CASTLE, sector, team)
+    this.scene.events.emit(GameEvents.SECTOR_ADD_BUILDING, sector, building, team)
   }
 
   destroyBuilding(sector, building)
@@ -71,8 +70,7 @@ export default class Store extends Phaser.Events.EventEmitter
     const sec = this.sectors[sector]
     console.assert(sec.buildings.has(building) === true, `Attempted to destroy missing ${building} in sector ${sector}`)
 
-    // this.scene.events.emit(GameEvents.SECTOR_DESTROY_BUILDING, sector, building)
-    this.scene.events.emit(GameEvents.SECTOR_REMOVE_CASTLE, sector)
+    this.scene.events.emit(GameEvents.SECTOR_REMOVE_BUILDING, sector, building)
 
     sec.buildings.remove(building)
   }
