@@ -202,22 +202,24 @@
       "filename": "jet_red",
       "frame": { "x": 0, "y": 232, "w": 32, "h": 24 }
     },
+
     {
       "filename": "red_stick_down_000",
-      "frame": { "x": 1, "y": 16, "w": 14, "h": 14 }
+      "frame": { "x": 0, "y": 16, "w": 16, "h": 16 }
     },
     {
       "filename": "red_stick_up_000",
-      "frame": { "x": 18, "y": 16, "w": 14, "h": 14 }
+      "frame": { "x": 1, "y": 16, "w": 16, "h": 16 }
     },
     {
       "filename": "red_stick_right_000",
-      "frame": { "x": 32, "y": 16, "w": 14, "h": 14 }
+      "frame": { "x": 32, "y": 16, "w": 16, "h": 16 }
     },
     {
       "filename": "red_stick_left_000",
-      "frame": { "x": 50, "y": 16, "w": 14, "h": 14 }
+      "frame": { "x": 48, "y": 16, "w": 16, "h": 16 }
     },
+
     {
       "filename": "stone_projectile_000",
       "frame": { "x": 272, "y": 16, "w": 11, "h": 8 }
