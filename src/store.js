@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { Teams, GameEvents } from './defines.js'
+import { Teams, GameEvents, BuildingTypes } from './defines.js'
 import Islands from './assets/islands.json'
 
 // TODO maybe sector manager rather then specific for buildings?
@@ -21,6 +21,7 @@ class BuildingManager
     return this.data
   }
 
+  // get building by type
   get(building)
   {
     return this.data[building]
@@ -33,9 +34,34 @@ class BuildingManager
 
   build(building, team)
   {
+    let defenderCount
+    switch (building)
+    {
+      case BuildingTypes.CASTLE:
+      {
+        defenderCount = 4
+        break
+      }
+      case BuildingTypes.MINE:
+      {
+        defenderCount = 2
+        break
+      }
+      case BuildingTypes.FACTORY:
+      {
+        defenderCount = 3
+        break
+      }
+      case BuildingTypes.LABORATORY:
+      {
+        defenderCount = 1
+        break
+      }
+    }
+
     this.data[building] = {
       team,
-      defenders: []
+      defenders: Array(defenderCount)
     }
   }
 
@@ -73,6 +99,30 @@ export default class Store extends Phaser.Events.EventEmitter
     this.scene.events.emit(GameEvents.SECTOR_REMOVE_BUILDING, sector, building)
 
     sec.buildings.remove(building)
+  }
+
+  hasDefender(sector, building, position)
+  {
+    const sec = this.sectors[sector]
+    const b = sec.buildings.get(building)
+    return !!b.defenders[position]
+  }
+
+  addDefender(sector, building, position, type)
+  {
+    console.log("add defender", sector, building, position, type)
+    const sec = this.sectors[sector]
+    const b = sec.buildings.get(building)
+
+    b.defenders[position] = type
+    this.scene.events.emit(GameEvents.BUILDING_ADD_DEFENDER, sector, building, position, type)
+  }
+  
+  removeDefender(sector, building, position)
+  {
+    console.log("remove defender", sector, building, position)
+
+    this.scene.events.emit(GameEvents.BUILDING_REMOVE_DEFENDER, sector, building, position)
   }
 
   setIsland(name)

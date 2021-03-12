@@ -81,6 +81,9 @@ export default class Sector extends Phaser.GameObjects.Container
     scene.events.on(GameEvents.SECTOR_REMOVE_BUILDING, this.onRemoveBuilding, this)
     scene.events.on(GameEvents.SECTOR_ADD_ARMY, this.onAddArmy, this)
     scene.events.on(GameEvents.SECTOR_REMOVE_ARMY, this.onRemoveArmy, this)
+    scene.events.on(GameEvents.BUILDING_ADD_DEFENDER, this.onAddDefender, this)
+    scene.events.on(GameEvents.BUILDING_REMOVE_DEFENDER, this.onRemoveDefender, this)
+
   }
 
   // Update features based on sector key
@@ -98,6 +101,13 @@ export default class Sector extends Phaser.GameObjects.Container
     })
   }
 
+  getBuilding(type)
+  {
+    return this.buildings.getChildren().find(building => {
+      return building.getData('type') === type
+    })
+  }
+
   buildBuilding(type, team, defenders)
   {
     const position = this.getData('positions')[type]
@@ -110,8 +120,8 @@ export default class Sector extends Phaser.GameObjects.Container
 
     if (defenders)
     {
-      defenders.forEach(defender => {
-        b.addDefender(defender)
+      defenders.forEach((defender, index) => {
+        b.addDefender(index, defender, false)
       })
     }
 
@@ -160,10 +170,7 @@ export default class Sector extends Phaser.GameObjects.Container
   {
     if (this.index === sector)
     {
-      const b = this.buildings.getChildren().find(building => {
-        return building.getData('type') === type
-      })
-
+      const b = this.getBuilding(type)
       if (b)
       {
         b.destroy()
@@ -174,6 +181,30 @@ export default class Sector extends Phaser.GameObjects.Container
   onAdvanceTechnologyLevel()
   {
 
+  }
+
+  onAddDefender(sector, building, position, type)
+  {
+    if (this.index === sector)
+    {
+      const b = this.getBuilding(building)
+      if (b)
+      {
+        b.addDefender(position, type)
+      }
+    }
+  }
+
+  onRemoveDefender(sector, building, position)
+  {
+    if (this.index === sector)
+    {
+      const b = this.getBuilding(building)
+      if (b)
+      {
+        b.removeDefender(position)
+      }
+    }
   }
 
   onAddArmy(sector, team) 

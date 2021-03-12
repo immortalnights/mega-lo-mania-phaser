@@ -26,6 +26,10 @@ export default class Building extends Phaser.GameObjects.Container
     })
 
     this.building = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_buildings', `${this.buildingType}_${options.epoch}`);
+    // this.building.setInteractive()
+    // this.building.on('pointerdown', () => {
+    //   this.scene.events.emit(UserEvents.BUILDING_SELECT, this.buildingType)
+    // })
     this.add(this.building)
 
     this.on('changedata-epoch', (obj, current, previous) => {
@@ -41,7 +45,7 @@ export default class Building extends Phaser.GameObjects.Container
 
       const repositionFlag = () => {
         const flagPosition = this.building.frame.customData.flag
-        flag.setPosition(this.getInnerPositionX(flagPosition.x), this.getInnerPositionY(flagPosition.y))
+        flag.setPosition(flagPosition.x, flagPosition.y)
       }
 
       this.on('changedata-epoch', repositionFlag)
@@ -53,14 +57,15 @@ export default class Building extends Phaser.GameObjects.Container
 
     for (let i = 0; i < 4; i++)
     {
-      const marker = new Phaser.GameObjects.Arc(this.scene, 0, 0, 4, 0, 360, false, 0x0000FF, 1)
+      const marker = new Phaser.GameObjects.Arc(this.scene, 0, 0, 2, 0, 360, false, 0x0000FF, 1)
       marker.setData('index', i)
       marker.setVisible(false)
+      marker.setAlpha(0.5)
       this.markers.add(marker)
       this.add(marker)
       marker.setInteractive()
       marker.on('pointerdown', () => {
-        this.scene.events.emit(UserEvents.BUILDING_PLACE_DEFENDER, this.buildingType, i)
+        this.scene.events.emit(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, this.buildingType, i)
       })
     }
 
@@ -69,22 +74,49 @@ export default class Building extends Phaser.GameObjects.Container
     this.setSize(this.building.displayWidth, this.building.displayHeight)
     this.setInteractive()
 
-    const marker = new Phaser.GameObjects.Arc(scene, 0, 0, 4, 0, 360, false, 0xFFFFFF, 1)
+    const marker = new Phaser.GameObjects.Arc(scene, 0, 0, 2, 0, 360, false, 0xFFFFFF, 1)
     marker.setVisible(false)
     this.add(marker)
 
     this.on('pointerdown', (pointer, localX, localY, event) => {
-      console.log(localX, localY)
-      marker.setPosition(this.getInnerPositionX(localX), this.getInnerPositionY(localY))
+      const relative = { x: localX - this.width / 2, y: localY - this.height / 2 }
+      console.log(relative.x, relative.y)
+      marker.setPosition(relative.x, relative.y)
       marker.setVisible(true)
+
+      this.scene.events.emit(UserEvents.BUILDING_SELECT, this.buildingType)
     })
 
     this.updateDefenderMarkers()
   }
 
-  addDefender()
+  addDefender(position, type, spawn = true)
   {
+    const defenderPositions = this.building.frame.customData.defenders || []
 
+    const p = defenderPositions[position]
+    const defender = new Unit(this.scene, p.x, p.y, {
+      type,
+      team: this.getData('team'),
+      defender: true,
+      position: position,
+      spawn,
+    })
+    this.add(defender)
+    this.defenders.add(defender)
+  }
+
+  removeDefender(position)
+  {
+    const defender = this.defenders.getChildren().find(d => d.getData('position') === position)
+    if (defender)
+    {
+      defender.destroy()
+    }
+    else
+    {
+      console.warn(`No defender at position ${position}`)
+    }
   }
 
   getInnerPositionX(localX)
@@ -109,7 +141,7 @@ export default class Building extends Phaser.GameObjects.Container
     const defenderPositions = this.building.frame.customData.defenders || []
     defenderPositions.forEach((pos, index) => {
       const marker = this.markers.getChildren()[index]
-      marker.setPosition(this.getInnerPositionX(pos.x), this.getInnerPositionY(pos.y))
+      marker.setPosition(pos.x, pos.y)
       marker.setVisible(true)
     })
   }

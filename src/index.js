@@ -92,14 +92,47 @@ class IslandGameScene extends Phaser.Scene
       updateDebugText()
     })
 
-    this.events.on(UserEvents.BUILDING_PLACE_DEFENDER, (building, position) => {
-      console.debug(UserEvents.BUILDING_PLACE_DEFENDER, building, position)
+    this.events.on(UserEvents.BUILDING_SELECT, building => {
+      console.debug(UserEvents.BUILDING_SELECT, building)
 
+      // Check the player is in placement mode
+      // Check if the sector has the required population
+      // Check if the sector has the required resources
+      // Check a position is free
+      let position
+      for (let i = 0; i < 4; i++)
+      {
+        if (store.hasDefender(sector, building, i) === false)
+        {
+          position = i
+          break
+        }
+      }
+
+      if (position != null)
+      {
+        // Place the defender
+        store.addDefender(sector, building, position, 'stick')
+      }
     })
 
-    this.events.on(UserEvents.BUILDING_REMOVE_DEFENDER, (building, position) => {
-      console.debug(UserEvents.SECTOR_SELECTBUILDING_REMOVE_DEFENDER, building, position)
+    this.events.on(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, (building, position) => {
+      console.debug(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, building, position)
 
+      // if placement mode
+      // preplacement checks
+      // store.placeDefender(sector, building, 'stick')
+      // else
+      // remove defender
+
+      if (store.hasDefender(sector, building, position))
+      {
+        store.removeDefender(sector, building, position)
+      }
+      else
+      {
+        store.addDefender(sector, building, position, 'stick')
+      }
     })
 
     // Trigger the selection of first sector of the island
@@ -130,8 +163,6 @@ class IslandGameScene extends Phaser.Scene
     // random AI castle (blue)
     position = Phaser.Math.RND.pick(indexes)
     store.buildBuilding(position, 'castle', Teams.BLUE)
-
-
 
     // Use a zone to spawn in a specific location
     // for (let i = 0; i < 1; i++)

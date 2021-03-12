@@ -35,21 +35,33 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
   {
     super(scene, x, y, 'mlm_icons', 'spawn_001')
 
-    this.unitType = options.type
-    this.team = options.team
+    Object.defineProperties(this, {
+      unitType: {
+        get()
+        {
+          return this.getData('type')
+        }
+      },
+      team: {
+        get()
+        {
+          return this.getData('team')
+        }
+      },
+    })
+
+    this.setData(options)
+
     this.direction = 'left'
 
-    this.state = UnitStates.SPAWNING
+    // options.spawn
+    this.state = options.spawn ? UnitStates.SPAWNING : ''
 
     // Do something different after 0.5s to 2s
     this.cooldown = Phaser.Math.RND.between(500, 2000)
     this.lastAttack = 0
 
-    this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, () => {
-      this.play('spawn', true)
-    })
-
-    this.once('animationcomplete', () => {
+    const onAnimationCompleted = () => {
       if (!options.defender)
       {
         this.state = UnitStates.WANDERING
@@ -60,7 +72,21 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
         const frame = `${this.team}_${this.unitType}_${this.direction}_000`
         this.setTexture('mlm_units', frame)
       }
-    })
+    }
+
+    // FIXME
+    if (this.state === UnitStates.SPAWNING)
+    {
+      this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, () => {
+        this.play('spawn', true)
+      })
+
+      this.once('animationcomplete', onAnimationCompleted)
+    }
+    else
+    {
+      onAnimationCompleted()
+    }
   }
 
   getCanAttack(time)
