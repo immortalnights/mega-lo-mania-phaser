@@ -24,19 +24,19 @@ export default class MiniMap extends Phaser.GameObjects.Container
     this.icons = new Phaser.GameObjects.Group(scene)
 
     // Build the map
-    for (let i = 0; i < 16; i++)
+    for (let index = 0; index < 16; index++)
     {
-      if (island.map[i])
+      if (island.map[index])
       {
-        const key = getKeyForSector(i, island.map)
+        const key = getKeyForSector(index, island.map)
 
         const sector = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_smallmap', `${island.style}_${key}`)
 
-        const position = this.getSectorXY(i)
+        const position = this.getSectorXY(index)
         sector.setPosition(position.x, position.y)
         sector.setInteractive()
-        sector.on('pointerup', () => {
-          this.scene.events.emit(UserEvents.SECTOR_SELECT, i, key)
+        sector.on('pointerup', pointer => {
+          this.scene.events.emit(UserEvents.SECTOR_MAP_SELECT, pointer, index)
         })
         // this.sectors.add(sector, true)
         this.add(sector)
@@ -121,6 +121,20 @@ export default class MiniMap extends Phaser.GameObjects.Container
     return sector
   }
 
+  hasCastle(sector, team)
+  {
+    return !!this.icons.getChildren().find(child => {
+      return child.name === BuildingTypes.CASTLE && child.getData('sector') === sector && child.getData('team') === team
+    })
+  }
+
+  hasArmy(sector, team)
+  {
+    return !!this.icons.getChildren().find(child => {
+      return child.name === 'army' && child.getData('sector') === sector && child.getData('team') === team
+    })
+  }
+
   onAddBuilding(sector, building, team)
   {
     if (building === BuildingTypes.CASTLE)
@@ -156,20 +170,24 @@ export default class MiniMap extends Phaser.GameObjects.Container
 
   onAddArmy(sector, team, units)
   {
-    const position = this.getSectorXY(sector)
+    // Ignore the event if an army icon for the specific team already exists
+    if (this.hasArmy(sector, team) === false)
+    {
+      const position = this.getSectorXY(sector)
 
-    position.x += armyIconOffset[team].x
-    position.y += armyIconOffset[team].y
+      position.x += armyIconOffset[team].x
+      position.y += armyIconOffset[team].y
 
-    const icon = new Phaser.GameObjects.Image(this.scene, position.x, position.y, 'mlm_icons', `${team}_army_icon`)
-    icon.name = 'army'
-    icon.setData({
-      sector,
-      team,
-    })
+      const icon = new Phaser.GameObjects.Image(this.scene, position.x, position.y, 'mlm_icons', `${team}_army_icon`)
+      icon.name = 'army'
+      icon.setData({
+        sector,
+        team,
+      })
 
-    this.icons.add(icon)
-    this.add(icon)
+      this.icons.add(icon)
+      this.add(icon)
+    }
   }
 
   onRemoveArmy(sector, team)
@@ -186,14 +204,20 @@ export default class MiniMap extends Phaser.GameObjects.Container
 
   onStartClaim(sector, team)
   {
-    const icon = sectorData[sector].armies[index]
+    const icon = this.icons.getChildren().find(child => {
+      return child.name === 'army' && child.getData('sector') === sector && child.getData('team') === team
+    })
+
     const position = this.getSectorCenterXT(sector)
     icon.setPosition(position.x, position.y)
   }
 
   onStopClaim(sector, team)
   {
-    const icon = sectorData[sector].armies[index]
+    const icon = this.icons.getChildren().find(child => {
+      return child.name === 'army' && child.getData('sector') === sector && child.getData('team') === team
+    })
+
     const iconTeam = icon.getData('team')
     const position = this.getSectorCenterXY(sector)
     position.x += armyIconOffset[iconTeam].x

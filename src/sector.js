@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import Building from './building'
-import { GameEvents } from './defines'
+import { GameEvents, UserEvents } from './defines'
 import sectorConfig from './assets/sectorconfig.json'
 
 
@@ -53,6 +53,10 @@ export default class Sector extends Phaser.GameObjects.Container
     // Slab image
     const land = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_slab')
     land.setTint(tints[options.style])
+    land.setInteractive()
+    land.on('pointerdown', (pointer, localX, localY, event) => {
+      this.scene.events.emit(UserEvents.SECTOR_SELECT, pointer)
+    })
     this.add(land)
 
     this.features = new Phaser.GameObjects.Group(scene)
@@ -121,7 +125,10 @@ export default class Sector extends Phaser.GameObjects.Container
     if (defenders)
     {
       defenders.forEach((defender, index) => {
-        b.addDefender(index, defender, false)
+        if (defender)
+        {
+          b.addDefender(index, defender, false)
+        }
       })
     }
 

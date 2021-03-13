@@ -1,9 +1,7 @@
 import Phaser from 'phaser'
 import TransparentColorsPipeline from './transparent-colors-pipeline.ts'
-import Unit from './unit.js'
-import Building from './building.js'
 import MiniMap from './minimap.js'
-import { DefaultKeys, GameEvents, BuildingTypes, Teams, UnitTypes, UserEvents } from './defines.js'
+import { DefaultKeys, PlayerStates, GameEvents, Teams, UserEvents } from './defines.js'
 import { getKeyForSector } from './utilities'
 import animationFactory from './animationfactory.js'
 import Sector from './sector'
@@ -53,20 +51,38 @@ class IslandGameScene extends Phaser.Scene
     animationFactory.createFlagAnimations(this)
     animationFactory.createProjectileAnimations(this)
 
-    // game data could be scene.data or scene.game.registry?
-    let sector = -1;
-    const teams = Object.values(Teams)
-    let team = 0
-    let epoch = 0
+    this.state = PlayerStates.DEFAULT
+    this.activeArmySector = undefined
 
-    const store = new Store(this)
-    store.setIsland("Quota")
+    Object.defineProperties(this, {
+      sector: {
+        get()
+        {
+          return this.data.get('sector')
+        },
+        set(value)
+        {
+          return this.data.set('sector', value)
+        }
+      },
+    })
+
+    this.sector = undefined
+
+    // game data could be scene.data or scene.game.registry?
+    this.data.set({
+      // (dev) current team
+      team: Teams.RED,
+    })
+
+    this.store = new Store(this)
+    this.store.setIsland("Quota")
 
     // Create the minimap
-    this.add.existing(new MiniMap(this, 20, 40, store.island))
+    this.add.existing(new MiniMap(this, 20, 40, this.store.island))
 
-    // Create the Sector  view
-    this.add.existing(new Sector(this, 250, 120, { style: store.island.style }))
+    // Create the Sector view
+    this.add.existing(new Sector(this, 250, 120, { style: this.store.island.style, epoch: 1 }))
 
     const units = this.physics.add.group()
     const projectiles = this.physics.add.group()
@@ -74,73 +90,20 @@ class IslandGameScene extends Phaser.Scene
 
     // debug text
     this.debugText = this.add.text(0, 0, ``);
-    const updateDebugText = () => {
-      this.debugText.setText(`Sector ${sector}, Team ${teams[team]}, Epoch ${epoch}`)
-    }
 
+    this.events.on(UserEvents.SECTOR_SELECT, this.onSectorSelected, this)
     // Listen to the sector selection event (emitted by the minimap)
     // TODO should this be emitted on the map to which the Scene listens?
-    this.events.on(UserEvents.SECTOR_SELECT, (index, key) => {
-      console.debug(UserEvents.SECTOR_SELECT, index, key)
-
-      sector = index
-
-      // Find the sector data from the game data...
-      const sec = store.sectors[sector]
-      this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings.map(), {/*armies*/})
-
-      updateDebugText()
-    })
-
-    this.events.on(UserEvents.BUILDING_SELECT, building => {
-      console.debug(UserEvents.BUILDING_SELECT, building)
-
-      // Check the player is in placement mode
-      // Check if the sector has the required population
-      // Check if the sector has the required resources
-      // Check a position is free
-      let position
-      for (let i = 0; i < 4; i++)
-      {
-        if (store.hasDefender(sector, building, i) === false)
-        {
-          position = i
-          break
-        }
-      }
-
-      if (position != null)
-      {
-        // Place the defender
-        store.addDefender(sector, building, position, 'stick')
-      }
-    })
-
-    this.events.on(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, (building, position) => {
-      console.debug(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, building, position)
-
-      // if placement mode
-      // preplacement checks
-      // store.placeDefender(sector, building, 'stick')
-      // else
-      // remove defender
-
-      if (store.hasDefender(sector, building, position))
-      {
-        store.removeDefender(sector, building, position)
-      }
-      else
-      {
-        store.addDefender(sector, building, position, 'stick')
-      }
-    })
+    this.events.on(UserEvents.SECTOR_MAP_SELECT, this.onMapSectorSelected, this)
+    this.events.on(UserEvents.BUILDING_SELECT, this.onBuildingSelected, this)
+    this.events.on(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, this.onBuildingPositionSelected, this)
 
     // Trigger the selection of first sector of the island
     // FIXME!
 
     // Place player and AI in random locations; select the player sector
     const indexes = []
-    store.island.map.forEach((value, index) => {
+    this.store.island.map.forEach((value, index) => {
       if (value)
       {
         indexes.push(index)
@@ -149,20 +112,18 @@ class IslandGameScene extends Phaser.Scene
 
     // random player castle (red)
     let position = Phaser.Math.RND.pick(indexes)
-    // store.sectors[position].buildings.build('castle', Teams.RED)
-    store.buildBuilding(position, 'castle', Teams.RED)
+    // this.store.sectors[position].buildings.build('castle', Teams.RED)
+    this.store.buildBuilding(position, 'castle', this.data.get('team'))
 
+    // Select the sector
+    this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, position)
 
-    // not ideal
-    const key = getKeyForSector(position, store.island.map)
-
-    this.events.emit(UserEvents.SECTOR_SELECT, position, key)
-
+    // Remove the used sector
     indexes.splice(indexes.findIndex(v => v === position), 1)
 
     // random AI castle (blue)
     position = Phaser.Math.RND.pick(indexes)
-    store.buildBuilding(position, 'castle', Teams.BLUE)
+    this.store.buildBuilding(position, 'castle', Teams.BLUE)
 
     // Use a zone to spawn in a specific location
     // for (let i = 0; i < 1; i++)
@@ -182,77 +143,52 @@ class IslandGameScene extends Phaser.Scene
     //   p.body.setVelocity(velocity.x, velocity.y)
     // })
 
-    // let epoch = 6
-    // const building = new Building(this, 100, 100, {
-    //   type: BuildingTypes.CASTLE,
-    //   team: Teams.RED,
-    //   epoch: epoch
-    // })
-    // this.add.existing(building)
-    // this.physics.add.existing(building)
-
+    const teamNames = Object.values(Teams)
     this.input.keyboard.on('keydown', event => {
-      if (event.key === '+')
-      {
-        epoch++
-      }
-      else if (event.key === '-')
-      {
-        epoch--
-      }
+      let team = this.data.get('team')
 
-      epoch = Phaser.Math.Wrap(epoch, 0, 9)
-
-      if (event.key === 'PageUp')
-      {
-        sector++
-      }
-      else if (event.key === 'PageDown')
-      {
-        sector--
-      }
-
-      sector = Phaser.Math.Wrap(sector, 0, 16)
-
+      let teamIndex = -1
       if (event.key === 'Home')
       {
-        team++
+        teamIndex = teamNames.findIndex(n => n === team)
+        teamIndex++
       }
       else if (event.key === 'End')
       {
-        team--
+        teamIndex = teamNames.findIndex(n => n === team)
+        teamIndex--
       }
 
-      team = Phaser.Math.Wrap(team, 0, 4)
+      teamIndex = Phaser.Math.Wrap(teamIndex, 0, 4)
+      team = teamNames[teamIndex]
+      this.data.set('team', team)
 
       if (event.key === 'z')
       {
-        store.buildBuilding(sector, 'castle', teams[team])
+        this.store.buildBuilding(this.sector, 'castle', team)
       }
       else if (event.key === 'x')
       {
-        store.destroyBuilding(sector, 'castle')
+        this.store.destroyBuilding(this.sector, 'castle')
       }
 
       if (event.key === 'c')
       {
-        this.events.emit('game:sector:add_army', sector, teams[team])
+        this.events.emit('game:sector:add_army', this.sector, team)
       }
       else if (event.key === 'v')
       {
-        this.events.emit('game:sector:remove_army', sector, teams[team])
+        this.events.emit('game:sector:remove_army', this.sector, team)
       }
 
       if (event.key === 'b')
       {
-        this.events.emit('game:sector:start_claim', sector, teams[team])
+        this.events.emit('game:sector:start_claim', this.sector, team)
       }
       else if (event.key === 'n')
       {
-        this.events.emit('game:sector:stop_claim', sector, teams[team])
+        this.events.emit('game:sector:stop_claim', this.sector, team)
       }
-
-      updateDebugText()
     })
 
     this.bindings = this.input.keyboard.addKeys(DefaultKeys)
@@ -279,6 +215,126 @@ class IslandGameScene extends Phaser.Scene
       this.units.getChildren().forEach(u => {
         u.setType(newType)
       })
+    }
+
+    this.debugText.setText(`Sector ${this.sector}, Team ${this.data.get('team')}`)
+  }
+
+  onSectorSelected(pointer)
+  {
+    console.debug(UserEvents.BUILDING_SELECT, pointer.button)
+
+    const team = this.data.get('team')
+
+    if (pointer.button === 0) // Left
+    {
+      // if (this.state === PlayerStates.DEPLOY_ARMY)
+      {
+        // Deploy army
+        this.store.deployArmy(this.sector, {
+          rock: 10
+        })
+
+        this.state = PlayerStates.DEFAULT
+      }
+    }
+    else if (pointer.button === 2) // Right
+    {
+      if (this.store.hasArmy(this.sector, team))
+      {
+        this.state = PlayerStates.MOVE_ARMY
+        this.activeArmySector = this.sector
+        this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, this.sector, team)
+      }
+    }
+  }
+
+  onMapSectorSelected(pointer, index)
+  {
+    console.debug(UserEvents.SECTOR_MAP_SELECT, pointer.button, index)
+
+    const team = this.data.get('team')
+
+    if (pointer.button === 2) // Right
+    {
+      if (this.store.hasArmy(index, team))
+      {
+        this.state = PlayerStates.MOVE_ARMY
+        this.activeArmySector = index
+        this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, index, team)
+      }
+    }
+    else // Left
+    {
+      switch (this.state)
+      {
+        case PlayerStates.DEPLOY_ARMY:
+        {
+          break
+        }
+        case PlayerStates.MOVE_ARMY:
+        {
+          this.store.moveArmy(this.activeArmySector, index, team)
+          this.state = PlayerStates.DEFAULT
+          break
+        }
+        case PlayerStates.DEFAULT:
+        {
+          const key = getKeyForSector(index, this.store.island.map)
+
+          this.sector = index
+
+          // Find the sector data from the game data...
+          const sec = this.store.sectors[this.sector]
+          this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings.map(), {/*armies*/})
+          break
+        }
+      }
+    }
+  }
+
+  onBuildingSelected(building)
+  {
+    console.debug(UserEvents.BUILDING_SELECT, building)
+
+    // Check the player is in placement mode
+    // Check if the sector has the required population
+    // Check if the sector has the required resources
+    // Check a position is free
+    let position
+    for (let i = 0; i < 4; i++)
+    {
+      if (this.store.hasDefender(this.sector, building, i) === false)
+      {
+        position = i
+        break
+      }
+    }
+    
+    if (position != null)
+    {
+      // Place the defender
+      this.store.addDefender(this.sector, building, position, 'stick')
+    }
+  }
+
+  onBuildingPositionSelected(building, position)
+  {
+    console.debug(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, building, position)
+
+    // if placement mode
+    // preplacement checks
+    // this.store.placeDefender(sector, building, 'stick')
+    // else
+    // remove defender
+
+    if (this.store.hasDefender(this.sector, building, position))
+    {
+      this.store.removeDefender(this.sector, building, position)
+    }
+    else
+    {
+      this.store.addDefender(this.sector, building, position, 'stick')
     }
   }
 }

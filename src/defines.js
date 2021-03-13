@@ -51,10 +51,17 @@ export const BuildingTypes = {
   LABORATORY: 'laboratory',
 }
 
+export const PlayerStates = {
+  DEFAULT: '',
+  DEPLOY_ARMY: 'army:deploy',
+  MOVE_ARMY: 'army:move',
+}
+
 export const UserEvents = {
+  SECTOR_MAP_SELECT: 'user:map:sector:select',
   SECTOR_SELECT: 'user:sector:select',
-  BUILDING_SELECT: 'user:building:select',
-  BUILDING_SELECT_DEFENDER_POSITION: 'user:building:select:defender_position',
+  BUILDING_SELECT: 'user:sector:building:select',
+  BUILDING_SELECT_DEFENDER_POSITION: 'user:sector:building:defender_position:select',
 }
 
 // Game Sector events
@@ -65,6 +72,8 @@ export const GameEvents = {
   SECTOR_REMOVE_BUILDING: 'game:sector:remove_building',
   SECTOR_ADD_ARMY: 'game:sector:add_army',
   SECTOR_REMOVE_ARMY: 'game:sector:remove_army',
+  SECTOR_ACTIVATE_ARMY: 'game:sector:activate_army',
+  SECTOR_DEACTIVATE_ARMY: 'game:sector:deactivate_army',
   SECTOR_START_CLAIM: 'game:sector:start_claim',
   SECTOR_STOP_CLAIM: 'game:sector:stop_claim',
   SECTOR_NUKE: 'game:sector:nuke',
