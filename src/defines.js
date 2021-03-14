@@ -12,9 +12,9 @@ export const DefaultKeys = {
 
 export const Teams = {
   RED: 'red',
+  YELLOW: 'yellow',
   GREEN: 'green',
   BLUE: 'blue',
-  YELLOW: 'yellow',
 }
 
 export const UnitTypes = {

@@ -40,6 +40,7 @@ class IslandGameScene extends Phaser.Scene
     this.load.image('mlm_slab', './mlm_slabs.png')
     // this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
     this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')
+    this.load.image('paletteswap-template', '/link-palette.png')
   }
 
   create()
@@ -85,7 +86,7 @@ class IslandGameScene extends Phaser.Scene
     this.add.existing(new Sector(this, 250, 120, { style: this.store.island.style, epoch: 1 }))
 
     const units = this.physics.add.group()
-    const projectiles = this.physics.add.group()
+    this.projectiles = this.physics.add.group()
     this.units = units
 
     // debug text
@@ -110,38 +111,32 @@ class IslandGameScene extends Phaser.Scene
       }
     })
 
-    // random player castle (red)
-    let position = Phaser.Math.RND.pick(indexes)
-    // this.store.sectors[position].buildings.build('castle', Teams.RED)
-    this.store.buildBuilding(position, 'castle', this.data.get('team'))
+    const players = Object.values(Teams)
+    const castles = {}
+    
+    players.forEach(t => {
+      // random player castle
+      let position = Phaser.Math.RND.pick(indexes)
+      castles[t] = position
+      this.store.buildBuilding(position, 'castle', t)
+      indexes.splice(indexes.findIndex(v => v === position), 1)
+    })
 
     // Select the sector
-    this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, position)
+    this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, castles[Teams.RED])
 
-    // Remove the used sector
-    indexes.splice(indexes.findIndex(v => v === position), 1)
+    setTimeout(() => {
+      this.store.deployArmy(1, {
+        rock: 10
+      })
+    }, 500)
 
-    // random AI castle (blue)
-    position = Phaser.Math.RND.pick(indexes)
-    this.store.buildBuilding(position, 'castle', Teams.BLUE)
-
-    // Use a zone to spawn in a specific location
-    // for (let i = 0; i < 1; i++)
-    // {
-    //   const u = new Unit(this, 0, 0, {
-    //     team: Teams.RED,
-    //     type: UnitTypes.ROCK,
-    //   })
-    //   u.setRandomPosition()
-    //   units.add(u, true)
-    // }
-
-    // this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
-    //   const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'rock_projectile_000')
-    //   p.play('rock_projectile')
-    //   projectiles.add(p, true)
-    //   p.body.setVelocity(velocity.x, velocity.y)
-    // })
+    this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
+      const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'rock_projectile_000')
+      p.play('rock_projectile')
+      this.projectiles.add(p, true)
+      p.body.setVelocity(velocity.x, velocity.y)
+    })
 
     const teamNames = Object.values(Teams)
     this.input.keyboard.on('keydown', event => {
@@ -280,13 +275,16 @@ class IslandGameScene extends Phaser.Scene
         }
         case PlayerStates.DEFAULT:
         {
-          const key = getKeyForSector(index, this.store.island.map)
+          if (this.sector !== index)
+          {
+            this.projectiles.clear(true, true)
 
-          this.sector = index
+            this.sector = index
 
-          // Find the sector data from the game data...
-          const sec = this.store.sectors[this.sector]
-          this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings.map(), sec.armies)
+            const key = getKeyForSector(index, this.store.island.map)
+            const sec = this.store.sectors[this.sector]
+            this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings.map(), sec.armies)
+          }
           break
         }
       }

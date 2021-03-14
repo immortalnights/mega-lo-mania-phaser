@@ -1,15 +1,16 @@
 import { Teams, UnitTypes } from './defines.js'
+import paletteSwap from './paletteswap.js'
 
 const WALK_ANIMATION_FRAMERATE = 12
 
-const createUnitAnimationSet = (manager, prefix) => {
+const createUnitAnimationSet = (manager, team, unit) => {
   const frames = 2
   const padding = 3
 
   manager.create({
-    key: `${prefix}_walk_down`,
-    frames: manager.generateFrameNames('mlm_units', {
-      prefix: `${prefix}_down_`,
+    key: `${team}_${unit}_walk_down`,
+    frames: manager.generateFrameNames(`mlm_units-${team}`, {
+      prefix: `${unit}_down_`,
       end: frames,
       zeroPad: padding,
     }),
@@ -18,9 +19,9 @@ const createUnitAnimationSet = (manager, prefix) => {
     repeat: -1,
   });
   manager.create({
-    key: `${prefix}_walk_up`,
-    frames: manager.generateFrameNames('mlm_units', {
-      prefix: `${prefix}_up_`,
+    key: `${team}_${unit}_walk_up`,
+    frames: manager.generateFrameNames(`mlm_units-${team}`, {
+      prefix: `${unit}_up_`,
       end: frames,
       zeroPad: padding,
     }),
@@ -29,9 +30,9 @@ const createUnitAnimationSet = (manager, prefix) => {
     repeat: -1,
   });
   manager.create({
-    key: `${prefix}_walk_right`,
-    frames: manager.generateFrameNames('mlm_units', {
-      prefix: `${prefix}_right_`,
+    key: `${team}_${unit}_walk_right`,
+    frames: manager.generateFrameNames(`mlm_units-${team}`, {
+      prefix: `${unit}_right_`,
       end: frames,
       zeroPad: padding,
     }),
@@ -40,9 +41,9 @@ const createUnitAnimationSet = (manager, prefix) => {
     repeat: -1,
   });
   manager.create({
-    key: `${prefix}_walk_left`,
-    frames: manager.generateFrameNames('mlm_units', {
-      prefix: `${prefix}_left_`,
+    key: `${team}_${unit}_walk_left`,
+    frames: manager.generateFrameNames(`mlm_units-${team}`, {
+      prefix: `${unit}_left_`,
       end: frames,
       zeroPad: padding,
     }),
@@ -54,14 +55,22 @@ const createUnitAnimationSet = (manager, prefix) => {
 
 
 export const createUnitAnimations = scene => {
-  const supportedTeams = [ Teams.RED ]
+  paletteSwap({
+    game: scene.game,
+    paletteKey: 'paletteswap-template',
+    paletteNames: Object.values(Teams),
+    spriteSheet: {
+      key: 'mlm_units'
+    }
+  })
 
-  supportedTeams.forEach(team => {
+  Object.values(Teams).forEach(team => {
     Object.values(UnitTypes).forEach(unit => {
-      createUnitAnimationSet(scene.anims, `${team}_${unit}`)
+      createUnitAnimationSet(scene.anims, team, unit)
     })
   })
 }
+
 
 export const createSpawnAnimation = scene => {
   scene.anims.create({
@@ -76,6 +85,7 @@ export const createSpawnAnimation = scene => {
     repeat: 0
   });
 }
+
 
 export const createFlagAnimations = scene => {
   Object.values(Teams).forEach(team => {
@@ -93,6 +103,7 @@ export const createFlagAnimations = scene => {
   })
 }
 
+
 export const createProjectileAnimations = scene => {
   scene.anims.create({
     key: `rock_projectile`,
@@ -106,6 +117,7 @@ export const createProjectileAnimations = scene => {
     repeat: 0
   });
 }
+
 
 export default {
   createUnitAnimations,

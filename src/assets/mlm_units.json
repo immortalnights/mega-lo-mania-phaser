@@ -1,67 +1,67 @@
 {
   "frames": [
     {
-      "filename": "red_rock_down_000",
+      "filename": "rock_down_000",
       "frame": { "x": 0, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_down_001",
+      "filename": "rock_down_001",
       "frame": { "x": 16, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_down_002",
+      "filename": "rock_down_002",
       "frame": { "x": 32, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_up_000",
+      "filename": "rock_up_000",
       "frame": { "x": 65, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_up_001",
+      "filename": "rock_up_001",
       "frame": { "x": 80, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_up_002",
+      "filename": "rock_up_002",
       "frame": { "x": 96, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_right_000",
+      "filename": "rock_right_000",
       "frame": { "x": 128, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_right_001",
+      "filename": "rock_right_001",
       "frame": { "x": 144, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_right_002",
+      "filename": "rock_right_002",
       "frame": { "x": 160, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_left_000",
+      "filename": "rock_left_000",
       "frame": { "x": 192, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_left_001",
+      "filename": "rock_left_001",
       "frame": { "x": 208, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_left_002",
+      "filename": "rock_left_002",
       "frame": { "x": 224, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_down_attacked_000",
+      "filename": "rock_down_attacked_000",
       "frame": { "x": 48, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_up_attacked_000",
+      "filename": "rock_up_attacked_000",
       "frame": { "x": 112, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_right_attacked_000",
+      "filename": "rock_right_attacked_000",
       "frame": { "x": 176, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_rock_left_attacked_000",
+      "filename": "rock_left_attacked_000",
       "frame": { "x": 240, "y": 0, "w": 16, "h": 16 }
     },
     {

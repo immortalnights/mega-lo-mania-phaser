@@ -65,12 +65,14 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
       if (!options.defender)
       {
         this.state = UnitStates.WANDERING
+        const frame = `${this.unitType}_${this.direction}_000`
+        this.setTexture(`mlm_units-${this.team}`, frame)
         this.changeDirection()
       }
       else
       {
-        const frame = `${this.team}_${this.unitType}_${this.direction}_000`
-        this.setTexture('mlm_units', frame)
+        const frame = `${this.unitType}_${this.direction}_000`
+        this.setTexture(`mlm_units-${this.team}`, frame)
       }
     }
 
@@ -147,7 +149,7 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
 
             this.stop()
             this.body.stop()
-            this.setFrame(`${this.team}_${this.unitType}_${this.direction}_attacked_000`)
+            this.setFrame(`${this.unitType}_${this.direction}_attacked_000`)
             this.cooldown = Phaser.Math.RND.between(500, 750)
             this.lastAttack = time
 
