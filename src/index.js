@@ -33,6 +33,7 @@ class IslandGameScene extends Phaser.Scene
 
   preload()
   {
+    this.load.json('mlm_units_data', './mlm_units.json')
     this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
     this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
     this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')

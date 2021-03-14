@@ -73,8 +73,16 @@ class Units extends Phaser.Physics.Arcade.Group
 
     Phaser.Actions.RandomRectangle(newUnits, this.zone)
   }
-}
 
+  removeSome(army, died = false)
+  {
+    const { team, ...units } = army
+
+    const toDestroy = this.getChildren().filter(u => u.getData('team') === team)
+
+    toDestroy.forEach(u => u.destroy())
+  }
+}
 
 
 export default class Sector extends Phaser.GameObjects.Container
@@ -288,11 +296,11 @@ export default class Sector extends Phaser.GameObjects.Container
     }
   }
 
-  onRemoveArmy(sector, team) 
+  onRemoveArmy(sector, team, units)
   {
     if (this.index === sector)
     {
-
+      this.units.removeSome(units)
     }
   }
 }

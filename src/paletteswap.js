@@ -1,6 +1,3 @@
-
-import mlm_units from  './assets/mlm_units.json'
-
 /**
  * Creates new sprite sheets and animations from the given palette and spritesheet.
  * from https://github.com/Colbydude/phaser-3-palette-swapping-example/blob/master/public/js/palette-swap.js
@@ -79,8 +76,9 @@ export default function paletteSwap(config)
       // Put our modified pixel data back into the context.
       context.putImageData(imageData, 0, 0);
 
+      const atlasData = game.cache.json.get(config.spriteSheet.dataKey)
       // Add the canvas as a sprite sheet to the game.
-      game.textures.addAtlas(atlasKey, canvasTexture.getSourceImage(), mlm_units, null);
+      game.textures.addAtlas(atlasKey, canvasTexture.getSourceImage(), atlasData, null);
       // game.textures.addSpriteSheet(atlasKey, canvasTexture.getSourceImage(), {
       //   frameWidth: config.spriteSheet.frameWidth,
       //   frameHeight: config.spriteSheet.frameHeight,

@@ -233,9 +233,9 @@ export default class Store extends Phaser.Events.EventEmitter
         }
 
         // Merge armies
-        this.combineArmies(sourceArmy, destinationArmy)
+        this.combineArmies(destinationArmy, sourceArmy)
 
-        this.scene.events.emit(GameEvents.SECTOR_REMOVE_ARMY, sectorIndex, team)
+        this.scene.events.emit(GameEvents.SECTOR_REMOVE_ARMY, sectorIndex, team, sourceArmy)
         this.scene.events.emit(GameEvents.SECTOR_ADD_ARMY, destinationIndex, team, destinationArmy)
       }
     }
@@ -249,19 +249,27 @@ export default class Store extends Phaser.Events.EventEmitter
 
   }
 
-  combineArmies(a, b)
+  /**
+   * Adds others to 'destination'
+   * @param {Object} destination
+   * @param {*} others
+   * @returns destination, with others merged in
+   */
+  combineArmies(destination, ...others)
   {
     const ignoredKeys = ['team']
 
-    for (const [key, value] of Object.entries(b))
-    {
-      if (ignoredKeys.includes(key) === false)
+    others.forEach(b => {
+      for (const [key, value] of Object.entries(b))
       {
-        a[key] += value
+        if (ignoredKeys.includes(key) === false)
+        {
+          destination[key] += value
+        }
       }
-    }
+    })
 
-    return a
+    return destination
   }
 
   setIsland(name)

@@ -60,7 +60,8 @@ export const createUnitAnimations = scene => {
     paletteKey: 'paletteswap-template',
     paletteNames: Object.values(Teams),
     spriteSheet: {
-      key: 'mlm_units'
+      key: 'mlm_units',
+      dataKey: 'mlm_units_data'
     }
   })
 
