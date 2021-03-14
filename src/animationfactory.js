@@ -95,9 +95,9 @@ export const createFlagAnimations = scene => {
 
 export const createProjectileAnimations = scene => {
   scene.anims.create({
-    key: `stone_projectile`,
+    key: `rock_projectile`,
     frames: scene.anims.generateFrameNames('mlm_units', {
-      prefix: `stone_projectile_`,
+      prefix: `rock_projectile_`,
       end: 3,
       zeroPad: 3,
     }),

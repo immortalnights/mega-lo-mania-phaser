@@ -1,21 +1,6 @@
 import Phaser from 'phaser'
-import { Teams, GameEvents, BuildingTypes } from './defines.js'
+import { Teams, GameEvents, BuildingTypes, unitSet } from './defines.js'
 import Islands from './assets/islands.json'
-
-
-// Cloned for new armies
-const baseArmy = {
-  rock: 0,
-  sling: 0,
-  spear: 0,
-  bowAndArrow: 0,
-  catapult: 0,
-  cannon: 0,
-  biplane: 0,
-  jet: 0,
-  saucer: 0,
-  trooper: 0,
-}
 
 
 // TODO maybe sector manager rather then specific for buildings?
@@ -192,12 +177,12 @@ export default class Store extends Phaser.Events.EventEmitter
 
       if (army == null)
       {
-        army = { team: ownerTeam, ...baseArmy }
+        army = { team: ownerTeam, ...unitSet }
         destination.armies.push(army)
         isNew = true
       }
 
-      army = this.combineArmies(units, army)
+      this.combineArmies(army, units)
 
       if (sectorIndex === destinationIndex)
       {
@@ -243,12 +228,12 @@ export default class Store extends Phaser.Events.EventEmitter
         // Create destination army, if required
         if (destinationArmy == null)
         {
-          destinationArmy = { team: team, ...baseArmy }
+          destinationArmy = { team: team, ...unitSet }
           destination.armies.push(destinationArmy)
         }
 
         // Merge armies
-        destinationArmy = this.combineArmies(sourceArmy, destinationArmy)
+        this.combineArmies(sourceArmy, destinationArmy)
 
         this.scene.events.emit(GameEvents.SECTOR_REMOVE_ARMY, sectorIndex, team)
         this.scene.events.emit(GameEvents.SECTOR_ADD_ARMY, destinationIndex, team, destinationArmy)
@@ -267,17 +252,16 @@ export default class Store extends Phaser.Events.EventEmitter
   combineArmies(a, b)
   {
     const ignoredKeys = ['team']
-    const d = { ...a }
 
     for (const [key, value] of Object.entries(b))
     {
       if (ignoredKeys.includes(key) === false)
       {
-        d[key] += value
+        a[key] += value
       }
     }
 
-    return d
+    return a
   }
 
   setIsland(name)

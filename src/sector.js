@@ -1,7 +1,8 @@
-import Phaser from 'phaser'
+import Phaser, { GameObjects } from 'phaser'
 import Building from './building'
 import { GameEvents, UserEvents } from './defines'
 import sectorConfig from './assets/sectorconfig.json'
+import Unit from './unit'
 
 
 const featurePositions = {
@@ -33,6 +34,49 @@ const tints = {
 }
 
 
+class Units extends Phaser.Physics.Arcade.Group
+{
+  constructor(scene, zone)
+  {
+    super(scene.physics.world, scene)
+
+    this.data = new Phaser.Data.DataManager(this)
+    this.zone = zone
+  }
+
+  spawnUnits()
+  {
+    const units = this.data.get('units')
+    const team = this.data.get('team')
+
+    
+  }
+
+  combine(army, spawn = true)
+  {
+    const { team, ...units } = army
+    const newUnits = []
+
+    for (const [key, value] of Object.entries(units))
+    {
+      for (let i = 0; i < value; i++)
+      {
+        const unit = new Unit(this.scene, 0, 0, {
+          team,
+          type: key,
+          spawn
+        })
+        newUnits.push(unit)
+        this.add(unit, true)
+      }
+    }
+
+    Phaser.Actions.RandomRectangle(newUnits, this.zone)
+  }
+}
+
+
+
 export default class Sector extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y, options)
@@ -59,9 +103,13 @@ export default class Sector extends Phaser.GameObjects.Container
     })
     this.add(land)
 
+    // this.unitZone = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 5, 5, 0, 0)
+    // this.unitZone.setStrokeStyle(1, 0xAA2222, 1)
+    // this.add(this.unitZone)
+
     this.features = new Phaser.GameObjects.Group(scene)
     this.buildings = new Phaser.GameObjects.Group(scene)
-    this.armies = new Phaser.GameObjects.Group(scene)
+    this.units = new Units(scene, this.getBounds())
 
     // Add all feature images
     Object.keys(featurePositions).forEach(key => {
@@ -87,7 +135,6 @@ export default class Sector extends Phaser.GameObjects.Container
     scene.events.on(GameEvents.SECTOR_REMOVE_ARMY, this.onRemoveArmy, this)
     scene.events.on(GameEvents.BUILDING_ADD_DEFENDER, this.onAddDefender, this)
     scene.events.on(GameEvents.BUILDING_REMOVE_DEFENDER, this.onRemoveDefender, this)
-
   }
 
   // Update features based on sector key
@@ -151,6 +198,21 @@ export default class Sector extends Phaser.GameObjects.Container
     // Remember where the buildings are positions for this sector
     this.setData({ positions: config.buildings })
 
+    // temp
+    if (config.unitZone == null)
+    {
+      config.unitZone = { "x": 0, "y": 0, "w": 50, "h": 50 }
+    }
+
+    if (this.unitZone)
+    {
+      this.unitZone.destroy()
+    }
+
+    this.unitZone = new Phaser.GameObjects.Rectangle(this.scene, config.unitZone.x, config.unitZone.y, config.unitZone.w, config.unitZone.h)
+    this.unitZone.setStrokeStyle(1, 0xFF0000, 1)
+    this.add(this.unitZone)
+
     this.renderFeatures(config.features)
 
     // Destroy all buildings
@@ -163,6 +225,10 @@ export default class Sector extends Phaser.GameObjects.Container
         this.buildBuilding(type, value.team, value.defenders)
       }
     }
+
+    // Destroy all units
+    this.units.clear(true, true)
+    armies.forEach(army => this.units.combine(army, false))
   }
 
   onAddBuilding(sector, type, team, defenders)
@@ -214,11 +280,11 @@ export default class Sector extends Phaser.GameObjects.Container
     }
   }
 
-  onAddArmy(sector, team) 
+  onAddArmy(sector, team, units)
   {
     if (this.index === sector)
     {
-
+      this.units.combine(units)
     }
   }
 

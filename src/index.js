@@ -130,15 +130,15 @@ class IslandGameScene extends Phaser.Scene
     // {
     //   const u = new Unit(this, 0, 0, {
     //     team: Teams.RED,
-    //     type: UnitTypes.STONE,
+    //     type: UnitTypes.ROCK,
     //   })
     //   u.setRandomPosition()
     //   units.add(u, true)
     // }
 
     // this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
-    //   const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'stone_projectile_000')
-    //   p.play('stone_projectile')
+    //   const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'rock_projectile_000')
+    //   p.play('rock_projectile')
     //   projectiles.add(p, true)
     //   p.body.setVelocity(velocity.x, velocity.y)
     // })
@@ -199,7 +199,7 @@ class IslandGameScene extends Phaser.Scene
     let newType = ''
     if (this.bindings.one.isDown)
     {
-      newType = 'stone'
+      newType = 'rock'
     }
     else if (this.bindings.two.isDown)
     {
@@ -286,7 +286,7 @@ class IslandGameScene extends Phaser.Scene
 
           // Find the sector data from the game data...
           const sec = this.store.sectors[this.sector]
-          this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings.map(), {/*armies*/})
+          this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings.map(), sec.armies)
           break
         }
       }

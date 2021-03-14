@@ -19,7 +19,7 @@ export const Teams = {
 
 export const UnitTypes = {
   // UNARMED: 'unarmed',
-  STONE: 'stone',
+  ROCK: 'rock',
   // SLING: 'sling',
   // PIKE: 'pike',
   // BOW_AND_ARROW: 'bowandarrow',
@@ -30,6 +30,12 @@ export const UnitTypes = {
   // NUKE: 'nuke',
   // FLYING_SAUCER: 'flyingsaucer',
 }
+
+// Cloned for new armies
+export const unitSet = {}
+Object.keys(UnitTypes).forEach(k => {
+  unitSet[k.toLowerCase()] = 0
+})
 
 export const DefenderUnitTypes = {
   STICK: 'stick',

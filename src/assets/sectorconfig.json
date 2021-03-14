@@ -15,12 +15,13 @@
       "mine": { "x": 0, "y": 0 },
       "factory": { "x": 0, "y": 0 },
       "laboratory": { "x": 0, "y": 0 }
-    }
+    },
+    "unitZone": { "x": 0, "y": 0, "w": 0, "h": 0 }
   },
   "s0010": {
     "features": [ "02", "00", "01", "05", "07", "11", "16", "17" ],
     "buildings": {
-      "castle": { "x": 0, "y": 0 },
+      "castle": { "x": 40, "y": -55 },
       "mine": { "x": 0, "y": 0 },
       "factory": { "x": 0, "y": 0 },
       "laboratory": { "x": 0, "y": 0 }

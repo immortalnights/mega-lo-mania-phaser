@@ -75,18 +75,17 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
     }
 
     // FIXME
-    if (this.state === UnitStates.SPAWNING)
-    {
-      this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, () => {
+    this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, () => {
+      if (this.state === UnitStates.SPAWNING)
+      {
         this.play('spawn', true)
-      })
-
-      this.once('animationcomplete', onAnimationCompleted)
-    }
-    else
-    {
-      onAnimationCompleted()
-    }
+        this.once('animationcomplete', onAnimationCompleted)
+      }
+      else
+      {
+        onAnimationCompleted()
+      }
+    })
   }
 
   getCanAttack(time)
