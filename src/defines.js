@@ -18,7 +18,7 @@ export const Teams = {
 }
 
 export const UnitTypes = {
-  // STONE: 'stone',
+  STONE: 'stone',
   ROCK: 'rock',
   // SLING: 'sling',
   // PIKE: 'pike',

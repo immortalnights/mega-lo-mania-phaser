@@ -1,195 +1,195 @@
 {
   "frames": [
     {
-      "filename": "rock_down_000",
+      "filename": "rock_down_00",
       "frame": { "x": 0, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_down_001",
+      "filename": "rock_down_01",
       "frame": { "x": 16, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_down_002",
+      "filename": "rock_down_02",
       "frame": { "x": 32, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_up_000",
+      "filename": "rock_up_00",
       "frame": { "x": 65, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_up_001",
+      "filename": "rock_up_01",
       "frame": { "x": 80, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_up_002",
+      "filename": "rock_up_02",
       "frame": { "x": 96, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_right_000",
+      "filename": "rock_right_00",
       "frame": { "x": 128, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_right_001",
+      "filename": "rock_right_01",
       "frame": { "x": 144, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_right_002",
+      "filename": "rock_right_02",
       "frame": { "x": 160, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_left_000",
+      "filename": "rock_left_00",
       "frame": { "x": 192, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_left_001",
+      "filename": "rock_left_01",
       "frame": { "x": 208, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_left_002",
+      "filename": "rock_left_02",
       "frame": { "x": 224, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_down_attacked_000",
+      "filename": "rock_down_attacked_00",
       "frame": { "x": 48, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_up_attacked_000",
+      "filename": "rock_up_attacked_00",
       "frame": { "x": 112, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_right_attacked_000",
+      "filename": "rock_right_attacked_00",
       "frame": { "x": 176, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "rock_left_attacked_000",
+      "filename": "rock_left_attacked_00",
       "frame": { "x": 240, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_down_000",
+      "filename": "sling_down_00",
       "frame": { "x": 0, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_down_001",
+      "filename": "sling_down_01",
       "frame": { "x": 16, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_down_002",
+      "filename": "sling_down_02",
       "frame": { "x": 32, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_down_003",
+      "filename": "sling_down_03",
       "frame": { "x": 48, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_up_000",
+      "filename": "sling_up_00",
       "frame": { "x": 65, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_up_001",
+      "filename": "sling_up_01",
       "frame": { "x": 80, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_up_002",
+      "filename": "sling_up_02",
       "frame": { "x": 96, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_up_003",
+      "filename": "sling_up_03",
       "frame": { "x": 112, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_right_000",
+      "filename": "sling_right_00",
       "frame": { "x": 128, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_right_001",
+      "filename": "sling_right_01",
       "frame": { "x": 144, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_right_002",
+      "filename": "sling_right_02",
       "frame": { "x": 160, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_right_003",
+      "filename": "sling_right_03",
       "frame": { "x": 176, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_left_000",
+      "filename": "sling_left_00",
       "frame": { "x": 192, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_left_001",
+      "filename": "sling_left_01",
       "frame": { "x": 208, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_left_002",
+      "filename": "sling_left_02",
       "frame": { "x": 224, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_sling_left_003",
+      "filename": "sling_left_03",
       "frame": { "x": 240, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_down_000",
+      "filename": "spear_down_00",
       "frame": { "x": 0, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_down_001",
+      "filename": "spear_down_01",
       "frame": { "x": 16, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_down_002",
+      "filename": "spear_down_02",
       "frame": { "x": 32, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_down_003",
+      "filename": "spear_down_03",
       "frame": { "x": 48, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_up_000",
+      "filename": "spear_up_00",
       "frame": { "x": 65, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_up_001",
+      "filename": "spear_up_01",
       "frame": { "x": 80, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_up_002",
+      "filename": "spear_up_02",
       "frame": { "x": 96, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_up_003",
+      "filename": "spear_up_03",
       "frame": { "x": 112, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_right_000",
+      "filename": "spear_right_00",
       "frame": { "x": 128, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_right_001",
+      "filename": "spear_right_01",
       "frame": { "x": 144, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_right_002",
+      "filename": "spear_right_02",
       "frame": { "x": 160, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_right_003",
+      "filename": "spear_right_03",
       "frame": { "x": 176, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_left_000",
+      "filename": "spear_left_00",
       "frame": { "x": 192, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_left_001",
+      "filename": "spear_left_01",
       "frame": { "x": 208, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_left_002",
+      "filename": "spear_left_02",
       "frame": { "x": 224, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_spear_left_003",
+      "filename": "spear_left_03",
       "frame": { "x": 240, "y": 64, "w": 16, "h": 16 }
     },
 
@@ -204,102 +204,37 @@
     },
 
     {
-      "filename": "red_stick_down_000",
+      "filename": "stick_down_00",
       "frame": { "x": 0, "y": 16, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_stick_up_000",
+      "filename": "stick_up_00",
       "frame": { "x": 1, "y": 16, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_stick_right_000",
+      "filename": "stick_right_00",
       "frame": { "x": 32, "y": 16, "w": 16, "h": 16 }
     },
     {
-      "filename": "red_stick_left_000",
+      "filename": "stick_left_00",
       "frame": { "x": 48, "y": 16, "w": 16, "h": 16 }
     },
 
-    {
-      "filename": "blue_rock_down_000",
-      "frame": { "x": 0, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_down_001",
-      "frame": { "x": 16, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_down_002",
-      "frame": { "x": 32, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_up_000",
-      "frame": { "x": 65, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_up_001",
-      "frame": { "x": 80, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_up_002",
-      "frame": { "x": 96, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_right_000",
-      "frame": { "x": 128, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_right_001",
-      "frame": { "x": 144, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_right_002",
-      "frame": { "x": 160, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_left_000",
-      "frame": { "x": 192, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_left_001",
-      "frame": { "x": 208, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_left_002",
-      "frame": { "x": 224, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_down_attacked_000",
-      "frame": { "x": 48, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_up_attacked_000",
-      "frame": { "x": 112, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_right_attacked_000",
-      "frame": { "x": 176, "y": 0, "w": 16, "h": 16 }
-    },
-    {
-      "filename": "blue_rock_left_attacked_000",
-      "frame": { "x": 240, "y": 0, "w": 16, "h": 16 }
-    },
-
 
     {
-      "filename": "rock_projectile_000",
+      "filename": "stone_projectile_00",
       "frame": { "x": 272, "y": 16, "w": 11, "h": 8 }
     },
     {
-      "filename": "rock_projectile_001",
+      "filename": "stone_projectile_01",
       "frame": { "x": 288, "y": 16, "w": 11, "h": 8 }
     },
     {
-      "filename": "rock_projectile_002",
+      "filename": "stone_projectile_02",
       "frame": { "x": 272, "y": 24, "w": 11, "h": 8 }
     },
     {
-      "filename": "rock_projectile_003",
+      "filename": "stone_projectile_03",
       "frame": { "x": 288, "y": 24, "w": 11, "h": 8 }
     }
   ],

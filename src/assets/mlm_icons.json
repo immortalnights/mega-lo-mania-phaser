@@ -46,33 +46,34 @@
     },
 
     {
-      "filename": "spawn_000",
+      "filename": "spawn_00",
       "frame": { "x": 230, "y": 176, "w": 3, "h": 5 }
     },
     {
-      "filename": "spawn_001",
+      "filename": "spawn_01",
       "frame": { "x": 246, "y": 175, "w": 5, "h": 9 }
     },
     {
-      "filename": "spawn_002",
+      "filename": "spawn_02",
       "frame": { "x": 261, "y": 174, "w": 7, "h": 13 }
     },
     {
-      "filename": "spawn_003",
+      "filename": "spawn_03",
       "frame": { "x": 275, "y": 173, "w": 11, "h": 15 }
     },
     {
-      "filename": "spawn_004",
+      "filename": "spawn_04",
       "frame": { "x": 291, "y": 173, "w": 11, "h": 15 }
     },
     {
-      "filename": "spawn_005",
+      "filename": "spawn_05",
       "frame": { "x": 306, "y": 165, "w": 13, "h": 17 }
     },
     {
-      "filename": "spawn_006",
+      "filename": "spawn_06",
       "frame": { "x": 305, "y": 184, "w": 15, "h": 19 }
     },
+
     {
       "filename": "red_flag_00",
       "frame": { "x": 160, "y": 157, "w": 10, "h": 16 }
@@ -144,19 +145,92 @@
     },
     {
       "filename": "ground_explosion_01",
-      "frame": { "x": 176, "y": 97, "w": 7, "h": 4 }
+      "frame": { "x": 176, "y": 96, "w": 7, "h": 4 }
     },
     {
       "filename": "ground_explosion_02",
-      "frame": { "x": 176, "y": 101, "w": 7, "h": 4 }
+      "frame": { "x": 176, "y": 100, "w": 7, "h": 4 }
     },
     {
       "filename": "ground_explosion_03",
-      "frame": { "x": 176, "y": 105, "w": 7, "h": 4 }
+      "frame": { "x": 176, "y": 104, "w": 7, "h": 4 }
     },
     {
       "filename": "ground_explosion_04",
-      "frame": { "x": 176, "y": 109, "w": 7, "h": 4 }
+      "frame": { "x": 176, "y": 108, "w": 7, "h": 4 }
+    },
+
+    
+
+    {
+      "filename": "stone_down_00",
+      "frame": { "x": 243, "y": 85, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_down_01",
+      "frame": { "x": 259, "y": 85, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_down_02",
+      "frame": { "x": 243, "y": 99, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_down_attacked_00",
+      "frame": { "x": 259, "y": 99, "w": 13, "h": 14 }
+    },
+
+    
+    {
+      "filename": "stone_up_00",
+      "frame": { "x": 227, "y": 113, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_up_01",
+      "frame": { "x": 243, "y": 113, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_up_02",
+      "frame": { "x": 259, "y": 113, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_up_attacked_00",
+      "frame": { "x": 275, "y": 113, "w": 13, "h": 14 }
+    },
+
+    
+    {
+      "filename": "stone_right_00",
+      "frame": { "x": 291, "y": 113, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_right_01",
+      "frame": { "x": 307, "y": 113, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_right_02",
+      "frame": { "x": 51, "y": 315, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_right_attacked_00",
+      "frame": { "x": 51, "y": 329, "w": 13, "h": 14 }
+    },
+
+    
+    {
+      "filename": "stone_left_00",
+      "frame": { "x": 51, "y": 343, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_left_01",
+      "frame": { "x": 51, "y": 357, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_left_02",
+      "frame": { "x": 221, "y": 350, "w": 13, "h": 14 }
+    },
+    {
+      "filename": "stone_left_attacked_00",
+      "frame": { "x": 226, "y": 350, "w": 13, "h": 14 }
     }
   ],
   "meta": {

@@ -33,9 +33,11 @@ class IslandGameScene extends Phaser.Scene
 
   preload()
   {
+    this.load.json('mlm_icons_data', './mlm_icons.json')
     this.load.json('mlm_units_data', './mlm_units.json')
-    this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
+
     this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
+    this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
     this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')
     this.load.atlas('mlm_smallmap', './mlm_smallmap.png', './mlm_smallmap.json')
     this.load.image('mlm_slab', './mlm_slabs.png')
@@ -128,15 +130,31 @@ class IslandGameScene extends Phaser.Scene
 
     setTimeout(() => {
       this.store.deployArmy(1, {
-        rock: 10
+        stone: 10
       })
     }, 500)
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
-      const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'rock_projectile_000')
-      p.play('rock_projectile')
-      this.projectiles.add(p, true)
-      p.body.setVelocity(velocity.x, velocity.y)
+      switch (unitType)
+      {
+        case 'rock':
+        {
+          break
+        }
+        case 'stone':
+        {
+          const p = new Phaser.GameObjects.Sprite(this, position.x, position.y, 'mlm_units', 'stone_projectile_00')
+          p.play('stone_projectile')
+          this.projectiles.add(p, true)
+          p.body.setVelocity(velocity.x, velocity.y)
+          break
+        }
+        default:
+        {
+          console.log(`Unhandled unit type for projectile`)
+          break
+        }
+      }
     })
 
     const teamNames = Object.values(Teams)

@@ -31,9 +31,9 @@ const PROJECTILE_MULTIPLIER = new Phaser.Math.Vector2({
 
 export default class Unit extends Phaser.Physics.Arcade.Sprite
 {
-  constructor(scene, x, y, options)
+  constructor(scene, x, y, config)
   {
-    super(scene, x, y, 'mlm_icons', 'spawn_001')
+    super(scene, x, y, 'mlm_icons', 'spawn_00')
 
     Object.defineProperties(this, {
       unitType: {
@@ -50,44 +50,45 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
       },
     })
 
-    this.setData(options)
+    this.setData(config)
 
     this.direction = 'left'
 
-    // options.spawn
-    this.state = options.spawn ? UnitStates.SPAWNING : ''
+    // config.spawn
+    this.state = config.spawn ? UnitStates.SPAWNING : ''
 
     // Do something different after 0.5s to 2s
     this.cooldown = Phaser.Math.RND.between(500, 2000)
     this.lastAttack = 0
 
-    const onAnimationCompleted = () => {
-      if (!options.defender)
+    this.unitTexture = this.unitType === 'stone' ? 'mlm_icons' : 'mlm_units'
+
+    // FIXME
+    this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, this.onAddedToScene, this)
+  }
+
+  onAddedToScene()
+  {
+    const onSpawnComplete = () => {
+      const frame = `${this.unitType}_${this.direction}_00`
+      this.setTexture(`${this.unitTexture}-${this.team}`, frame)
+
+      if (!this.data.get('defender'))
       {
         this.state = UnitStates.WANDERING
-        const frame = `${this.unitType}_${this.direction}_000`
-        this.setTexture(`mlm_units-${this.team}`, frame)
         this.changeDirection()
-      }
-      else
-      {
-        const frame = `${this.unitType}_${this.direction}_000`
-        this.setTexture(`mlm_units-${this.team}`, frame)
       }
     }
 
-    // FIXME
-    this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, () => {
-      if (this.state === UnitStates.SPAWNING)
-      {
-        this.play('spawn', true)
-        this.once('animationcomplete', onAnimationCompleted)
-      }
-      else
-      {
-        onAnimationCompleted()
-      }
-    })
+    if (this.state === UnitStates.SPAWNING)
+    {
+      this.play('spawn', true)
+      this.once('animationcomplete', onSpawnComplete)
+    }
+    else
+    {
+      onSpawnComplete()
+    }
   }
 
   getCanAttack(time)
@@ -149,7 +150,7 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
 
             this.stop()
             this.body.stop()
-            this.setFrame(`${this.unitType}_${this.direction}_attacked_000`)
+            this.setFrame(`${this.unitType}_${this.direction}_attacked_00`)
             this.cooldown = Phaser.Math.RND.between(500, 750)
             this.lastAttack = time
 

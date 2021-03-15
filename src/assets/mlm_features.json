@@ -67,6 +67,37 @@
     {
       "filename": "f17",
       "frame": { "x": 224, "y": 111, "w": 17, "h": 32 }
+    },
+
+    {
+      "filename": "rock_00",
+      "frame": { "x": 306, "y": 1, "w": 13, "h": 13 }
+    },
+    {
+      "filename": "rock_01",
+      "frame": { "x": 306, "y": 14, "w": 6, "h": 6 }
+    },
+
+    {
+      "filename": "tree_00",
+      "frame": { "x": 96, "y": 119, "w": 22, "h": 20 }
+    },
+    {
+      "filename": "tree_01",
+      "frame": { "x": 128, "y": 114, "w": 18, "h": 24 }
+    },
+    {
+      "filename": "tree_02",
+      "frame": { "x": 160, "y": 114, "w": 22, "h": 26 }
+    },
+    {
+      "filename": "tree_03",
+      "frame": { "x": 192, "y": 116, "w": 22, "h": 26 }
+    },
+
+    {
+      "filename": "mine",
+      "frame": { "x": 256, "y": 118, "w": 47, "h": 24 }
     }
   ],
   "meta": {

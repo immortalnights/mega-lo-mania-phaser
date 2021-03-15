@@ -3,13 +3,13 @@ import paletteSwap from './paletteswap.js'
 
 const WALK_ANIMATION_FRAMERATE = 12
 
-const createUnitAnimationSet = (manager, team, unit) => {
+const createUnitAnimationSet = (manager, texture, team, unit) => {
   const frames = 2
-  const padding = 3
+  const padding = 2
 
   manager.create({
     key: `${team}_${unit}_walk_down`,
-    frames: manager.generateFrameNames(`mlm_units-${team}`, {
+    frames: manager.generateFrameNames(`${texture}-${team}`, {
       prefix: `${unit}_down_`,
       end: frames,
       zeroPad: padding,
@@ -20,7 +20,7 @@ const createUnitAnimationSet = (manager, team, unit) => {
   });
   manager.create({
     key: `${team}_${unit}_walk_up`,
-    frames: manager.generateFrameNames(`mlm_units-${team}`, {
+    frames: manager.generateFrameNames(`${texture}-${team}`, {
       prefix: `${unit}_up_`,
       end: frames,
       zeroPad: padding,
@@ -31,7 +31,7 @@ const createUnitAnimationSet = (manager, team, unit) => {
   });
   manager.create({
     key: `${team}_${unit}_walk_right`,
-    frames: manager.generateFrameNames(`mlm_units-${team}`, {
+    frames: manager.generateFrameNames(`${texture}-${team}`, {
       prefix: `${unit}_right_`,
       end: frames,
       zeroPad: padding,
@@ -42,7 +42,7 @@ const createUnitAnimationSet = (manager, team, unit) => {
   });
   manager.create({
     key: `${team}_${unit}_walk_left`,
-    frames: manager.generateFrameNames(`mlm_units-${team}`, {
+    frames: manager.generateFrameNames(`${texture}-${team}`, {
       prefix: `${unit}_left_`,
       end: frames,
       zeroPad: padding,
@@ -60,18 +60,31 @@ export const createUnitAnimations = scene => {
     paletteKey: 'paletteswap-template',
     paletteNames: Object.values(Teams),
     spriteSheet: {
+      key: 'mlm_icons',
+      dataKey: 'mlm_icons_data'
+    }
+  })
+
+  paletteSwap({
+    game: scene.game,
+    paletteKey: 'paletteswap-template',
+    paletteNames: Object.values(Teams),
+    spriteSheet: {
       key: 'mlm_units',
       dataKey: 'mlm_units_data'
     }
   })
 
   Object.values(Teams).forEach(team => {
+    createUnitAnimationSet(scene.anims, 'mlm_icons', team, 'stone')
+  })
+
+  Object.values(Teams).forEach(team => {
     Object.values(UnitTypes).forEach(unit => {
-      createUnitAnimationSet(scene.anims, team, unit)
+      createUnitAnimationSet(scene.anims, 'mlm_units', team, unit)
     })
   })
 }
-
 
 export const createSpawnAnimation = scene => {
   scene.anims.create({
@@ -79,7 +92,7 @@ export const createSpawnAnimation = scene => {
     frames: scene.anims.generateFrameNames('mlm_icons', {
       prefix: `spawn_`,
       end: 6,
-      zeroPad: 3,
+      zeroPad: 2,
     }),
     frameRate: 12,
     yoyo: true,
@@ -107,11 +120,11 @@ export const createFlagAnimations = scene => {
 
 export const createProjectileAnimations = scene => {
   scene.anims.create({
-    key: `rock_projectile`,
+    key: `stone_projectile`,
     frames: scene.anims.generateFrameNames('mlm_units', {
-      prefix: `rock_projectile_`,
+      prefix: `stone_projectile_`,
       end: 3,
-      zeroPad: 3,
+      zeroPad: 2,
     }),
     frameRate: 12,
     yoyo: false,
