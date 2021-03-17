@@ -44,6 +44,11 @@ class Units extends Phaser.Physics.Arcade.Group
     this.zone = zone
   }
 
+  setZone(zone)
+  {
+    this.zone = zone
+  }
+
   spawnUnits()
   {
     const units = this.data.get('units')
@@ -61,17 +66,21 @@ class Units extends Phaser.Physics.Arcade.Group
     {
       for (let i = 0; i < value; i++)
       {
-        const unit = new Unit(this.scene, 0, 0, {
+        const position = this.zone.getRandomPoint()
+        const unit = new Unit(this.scene, position.x, position.y, {
           team,
           type: key,
           spawn
         })
         newUnits.push(unit)
         this.add(unit, true)
+
+        unit.setCollideWorldBounds(true)
+        unit.body.setBoundsRectangle(this.zone)
       }
     }
 
-    Phaser.Actions.RandomRectangle(newUnits, this.zone)
+    // Phaser.Actions.RandomRectangle(newUnits, this.zone)
   }
 
   removeSome(army, died = false)
@@ -217,9 +226,7 @@ export default class Sector extends Phaser.GameObjects.Container
       this.unitZone.destroy()
     }
 
-    this.unitZone = new Phaser.GameObjects.Rectangle(this.scene, config.unitZone.x, config.unitZone.y, config.unitZone.w, config.unitZone.h)
-    this.unitZone.setStrokeStyle(1, 0xFF0000, 1)
-    this.add(this.unitZone)
+    this.unitZone = new Phaser.Geom.Rectangle(this.x + config.unitZone.x, this.y + config.unitZone.y, config.unitZone.w, config.unitZone.h)
 
     this.renderFeatures(config.features)
 
@@ -236,6 +243,7 @@ export default class Sector extends Phaser.GameObjects.Container
 
     // Destroy all units
     this.units.clear(true, true)
+    this.units.setZone(this.unitZone)
     armies.forEach(army => this.units.combine(army, false))
   }
 
