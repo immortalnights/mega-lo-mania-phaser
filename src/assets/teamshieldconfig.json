@@ -1,0 +1,62 @@
+[
+  {
+    "teams": [],
+    "frame": "team_shield_black"
+  },
+  {
+    "teams": ["green"],
+    "frame": "team_shield_green"
+  },
+  {
+    "teams": ["red"],
+    "frame": "team_shield_red"
+  },
+  {
+    "teams": ["blue"],
+    "frame": "team_shield_blue"
+  },
+  {
+    "teams": ["yellow"],
+    "frame": "team_shield_yellow"
+  },
+  {
+    "teams": ["blue", "red"],
+    "frame": "team_shield_red_blue"
+  },
+  {
+    "teams": ["blue", "green"],
+    "frame": "team_shield_blue_green"
+  },
+  {
+    "teams": ["red", "yellow"],
+    "frame": "team_shield_red_yellow"
+  },
+  {
+    "teams": ["green", "red"],
+    "frame": "team_shield_red_green"
+  },
+  {
+    "teams": ["green", "yellow"],
+    "frame": "team_shield_green_yellow"
+  },
+  {
+    "teams": ["blue", "yellow"],
+    "frame": "team_shield_yellow_blue"
+  },
+  {
+    "teams": ["blue", "red", "yellow"],
+    "frame": "team_shield_red_green_yellow"
+  },
+  {
+    "teams": ["blue", "red", "yellow"],
+    "frame": "team_shield_red_blue_yellow"
+  },
+  {
+    "teams": ["blue", "red", "green"],
+    "frame": "team_shield_red_blue_green"
+  },
+  {
+    "teams": ["blue", "green", "yellow"],
+    "frame": "team_shield_blue_green_yellow"
+  }
+]

@@ -25,7 +25,7 @@ export default class Building extends Phaser.GameObjects.Container
       team: options.team
     })
 
-    this.building = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_buildings', `${this.buildingType}_${options.epoch}`);
+    this.building = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_buildings', `${this.buildingType}_${options.epoch}`);
     // this.building.setInteractive()
     // this.building.on('pointerdown', () => {
     //   this.scene.events.emit(UserEvents.BUILDING_SELECT, this.buildingType)

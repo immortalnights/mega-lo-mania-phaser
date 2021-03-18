@@ -6,6 +6,7 @@ import { getKeyForSector } from './utilities'
 import animationFactory from './animationfactory.js'
 import Sector from './sector'
 import Store from './store'
+import PlayerTeamShields from './teamshield'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
 // const renderer = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
@@ -76,6 +77,8 @@ class IslandGameScene extends Phaser.Scene
         }
       },
     })
+
+    window.GAME_SCENE = this
   }
 
   preload()
@@ -132,6 +135,8 @@ class IslandGameScene extends Phaser.Scene
     // Create the minimap
     this.add.existing(new MiniMap(this, 20, 40, this.store.island))
 
+    this.add.existing(new PlayerTeamShields(this, 90, 50, ["red", "green", "blue", "yellow"]))
+
     // Create the Sector view
     this.add.existing(new Sector(this, 250, 120, { style: this.store.island.style, epoch: 1 }))
 
@@ -163,7 +168,7 @@ class IslandGameScene extends Phaser.Scene
 
     const players = Object.values(Teams)
     const castles = {}
-    
+
     players.forEach(t => {
       // random player castle
       let position = Phaser.Math.RND.pick(indexes)
