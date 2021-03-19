@@ -131,11 +131,12 @@ class IslandGameScene extends Phaser.Scene
 
     this.store = new Store(this)
     this.store.setIsland("Quota")
+    this.store.setPlayers(Object.values(Teams))
 
     // Create the minimap
     this.add.existing(new MiniMap(this, 20, 40, this.store.island))
 
-    this.add.existing(new PlayerTeamShields(this, 90, 50, ["red", "green", "blue", "yellow"]))
+    this.add.existing(new PlayerTeamShields(this, 90, 50, this.store.players.map(p => p.team)))
 
     // Create the Sector view
     this.add.existing(new Sector(this, 250, 120, { style: this.store.island.style, epoch: 1 }))
@@ -153,6 +154,8 @@ class IslandGameScene extends Phaser.Scene
     this.events.on(UserEvents.SECTOR_MAP_SELECT, this.onMapSectorSelected, this)
     this.events.on(UserEvents.BUILDING_SELECT, this.onBuildingSelected, this)
     this.events.on(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, this.onBuildingPositionSelected, this)
+    this.events.on(UserEvents.REQUEST_ALLIANCE, this.onRequestAlliance, this)
+    this.events.on(UserEvents.BREAK_ALLIANCES, this.onBreakAlliances, this)
 
     // Trigger the selection of first sector of the island
     // FIXME!
@@ -166,6 +169,7 @@ class IslandGameScene extends Phaser.Scene
       }
     })
 
+    this.localPlayer = Teams.RED
     const players = Object.values(Teams)
     const castles = {}
 
@@ -311,6 +315,24 @@ class IslandGameScene extends Phaser.Scene
         this.activeArmySector = this.sector
         this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, this.sector, team)
       }
+    }
+  }
+
+  onRequestAlliance(otherTeam)
+  {
+    // TODO player cannot ally with everyone at the same time.
+    if (this.localPlayer !== otherTeam && this.store.isAllied(this.localPlayer, otherTeam) === false)
+    {
+      // Check if the other player actually wants to be allied
+      this.store.makeAlliance(this.localPlayer, otherTeam)
+    }
+  }
+
+  onBreakAlliances()
+  {
+    if (this.store.isAllied(this.localPlayer) === true)
+    {
+      this.store.breakAlliances(this.localPlayer)
     }
   }
 

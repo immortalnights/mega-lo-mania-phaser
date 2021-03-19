@@ -1,4 +1,4 @@
-import Phaser from 'phaser'
+import Phaser, { Game } from 'phaser'
 import { Teams, GameEvents, BuildingTypes, unitSet } from './defines.js'
 import Islands from './assets/islands.json'
 
@@ -79,7 +79,37 @@ export default class Store extends Phaser.Events.EventEmitter
 
     this.scene = scene
 
+    this.players = []
     this.sectors = {}
+  }
+
+  setIsland(name)
+  {
+    const island = Islands.find(i => i.name === name)
+    console.assert(island != null, `Island '${name}' is invalid`)
+    this.island = { ...island }
+
+    this.sectors = {}
+    this.island.map.forEach((value, index) => {
+      if (value)
+      {
+        this.sectors[index] = {
+          buildings: new BuildingManager(),
+          armies: [],
+          nuked: false
+        }
+      }
+    })
+  }
+
+  setPlayers(teams)
+  {
+    teams.forEach(team => {
+      this.players.push({
+        team,
+        allies: []
+      })
+    })
   }
 
   /**
@@ -91,6 +121,78 @@ export default class Store extends Phaser.Events.EventEmitter
   hasPath(sector, destination)
   {
     return true
+  }
+
+  isAllied(team, other=null)
+  {
+    const p = this.players.find(p => p.team === team)
+    return other ? p.allies.includes(other) : p.allies.length > 0
+  }
+
+  updateTeams(localPlayer)
+  {
+    const teams = []
+    let localPlayerAllied = false
+
+    const isIncluded = t => {
+      return -1 !== teams.findIndex(group => {
+        return group.includes(t)
+      })
+    }
+
+    this.players.forEach(p => {
+      if (isIncluded(p.team))
+      {
+        // Skip
+      }
+      else if (p.allies.length === 0)
+      {
+        if (teams.includes(p.team) === false)
+        {
+          teams.push(p.team)
+        }
+      }
+      else
+      {
+        if (p.team === localPlayer)
+        {
+          localPlayerAllied = true
+        }
+
+        teams.push([p.team].concat(p.allies))
+      }
+    })
+
+    this.scene.events.emit(GameEvents.TEAMS_CHANGED, teams, localPlayerAllied)
+  }
+
+  makeAlliance(a, b)
+  {
+    const player = this.players.find(p => p.team === a)
+    player.allies.push(b)
+
+    const otherPlayer = this.players.find(p => p.team === b)
+    otherPlayer.allies.push(a)
+
+    // Update team shields
+    this.updateTeams(a)
+  }
+
+  breakAlliances(a)
+  {
+    const player = this.players.find(p => p.team === a)
+
+    // update all allies
+    player.allies.forEach(name => {
+      const ally = this.players.find(p => p.team === name)
+      const index = ally.allies.findIndex(i => i === player.team)
+      ally.allies.splice(index, 1)
+    })
+
+    player.allies.splice(0, player.allies.length)
+
+    // Update team shields
+    this.updateTeams(a)
   }
 
   buildBuilding(sector, building, team)
@@ -270,24 +372,5 @@ export default class Store extends Phaser.Events.EventEmitter
     })
 
     return destination
-  }
-
-  setIsland(name)
-  {
-    const island = Islands.find(i => i.name === name)
-    console.assert(island != null, `Island '${name}' is invalid`)
-    this.island = { ...island }
-
-    this.sectors = {}
-    this.island.map.forEach((value, index) => {
-      if (value)
-      {
-        this.sectors[index] = {
-          buildings: new BuildingManager(),
-          armies: [],
-          nuked: false
-        }
-      }
-    })
   }
 }

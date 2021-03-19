@@ -93,7 +93,7 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
 
   getCanAttack(time)
   {
-    const hasEnemiesInSector = true
+    const hasEnemiesInSector = false
     let canAttack
 
     if (hasEnemiesInSector === false)
@@ -132,13 +132,20 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
   {
     super.preUpdate(time, delta)
 
+    // Action cooldown
+    this.cooldown = Phaser.Math.MinSub(this.cooldown, delta, 0)
+    let action = this.cooldown <= 0
+
+    if (action)
+    {
+      this.cooldown = Phaser.Math.RND.between(500, 2000)
+    }
+
     switch (this.state)
     {
       case UnitStates.WANDERING:
       {
-        this.cooldown = Phaser.Math.MinSub(this.cooldown, delta, 0)
-
-        if (this.cooldown <= 0)
+        if (action)
         {
           // can attack if there are enemies in the same sector
           const attacking = this.getCanAttack(time)
@@ -148,7 +155,9 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
             const velocity = this.body.velocity.clone().multiply(PROJECTILE_MULTIPLIER)
             // console.log("Attack velocity", velocity)
 
+            // stop the walk animation
             this.stop()
+            // stop the movement
             this.body.stop()
             this.setFrame(`${this.unitType}_${this.direction}_attacked_00`)
             this.cooldown = Phaser.Math.RND.between(500, 750)
@@ -159,10 +168,12 @@ export default class Unit extends Phaser.Physics.Arcade.Sprite
           else
           {
             this.changeDirection()
-            this.cooldown = Phaser.Math.RND.between(500, 2000)
           }
         }
-
+        break
+      }
+      case UnitStates.ATTACKING:
+      {
         break
       }
     }

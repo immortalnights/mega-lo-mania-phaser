@@ -44,7 +44,7 @@
     "frame": "team_shield_yellow_blue"
   },
   {
-    "teams": ["blue", "red", "yellow"],
+    "teams": ["green", "red", "yellow"],
     "frame": "team_shield_red_green_yellow"
   },
   {
@@ -52,7 +52,7 @@
     "frame": "team_shield_red_blue_yellow"
   },
   {
-    "teams": ["blue", "red", "green"],
+    "teams": ["blue", "green", "red"],
     "frame": "team_shield_red_blue_green"
   },
   {
