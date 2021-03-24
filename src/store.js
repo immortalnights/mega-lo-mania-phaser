@@ -94,6 +94,14 @@ export default class Store extends Phaser.Events.EventEmitter
       if (value)
       {
         this.sectors[index] = {
+          tasks: {
+            research: 0,
+            production: 0,
+            mining: {
+              resource1: 0,
+              resource2: 0
+            }
+          },
           buildings: new BuildingManager(),
           armies: [],
           nuked: false
@@ -110,6 +118,20 @@ export default class Store extends Phaser.Events.EventEmitter
         allies: []
       })
     })
+  }
+
+  allocatePopulation(sector, task, population = 1)
+  {
+    const sec = this.sectors[sector]
+    sec.tasks[task] += population
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, task, sec.tasks[task])
+  }
+
+  deallocatePopulation(sector, task, population = 1)
+  {
+    const sec = this.sectors[sector]
+    sec.tasks[task] -= population
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, task, sec.tasks[task])
   }
 
   /**

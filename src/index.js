@@ -7,6 +7,8 @@ import animationFactory from './animationfactory.js'
 import Sector from './sector'
 import Store from './store'
 import PlayerTeamShields from './teamshield'
+import Clock from './clock'
+import Task from './task'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
 // const renderer = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
@@ -156,6 +158,8 @@ class IslandGameScene extends Phaser.Scene
     this.events.on(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, this.onBuildingPositionSelected, this)
     this.events.on(UserEvents.REQUEST_ALLIANCE, this.onRequestAlliance, this)
     this.events.on(UserEvents.BREAK_ALLIANCES, this.onBreakAlliances, this)
+    this.events.on(UserEvents.ALLOCATE_POPULATION, this.onAllocatePopulation, this)
+    this.events.on(UserEvents.DEALLOCATE_POPULATION, this.onDeallocatePopulation, this)
 
     // Trigger the selection of first sector of the island
     // FIXME!
@@ -189,6 +193,9 @@ class IslandGameScene extends Phaser.Scene
         stone: 10
       })
     }, 500)
+
+    this.add.existing(new Clock(this, 50, 200, 4))
+    this.add.existing(new Task(this, 50, 150, 'research_small', 'research'))
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
       switch (unitType)
@@ -426,6 +433,16 @@ class IslandGameScene extends Phaser.Scene
     {
       this.store.addDefender(this.sector, building, position, 'stick')
     }
+  }
+
+  onAllocatePopulation(task)
+  {
+    this.store.allocatePopulation(this.sector, task)
+  }
+
+  onDeallocatePopulation(task)
+  {
+    this.store.deallocatePopulation(this.sector, task)
   }
 }
 

@@ -70,6 +70,8 @@ export const UserEvents = {
   BUILDING_SELECT_DEFENDER_POSITION: 'user:sector:building:defender_position:select',
   REQUEST_ALLIANCE: 'user:request:alliance',
   BREAK_ALLIANCES: 'user:break:alliances',
+  ALLOCATE_POPULATION: 'user:allocate_population',
+  DEALLOCATE_POPULATION: 'user:deallocate_population',
 }
 
 // Game Sector events
@@ -85,7 +87,8 @@ export const GameEvents = {
   SECTOR_START_CLAIM: 'game:sector:start_claim',
   SECTOR_STOP_CLAIM: 'game:sector:stop_claim',
   SECTOR_NUKED: 'game:sector:nuke',
-  BUILDING_ADD_DEFENDER: 'building:add_defender',
-  BUILDING_REMOVE_DEFENDER: 'building:remove_defender',
-  TEAMS_CHANGED: 'teams:changed',
+  BUILDING_ADD_DEFENDER: 'game:building:add_defender',
+  BUILDING_REMOVE_DEFENDER: 'game:building:remove_defender',
+  TEAMS_CHANGED: 'game:teams:changed',
+  POPULATION_ALLOCATION_CHANGED: 'game:population:allocation_changed'
 }
