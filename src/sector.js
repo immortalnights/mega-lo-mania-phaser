@@ -221,11 +221,6 @@ export default class Sector extends Phaser.GameObjects.Container
       config.unitZone = { "x": 0, "y": 0, "w": 50, "h": 50 }
     }
 
-    if (this.unitZone)
-    {
-      this.unitZone.destroy()
-    }
-
     this.unitZone = new Phaser.Geom.Rectangle(this.x + config.unitZone.x, this.y + config.unitZone.y, config.unitZone.w, config.unitZone.h)
 
     this.renderFeatures(config.features)

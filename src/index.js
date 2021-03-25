@@ -7,8 +7,8 @@ import animationFactory from './animationfactory.js'
 import Sector from './sector'
 import Store from './store'
 import PlayerTeamShields from './teamshield'
-import Clock from './clock'
-import Task from './task'
+import SectorControls from './sectorcontrols'
+import clone from 'lodash.clonedeep'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
 // const renderer = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
@@ -185,8 +185,10 @@ class IslandGameScene extends Phaser.Scene
       indexes.splice(indexes.findIndex(v => v === position), 1)
     })
 
-    // Select the sector
-    this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, castles[Teams.RED])
+    // Select the sector, always do this last
+    setTimeout(() => {
+      this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, castles[Teams.RED])
+    })
 
     setTimeout(() => {
       this.store.deployArmy(1, {
@@ -194,8 +196,7 @@ class IslandGameScene extends Phaser.Scene
       })
     }, 500)
 
-    this.add.existing(new Clock(this, 50, 200, 4))
-    this.add.existing(new Task(this, 50, 150, 'research_small', 'research'))
+    this.add.existing(new SectorControls(this, 50, 150))
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
       switch (unitType)
@@ -296,35 +297,6 @@ class IslandGameScene extends Phaser.Scene
     this.debugText.setText(`Sector ${this.sector}, Team ${this.data.get('team')}`)
   }
 
-  onSectorSelected(pointer)
-  {
-    console.debug(UserEvents.BUILDING_SELECT, pointer.button)
-
-    const team = this.data.get('team')
-
-    if (pointer.button === 0) // Left
-    {
-      // if (this.state === PlayerStates.DEPLOY_ARMY)
-      {
-        // Deploy army
-        this.store.deployArmy(this.sector, {
-          rock: 10
-        })
-
-        this.state = PlayerStates.DEFAULT
-      }
-    }
-    else if (pointer.button === 2) // Right
-    {
-      if (this.store.hasArmy(this.sector, team))
-      {
-        this.state = PlayerStates.MOVE_ARMY
-        this.activeArmySector = this.sector
-        this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, this.sector, team)
-      }
-    }
-  }
-
   onRequestAlliance(otherTeam)
   {
     // TODO player cannot ally with everyone at the same time.
@@ -382,10 +354,40 @@ class IslandGameScene extends Phaser.Scene
 
             const key = getKeyForSector(index, this.store.island.map)
             const sec = this.store.sectors[this.sector]
-            this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings.map(), sec.armies)
+            this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings, sec.armies)
+            this.events.emit(GameEvents.ACTIVATE_SECTOR, clone(sec))
           }
           break
         }
+      }
+    }
+  }
+
+  onSectorSelected(pointer)
+  {
+    console.debug(UserEvents.BUILDING_SELECT, pointer.button)
+
+    const team = this.data.get('team')
+
+    if (pointer.button === 0) // Left
+    {
+      // if (this.state === PlayerStates.DEPLOY_ARMY)
+      {
+        // Deploy army
+        this.store.deployArmy(this.sector, {
+          rock: 10
+        })
+
+        this.state = PlayerStates.DEFAULT
+      }
+    }
+    else if (pointer.button === 2) // Right
+    {
+      if (this.store.hasArmy(this.sector, team))
+      {
+        this.state = PlayerStates.MOVE_ARMY
+        this.activeArmySector = this.sector
+        this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, this.sector, team)
       }
     }
   }

@@ -77,6 +77,7 @@ export const UserEvents = {
 // Game Sector events
 export const GameEvents = {
   SECTOR_VIEW: 'game:view:sector',
+  ACTIVATE_SECTOR: 'game:activate:sector',
   SECTOR_ALERT: 'game:sector:alert',
   SECTOR_ADD_BUILDING: 'game:sector:add_building',
   SECTOR_REMOVE_BUILDING: 'game:sector:remove_building',

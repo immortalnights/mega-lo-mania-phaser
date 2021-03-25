@@ -16,14 +16,13 @@ export default class Task extends Phaser.GameObjects.Container
     this.label.setOrigin(0.5, 0.5)
     this.add(this.label)
 
-    this.setData('allocated', 0)
+    this.setData('population', 0)
 
-    this.on('changedata-allocated', this.onAllocationChanged, this)
+    this.on('changedata-population', this.onPopulationChanged, this)
 
     this.setSize(16, 24)
     this.setInteractive()
     this.on('pointerdown', pointer => {
-      console.log("OK")
       if (pointer.buttons === 1)
       {
         this.scene.events.emit(UserEvents.ALLOCATE_POPULATION, name)
@@ -37,12 +36,12 @@ export default class Task extends Phaser.GameObjects.Container
     this.scene.events.on(GameEvents.POPULATION_ALLOCATION_CHANGED, (task, population) => {
       if (this.name === task)
       {
-        this.setData('allocated', population)
+        this.setData('population', population)
       }
     })
   }
 
-  onAllocationChanged(obj, val, prev)
+  onPopulationChanged(obj, val, prev)
   {
     this.label.setText(Math.max(val, 0))
   }

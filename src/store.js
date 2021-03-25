@@ -1,74 +1,36 @@
 import Phaser, { Game } from 'phaser'
 import { Teams, GameEvents, BuildingTypes, unitSet } from './defines.js'
 import Islands from './assets/islands.json'
+import { getKeyForSector } from './utilities'
 
+const getDefaultDefendersForBuilding = (type) => {
+  let defenderCount = 0
 
-// TODO maybe sector manager rather then specific for buildings?
-class BuildingManager
-{
-  constructor()
+  switch (type)
   {
-    this.data = {
-      castle: null,
-      mine: null,
-      factory: null,
-      laboratory: null,
-    }
-  }
-
-  map()
-  {
-    return this.data
-  }
-
-  // get building by type
-  get(building)
-  {
-    return this.data[building]
-  }
-
-  has(building)
-  {
-    return !!this.get(building)
-  }
-
-  build(building, team)
-  {
-    let defenderCount
-    switch (building)
+    case BuildingTypes.CASTLE:
     {
-      case BuildingTypes.CASTLE:
-      {
-        defenderCount = 4
-        break
-      }
-      case BuildingTypes.MINE:
-      {
-        defenderCount = 2
-        break
-      }
-      case BuildingTypes.FACTORY:
-      {
-        defenderCount = 3
-        break
-      }
-      case BuildingTypes.LABORATORY:
-      {
-        defenderCount = 1
-        break
-      }
+      defenderCount = 4
+      break
     }
-
-    this.data[building] = {
-      team,
-      defenders: Array(defenderCount)
+    case BuildingTypes.MINE:
+    {
+      defenderCount = 2
+      break
+    }
+    case BuildingTypes.FACTORY:
+    {
+      defenderCount = 3
+      break
+    }
+    case BuildingTypes.LABORATORY:
+    {
+      defenderCount = 1
+      break
     }
   }
 
-  remove(building)
-  {
-    this.data[building] = null
-  }
+  return Array(defenderCount)
 }
 
 export default class Store extends Phaser.Events.EventEmitter
@@ -94,15 +56,51 @@ export default class Store extends Phaser.Events.EventEmitter
       if (value)
       {
         this.sectors[index] = {
-          tasks: {
-            research: 0,
-            production: 0,
-            mining: {
-              resource1: 0,
-              resource2: 0
-            }
+          id: index,
+          key: getKeyForSector(index, island.map),
+          epoch: 1,
+          population: {
+            available: 0,
+            researching: 0,
+            producing: 0,
+            building_mine: 0,
+            building_factory: 0,
+            building_laboratory: 0,
+            mining_resource1: 0,
+            mining_resource2: 0,
+            mining_resource4: 0,
+            mining_resource5: 0,
           },
-          buildings: new BuildingManager(),
+          resources: {
+            resource1: 100,
+            resource2: 100
+          },
+          buildings: {
+            castle: false,
+            mine: false,
+            factory: false,
+            laboratory: false,
+          },
+          technologies: {
+            tech1: false,
+            tech2: false,
+            tech3: false,
+            tech4: false,
+            tech5: false,
+            tech6: false,
+            tech7: false,
+            tech8: false,
+            tech9: false,
+            tech10: false,
+            tech11: false,
+            tech12: false
+          },
+          defences: {
+
+          },
+          weapons: {
+
+          },
           armies: [],
           nuked: false
         }
@@ -217,29 +215,32 @@ export default class Store extends Phaser.Events.EventEmitter
     this.updateTeams(a)
   }
 
-  buildBuilding(sector, building, team)
+  buildBuilding(sector, type, team)
   {
     const sec = this.sectors[sector]
-    console.assert(sec.buildings.has(building) === false, `Attempted to build another ${building} in sector ${sector}`)
-    sec.buildings.build(building, team)
+    console.assert(sec.buildings[type] === false, `Attempted to build another ${type} in sector ${sector}`)
+    sec.buildings[type] = {
+      team,
+      defenders: getDefaultDefendersForBuilding(type)
+    }
 
-    this.scene.events.emit(GameEvents.SECTOR_ADD_BUILDING, sector, building, team)
+    this.scene.events.emit(GameEvents.SECTOR_ADD_BUILDING, sector, type, team)
   }
 
-  destroyBuilding(sector, building)
+  destroyBuilding(sector, type)
   {
     const sec = this.sectors[sector]
-    console.assert(sec.buildings.has(building) === true, `Attempted to destroy missing ${building} in sector ${sector}`)
+    console.assert(sec.buildings[type] !== false, `Attempted to destroy missing ${type} in sector ${sector}`)
 
-    this.scene.events.emit(GameEvents.SECTOR_REMOVE_BUILDING, sector, building)
+    sec.buildings[type] = false
 
-    sec.buildings.remove(building)
+    this.scene.events.emit(GameEvents.SECTOR_REMOVE_BUILDING, sector, type)
   }
 
   hasDefender(sector, building, position)
   {
     const sec = this.sectors[sector]
-    const b = sec.buildings.get(building)
+    const b = sec.buildings[building]
     return !!b.defenders[position]
   }
 
@@ -247,7 +248,7 @@ export default class Store extends Phaser.Events.EventEmitter
   {
     console.log("add defender", sector, building, position, type)
     const sec = this.sectors[sector]
-    const b = sec.buildings.get(building)
+    const b = sec.buildings[building]
 
     b.defenders[position] = type
     this.scene.events.emit(GameEvents.BUILDING_ADD_DEFENDER, sector, building, position, type)
@@ -258,7 +259,7 @@ export default class Store extends Phaser.Events.EventEmitter
     console.log("remove defender", sector, building, position)
 
     const sec = this.sectors[sector]
-    const b = sec.buildings.get(building)
+    const b = sec.buildings[building]
     b.defenders[position] = undefined
 
     this.scene.events.emit(GameEvents.BUILDING_REMOVE_DEFENDER, sector, building, position)
@@ -280,7 +281,7 @@ export default class Store extends Phaser.Events.EventEmitter
   {
     //
     const sector = this.sectors[sectorIndex]
-    const castle = sector.buildings.get('castle')
+    const castle = sector.buildings['castle']
 
     if (destinationIndex == null) { destinationIndex = sectorIndex }
     const destination = this.sectors[destinationIndex]
