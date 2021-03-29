@@ -7,7 +7,8 @@ import animationFactory from './animationfactory.js'
 import Sector from './sector'
 import Store from './store'
 import PlayerTeamShields from './teamshield'
-import SectorControls from './sectorcontrols'
+import SectorControls from './sectorcontrols/'
+import Research from './sectorcontrols/research'
 import clone from 'lodash.clonedeep'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
@@ -64,6 +65,114 @@ class Projectile extends Phaser.GameObjects.Sprite
   }
 }
 
+class Loader extends Phaser.Scene
+{
+
+  constructor(config)
+  {
+    super({
+      ...config,
+      key: 'loader',
+    })
+  }
+
+  preload()
+  {
+    this.load.json('mlm_icons_data', './mlm_icons.json')
+    this.load.json('mlm_units_data', './mlm_units.json')
+
+    this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
+    this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
+    this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')
+    this.load.atlas('mlm_smallmap', './mlm_smallmap.png', './mlm_smallmap.json')
+    this.load.image('mlm_slab', './mlm_slabs.png')
+    // this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
+    this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')
+    this.load.image('paletteswap-template', '/link-palette.png')
+  }
+
+  create()
+  {
+    animationFactory.createUnitAnimations(this)
+    animationFactory.createSpawnAnimation(this)
+    animationFactory.createFlagAnimations(this)
+    animationFactory.createProjectileAnimations(this)
+
+    this.scene.start('sandbox');
+  }
+}
+
+class Sandbox extends Phaser.Scene
+{
+  constructor(config)
+  {
+    super({
+      ...config,
+      key: 'sandbox',
+      physics: {
+        default: 'arcade',
+        arcade: {
+          debug: false
+        }
+      },
+    })
+
+    window.SANDBOX_SCENE = this
+  }
+
+  preload()
+  {
+  
+  }
+
+  create()
+  {
+    const { width, height } = this.sys.game.canvas
+    const margin = 25
+    const third = (width / 3)
+
+    const r1 = new Research(this, margin, 50)
+    this.add.existing(r1)
+    r1.display({
+      epoch: 1,
+      researches: 0,
+      researching: null,
+      technologies: {}
+    })
+    const r2 = new Research(this, margin + third, 50)
+    this.add.existing(r2)
+    r2.display({
+      epoch: 1,
+      researches: 0,
+      researching: {
+        name: 'cannon',
+        started: 0,
+        duration: Infinity,
+      },
+      technologies: {
+        rock: {
+          wood: 0.5
+        },
+        pike: {}
+      }
+    })
+    const r3 = new Research(this, margin + (third * 2), 50)
+    this.add.existing(r3)
+    r3.display({
+      epoch: 1,
+      researches: 10,
+      researching: {
+        name: 'jet',
+        started: 0,
+        duration: 99,
+      },
+      technologies: {
+        jet: {},
+        rifle: {}
+      }
+    })
+  }
+}
 
 class IslandGameScene extends Phaser.Scene
 {
@@ -102,10 +211,6 @@ class IslandGameScene extends Phaser.Scene
   {
     const { width, height } = this.sys.game.canvas
 
-    animationFactory.createUnitAnimations(this)
-    animationFactory.createSpawnAnimation(this)
-    animationFactory.createFlagAnimations(this)
-    animationFactory.createProjectileAnimations(this)
 
     this.state = PlayerStates.DEFAULT
     this.activeArmySector = undefined
@@ -136,9 +241,9 @@ class IslandGameScene extends Phaser.Scene
     this.store.setPlayers(Object.values(Teams))
 
     // Create the minimap
-    this.add.existing(new MiniMap(this, 20, 40, this.store.island))
+    this.add.existing(new MiniMap(this, 12, 40, this.store.island))
 
-    this.add.existing(new PlayerTeamShields(this, 90, 50, this.store.players.map(p => p.team)))
+    this.add.existing(new PlayerTeamShields(this, 90, 48, this.store.players.map(p => p.team)))
 
     // Create the Sector view
     this.add.existing(new Sector(this, 250, 120, { style: this.store.island.style, epoch: 1 }))
@@ -196,7 +301,8 @@ class IslandGameScene extends Phaser.Scene
       })
     }, 500)
 
-    this.add.existing(new SectorControls(this, 50, 150))
+    this.add.existing(new SectorControls(this, 0, 110))
+
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
       switch (unitType)
@@ -453,7 +559,7 @@ const config = {
   width: 400,
   height: 300,
   zoom: 2,
-  scene: IslandGameScene,
+  scene: [ Loader, Sandbox, IslandGameScene ],
   seed: [ 'T' ],
   // backgroundColor: 0x005500,
   loader: {

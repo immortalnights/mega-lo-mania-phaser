@@ -211,6 +211,47 @@
       "frame": { "x": 240, "y": 32, "w": 16, "h": 16 }
     },
 
+    {
+      "filename": "mine_header",
+      "frame": { "x": 0, "y": 48, "w": 32, "h": 16 }
+    },
+    {
+      "filename": "build_header",
+      "frame": { "x": 32, "y": 48, "w": 32, "h": 16 }
+    },
+    {
+      "filename": "advanced_mine_header",
+      "frame": { "x": 64, "y": 48, "w": 32, "h": 16 }
+    },
+    {
+      "filename": "advanced_research_header",
+      "frame": { "x": 96, "y": 48, "w": 32, "h": 16 }
+    },
+    {
+      "filename": "production_header",
+      "frame": { "x": 128, "y": 48, "w": 32, "h": 16 }
+    },
+    {
+      "filename": "repair_header",
+      "frame": { "x": 160, "y": 48, "w": 32, "h": 16 }
+    },
+    {
+      "filename": "defence_header",
+      "frame": { "x": 192, "y": 48, "w": 32, "h": 16 }
+    },
+    {
+      "filename": "offence_header",
+      "frame": { "x": 224, "y": 48, "w": 32, "h": 15 }
+    },
+    {
+      "filename": "research_header",
+      "frame": { "x": 256, "y": 48, "w": 32, "h": 15 }
+    },
+    {
+      "filename": "blueprint_header",
+      "frame": { "x": 288, "y": 48, "w": 32, "h": 15 }
+    },
+
 
     {
       "filename": "red_castle_icon",
@@ -256,6 +297,78 @@
       "filename": "sector_alert_icon",
       "frame": { "x": 192, "y": 92, "w": 17, "h": 17 }
     },
+
+    {
+      "filename": "arrow_down_left",
+      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "arrow_down_right",
+      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "arrow_up_right_0",
+      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "arrow_up_right_1",
+      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "arrow_left",
+      "frame": { "x": 64, "y": 96, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "arrow_right",
+      "frame": { "x": 80, "y": 96, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "arrow_down",
+      "frame": { "x": 94, "y": 96, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "arrow_up",
+      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "arrow_up_left",
+      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+    },
+    {
+      "filename": "multiply_icon",
+      "frame": { "x": 112, "y": 97, "w": 7, "h": 7 }
+    },
+    {
+      "filename": "equal_icon",
+      "frame": { "x": 128, "y": 97, "w": 7, "h": 7 }
+    },
+
+    {
+      "filename": "ok_inactive",
+      "frame": { "x": 143, "y": 114, "w": 7, "h": 2 }
+    },
+    {
+      "filename": "infinity_inactive",
+      "frame": { "x": 112, "y": 106, "w": 12, "h": 6 }
+    },
+    {
+      "filename": "infinity_active",
+      "frame": { "x": 143, "y": 114, "w": 7, "h": 2 }
+    },
+    {
+      "filename": "ok_red",
+      "frame": { "x": 143, "y": 114, "w": 7, "h": 2 }
+    },
+    {
+      "filename": "ok_yellow",
+      "frame": { "x": 143, "y": 114, "w": 7, "h": 2 }
+    },
+
+    {
+      "filename": "minus_icon",
+      "frame": { "x": 143, "y": 114, "w": 7, "h": 2 }
+    },
+
 
     {
       "filename": "spawn_00",
@@ -506,6 +619,149 @@
     {
       "filename": "stone_left_attacked_00",
       "frame": { "x": 226, "y": 350, "w": 13, "h": 14 }
+    },
+
+    {
+      "filename": "technology_rock",
+      "frame": { "x": 0, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_sling",
+      "frame": { "x": 16, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_pike",
+      "frame": { "x": 32, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_bowandarrow",
+      "frame": { "x": 48, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_catapult",
+      "frame": { "x": 64, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_cannon",
+      "frame": { "x": 80, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_biplane",
+      "frame": { "x": 96, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_jet",
+      "frame": { "x": 112, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_nuke",
+      "frame": { "x": 128, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_flyingsaucer",
+      "frame": { "x": 144, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_catapult",
+      "frame": { "x": 160, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_cannon",
+      "frame": { "x": 176, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_biplane",
+      "frame": { "x": 192, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_jet",
+      "frame": { "x": 208, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_nuke",
+      "frame": { "x": 224, "y": 237, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_flyingsaucer",
+      "frame": { "x": 240, "y": 237, "w": 16, "h": 16 }
+    },
+
+    {
+      "filename": "technology_stick",
+      "frame": { "x": 0, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_spear",
+      "frame": { "x": 16, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_bow",
+      "frame": { "x": 32, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_oil",
+      "frame": { "x": 48, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_crossbow",
+      "frame": { "x": 64, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_rifle",
+      "frame": { "x": 80, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_machinegun",
+      "frame": { "x": 96, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_rocket",
+      "frame": { "x": 112, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_antinuke",
+      "frame": { "x": 128, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "technology_laser",
+      "frame": { "x": 144, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_crossbow",
+      "frame": { "x": 160, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_rifle",
+      "frame": { "x": 176, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_machinegun",
+      "frame": { "x": 192, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_rocket",
+      "frame": { "x": 208, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_antinuke",
+      "frame": { "x": 224, "y": 253, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "manufacturing_laser",
+      "frame": { "x": 240, "y": 253, "w": 16, "h": 16 }
+    },
+
+    {
+      "filename": "category_repair",
+      "frame": { "x": 272, "y": 315, "w": 16, "h": 15 }
+    },
+    {
+      "filename": "category_defence",
+      "frame": { "x": 288, "y": 315, "w": 15, "h": 15 }
+    },
+    {
+      "filename": "category_offence",
+      "frame": { "x": 305, "y": 315, "w": 15, "h": 15 }
     }
   ],
   "meta": {

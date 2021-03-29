@@ -48,7 +48,7 @@ export class TeamShield extends Phaser.GameObjects.Image
   }
 }
 
-const SHIELD_Y_SPACING = 16
+const SHIELD_Y_SPACING = 15
 
 export default class PlayerTeamShields extends Phaser.GameObjects.Container
 {
