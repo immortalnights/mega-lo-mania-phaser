@@ -8,7 +8,7 @@ import Sector from './sector'
 import Store from './store'
 import PlayerTeamShields from './teamshield'
 import SectorControls from './sectorcontrols/'
-import Research from './sectorcontrols/research'
+import Sandbox from './sandbox'
 import clone from 'lodash.clonedeep'
 
 // const shader = new TransparentColorsPipeline(game, [[124, 154, 160], [92, 100, 108]]);
@@ -99,78 +99,6 @@ class Loader extends Phaser.Scene
     animationFactory.createProjectileAnimations(this)
 
     this.scene.start('sandbox');
-  }
-}
-
-class Sandbox extends Phaser.Scene
-{
-  constructor(config)
-  {
-    super({
-      ...config,
-      key: 'sandbox',
-      physics: {
-        default: 'arcade',
-        arcade: {
-          debug: false
-        }
-      },
-    })
-
-    window.SANDBOX_SCENE = this
-  }
-
-  preload()
-  {
-  
-  }
-
-  create()
-  {
-    const { width, height } = this.sys.game.canvas
-    const margin = 25
-    const third = (width / 3)
-
-    const r1 = new Research(this, margin, 50)
-    this.add.existing(r1)
-    r1.display({
-      epoch: 1,
-      researches: 0,
-      researching: null,
-      technologies: {}
-    })
-    const r2 = new Research(this, margin + third, 50)
-    this.add.existing(r2)
-    r2.display({
-      epoch: 1,
-      researches: 0,
-      researching: {
-        name: 'cannon',
-        started: 0,
-        duration: Infinity,
-      },
-      technologies: {
-        rock: {
-          wood: 0.5
-        },
-        pike: {}
-      }
-    })
-    const r3 = new Research(this, margin + (third * 2), 50)
-    this.add.existing(r3)
-    r3.display({
-      epoch: 1,
-      researches: 10,
-      researching: {
-        name: 'jet',
-        started: 0,
-        duration: 99,
-      },
-      technologies: {
-        jet: {},
-        rifle: {}
-      }
-    })
   }
 }
 

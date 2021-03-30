@@ -72,6 +72,7 @@ export const UserEvents = {
   BREAK_ALLIANCES: 'user:break:alliances',
   ALLOCATE_POPULATION: 'user:allocate_population',
   DEALLOCATE_POPULATION: 'user:deallocate_population',
+  SELECT_RESEARCH_TECHNOLOGY: 'user:select_research_technology',
 }
 
 // Game Sector events
@@ -91,5 +92,6 @@ export const GameEvents = {
   BUILDING_ADD_DEFENDER: 'game:building:add_defender',
   BUILDING_REMOVE_DEFENDER: 'game:building:remove_defender',
   TEAMS_CHANGED: 'game:teams:changed',
-  POPULATION_ALLOCATION_CHANGED: 'game:population:allocation_changed'
+  RESEARCH_CHANGED: 'game:research:changed',
+  POPULATION_ALLOCATION_CHANGED: 'game:population:allocation_changed',
 }

@@ -66,9 +66,13 @@ export default class Task extends Phaser.GameObjects.Container
 
   onPopulationChanged(obj, val, prev)
   {
-    if (val === null)
+    if (val === undefined)
     {
       this.label.setText('-')
+    }
+    else if (val === null)
+    {
+      this.label.setText('')
     }
     else
     {

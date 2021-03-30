@@ -33,6 +33,63 @@ const getDefaultDefendersForBuilding = (type) => {
   return Array(defenderCount)
 }
 
+class Sector
+{
+  constructor(scene, index, key, startEpoch)
+  {
+    this.scene = scene
+    this.id = index,
+    this.key = key
+    this.epoch = startEpoch
+    this.startPopulation = 0
+    this.availablePopulation = 0
+    this.spawnedPopulation = 0
+    this.deployedPopulation = 0
+    this.resources = []
+    this.buildings = {
+      castle: false,
+      mine: false,
+      factory: false,
+      laboratory: false,
+    }
+    this.technologies = {
+      tech1: false,
+      tech2: false,
+      tech3: false,
+      tech4: false,
+      tech5: false,
+      tech6: false,
+      tech7: false,
+      tech8: false,
+      tech9: false,
+      tech10: false,
+      tech11: false,
+      tech12: false
+    }
+    this.research = null
+    this.construction = null
+    this.production = null
+    this.armies = []
+    this.nuked = false
+  }
+
+  beginResearch(technology)
+  {
+    const tech = this.technologies[technology]
+    if (tech)
+    {
+      this.research = {
+        researches: 0,
+        name: technology,
+        started: 0,
+        duration: tech.duration,
+      }
+
+      this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
+    }
+  }
+}
+
 export default class Store extends Phaser.Events.EventEmitter
 {
   constructor(scene)
@@ -55,57 +112,15 @@ export default class Store extends Phaser.Events.EventEmitter
     this.island.map.forEach((value, index) => {
       if (value)
       {
-        this.sectors[index] = {
-          id: index,
-          key: getKeyForSector(index, island.map),
-          epoch: 1,
-          population: {
-            available: 0,
-            researching: 0,
-            producing: 0,
-            building_mine: 0,
-            building_factory: 0,
-            building_laboratory: 0,
-            mining_resource1: 0,
-            mining_resource2: 0,
-            mining_resource4: 0,
-            mining_resource5: 0,
-          },
-          resources: {
-            resource1: 100,
-            resource2: 100
-          },
-          buildings: {
-            castle: false,
-            mine: false,
-            factory: false,
-            laboratory: false,
-          },
-          technologies: {
-            tech1: false,
-            tech2: false,
-            tech3: false,
-            tech4: false,
-            tech5: false,
-            tech6: false,
-            tech7: false,
-            tech8: false,
-            tech9: false,
-            tech10: false,
-            tech11: false,
-            tech12: false
-          },
-          defences: {
-
-          },
-          weapons: {
-
-          },
-          armies: [],
-          nuked: false
-        }
+        this.addEpock(index, getKeyForSector(index, island.map), 1)
       }
     })
+  }
+
+  addSector(index, key, startEpoch)
+  {
+    this.sectors[index] = new Sector(this.scene, index, key, startEpoch)
+    return this.sectors[index]
   }
 
   setPlayers(teams)

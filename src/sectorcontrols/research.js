@@ -3,7 +3,7 @@ import Header from './header'
 import Clock from '../clock'
 import Task from '../task'
 import Button from '../button'
-import { UnitTypes, DefenderUnitTypes } from '../defines'
+import { UnitTypes, DefenderUnitTypes, UserEvents } from '../defines'
 
 export default class Research extends Phaser.GameObjects.Container
 {
@@ -25,7 +25,7 @@ export default class Research extends Phaser.GameObjects.Container
     this.activeResearch.add(new Phaser.GameObjects.Image(this.scene, 12, 18, 'mlm_icons', 'multiply_icon'))
 
     this.activeResearchPopulation = new Task(this.scene, 26, 23, 'population_epoch_1', 'researches')
-    this.activeResearchPopulation.setData('population', null)
+    this.activeResearchPopulation.setData('population', undefined)
     this.add(this.activeResearchPopulation)
 
     this.activeResearch.add(new Phaser.GameObjects.Image(this.scene, 38, 18, 'mlm_icons', 'equal_icon'))
@@ -44,28 +44,30 @@ export default class Research extends Phaser.GameObjects.Container
     this.add(this.scene.add.image(50, 45, 'mlm_icons', 'category_offence'))
 
     // Technologies
+    const onClickTechnology = this.onClickTechnology.bind(this)
+
     this.technologies = new Phaser.GameObjects.Group(this.scene)
-    this.technologies.add(new Button(scene, 0, 62, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 78, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 94, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 110, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 62, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 78, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 94, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 110, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 62, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 78, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 94, 'technology_rock', this.onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 110, 'technology_rock', this.onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 62, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 78, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 94, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 110, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 24, 62, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 24, 78, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 24, 94, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 24, 110, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 50, 62, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 50, 78, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 50, 94, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 50, 110, 'technology_rock', onClickTechnology))
     this.add(this.technologies.getChildren())
 
     // Hide all technology icons
     this.technologies.setVisible(false)
   }
 
-  onClickTechnology(a, c, b, e)
+  onClickTechnology(button, pointer, localX, localY, event)
   {
-    console.log(arguments)
+    this.scene.events.emit(UserEvents.SELECT_RESEARCH_TECHNOLOGY, button.name)
   }
 
   // display({
@@ -87,15 +89,15 @@ export default class Research extends Phaser.GameObjects.Container
   {
     this.setVisible(true)
 
-    if (sector.researching)
+    if (sector.research)
     {
       // Set researching icon
-      this.activeResearchIcon.setFrame(`technology_${sector.researching.name}`)
+      this.activeResearchIcon.setFrame(`technology_${sector.research.name}`)
 
-      this.activeResearchPopulation.setData('population', sector.researches)
+      this.activeResearchPopulation.setData('population', sector.research.researches)
 
       // Set researching time
-      this.activeResearchClock.setDuration(sector.researching.duration)
+      this.activeResearchClock.setDuration(sector.research.duration)
 
       let repair = 0
       let defence = 0
