@@ -99,38 +99,38 @@ export default class Research extends Phaser.GameObjects.Container
       // Set researching time
       this.activeResearchClock.setDuration(sector.research.duration)
 
-      let repair = 0
-      let defence = 0
-      let offence = 0
-      for (const [ key, val ] of Object.entries(sector.technologies))
-      {
-        let icon
-        if (Object.values(UnitTypes).includes(key))
-        {
-          icon = this.technologies.getChildren()[8 + offence]
-          offence++
-        }
-        else if (Object.values(DefenderUnitTypes).includes(key))
-        {
-          icon = this.technologies.getChildren()[4 + defence]
-          defence++
-        }
-        else // repair
-        {
-          icon = this.technologies.getChildren()[repair]
-          repair++
-        }
-
-        if (icon)
-        {
-          icon.name = key
-          icon.setFrame(`technology_${key}`)
-          icon.setVisible(true)
-        }
-      }
-
       // Display
       this.activeResearch.setVisible(true)
+    }
+
+    let repair = 0
+    let defence = 0
+    let offence = 0
+    for (const [ key, val ] of Object.entries(sector.technologies))
+    {
+      let icon
+      if (val.category === 'repair')
+      {
+        icon = this.technologies.getChildren()[repair]
+        repair++
+      }
+      else if (val.category === 'defence')
+      {
+        icon = this.technologies.getChildren()[4 + defence]
+        defence++
+      }
+      else if (val.category === 'offence')
+      {
+        icon = this.technologies.getChildren()[8 + offence]
+        offence++
+      }
+
+      if (icon)
+      {
+        icon.name = key
+        icon.setFrame(`technology_${key}`)
+        icon.setVisible(true)
+      }
     }
   }
 }

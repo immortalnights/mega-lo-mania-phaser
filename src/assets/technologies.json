@@ -1,0 +1,200 @@
+[
+  {
+    "id": "rock",
+    "name": "rock",
+    "category": "offence",
+    "technologyLevel": 1,
+    "researchDuration": 10
+  },
+  {
+    "id": "sling",
+    "name": "sling",
+    "category": "offence",
+    "technologyLevel": 2,
+    "researchDuration": 10
+  },
+  {
+    "id": "pike",
+    "name": "pike",
+    "category": "offence",
+    "technologyLevel": 3,
+    "researchDuration": 10
+  },
+  {
+    "id": "bowandarrow",
+    "name": "bowandarrow",
+    "category": "offence",
+    "technologyLevel": 4,
+    "researchDuration": 10
+  },
+  {
+    "id": "catapult",
+    "name": "catapult",
+    "category": "offence",
+    "technologyLevel": 5,
+    "researchDuration": 10
+  },
+  {
+    "id": "cannon",
+    "name": "cannon",
+    "category": "offence",
+    "technologyLevel": 6,
+    "researchDuration": 10
+  },
+  {
+    "id": "biplane",
+    "name": "biplane",
+    "category": "offence",
+    "technologyLevel": 7,
+    "researchDuration": 10
+  },
+  {
+    "id": "jet",
+    "name": "jet",
+    "category": "offence",
+    "technologyLevel": 8,
+    "researchDuration": 10
+  },
+  {
+    "id": "nuke",
+    "name": "nuke",
+    "category": "offence",
+    "technologyLevel": 9,
+    "researchDuration": 10
+  },
+  {
+    "id": "flyingsaucer",
+    "name": "flyingsaucer",
+    "category": "offence",
+    "technologyLevel": 10,
+    "researchDuration": 10
+  },
+
+  {
+    "id": "stick",
+    "name": "stick",
+    "category": "defence",
+    "technologyLevel": 1,
+    "researchDuration": 10
+  },
+  {
+    "id": "spear",
+    "name": "spear",
+    "category": "defence",
+    "technologyLevel": 2,
+    "researchDuration": 10
+  },
+  {
+   "id": "bow",
+   "name": "bow",
+   "category": "defence",
+   "technologyLevel": 3,
+   "researchDuration": 10
+  },
+  {
+    "id": "oil",
+    "name": "oil",
+    "category": "defence",
+    "technologyLevel": 4,
+    "researchDuration": 10
+  },
+  {
+    "id": "crossbow",
+    "name": "crossbow",
+    "category": "defence",
+    "technologyLevel": 5,
+    "researchDuration": 10
+  },
+  {
+   "id": "rifle",
+   "name": "rifle",
+   "category": "defence",
+   "technologyLevel": 6,
+   "researchDuration": 10
+  },
+  {
+   "id": "machinegun",
+   "name": "machinegun",
+   "category": "defence",
+   "technologyLevel": 7,
+   "researchDuration": 10
+  },
+  {
+    "id": "rocketlauncher",
+    "name": "rocketlauncher",
+    "category": "defence",
+    "technologyLevel": 8,
+    "researchDuration": 10
+  },
+  {
+    "id": "antinuke",
+    "name": "antinuke",
+    "category": "defence",
+    "technologyLevel": 9,
+    "researchDuration": 10
+  },
+  {
+    "id": "laser",
+    "name": "laser",
+    "category": "defence",
+    "technologyLevel": 10,
+    "researchDuration": 10
+  },
+
+  {
+    "id": "repair_1",
+    "name": "Repair 1",
+    "category": "repair",
+    "technologyLevel": 1,
+    "researchDuration": 10
+  },
+  {
+    "id": "repair_2",
+    "name": "Repair 2",
+    "category": "repair",
+    "technologyLevel": 2,
+    "researchDuration": 10
+  },
+  {
+   "id": "repair_3",
+   "name": "Repair 3",
+   "category": "repair",
+   "technologyLevel": 3,
+   "researchDuration": 10
+  },
+  {
+    "id": "repair_4",
+    "name": "Repair 4",
+    "category": "repair",
+    "technologyLevel": 4,
+    "researchDuration": 10
+  },
+  {
+    "id": "repair_advanced_1",
+    "name": "Repair Advanced 1",
+    "category": "repair",
+    "technologyLevel": 5,
+    "researchDuration": 10
+  },
+  {
+   "id": "repair_advanced_2",
+   "name": "Repair Advanced 2",
+   "category": "repair",
+   "technologyLevel": 6,
+   "researchDuration": 10
+  },
+  {
+   "id": "repair_advanced_3",
+   "name": "Repair Advanced 3",
+   "category": "repair",
+   "technologyLevel": 7,
+   "researchDuration": 10
+  },
+  {
+    "id": "repair_advanced_4",
+    "name": "Repair Advanced 4",
+    "category": "repair",
+    "technologyLevel": 8,
+    "researchDuration": 10
+  }
+]

@@ -1,6 +1,7 @@
 import Phaser, { Game } from 'phaser'
 import { Teams, GameEvents, BuildingTypes, unitSet } from './defines.js'
 import Islands from './assets/islands.json'
+import Technologies from './assets/technologies.json'
 import { getKeyForSector } from './utilities'
 
 const getDefaultDefendersForBuilding = (type) => {
@@ -35,12 +36,12 @@ const getDefaultDefendersForBuilding = (type) => {
 
 class Sector
 {
-  constructor(scene, index, key, startEpoch)
+  constructor(scene, index, key)
   {
     this.scene = scene
     this.id = index,
     this.key = key
-    this.epoch = startEpoch
+    this.epoch = 0
     this.startPopulation = 0
     this.availablePopulation = 0
     this.spawnedPopulation = 0
@@ -52,25 +53,89 @@ class Sector
       factory: false,
       laboratory: false,
     }
-    this.technologies = {
-      tech1: false,
-      tech2: false,
-      tech3: false,
-      tech4: false,
-      tech5: false,
-      tech6: false,
-      tech7: false,
-      tech8: false,
-      tech9: false,
-      tech10: false,
-      tech11: false,
-      tech12: false
-    }
+    this.technologies = {}
     this.research = null
     this.construction = null
     this.production = null
     this.armies = []
     this.nuked = false
+  }
+
+  /**
+   * Initialize the sector resources and technologies (based on the epoch)
+   */
+  setup(epoch, resources)
+  {
+    Technologies.forEach(technology => {
+      if (technology.technologyLevel >= epoch && technology.technologyLevel < epoch + 4)
+      {
+        this.technologies[technology.id] = {
+          name: technology.name,
+          category: technology.category,
+          duration: technology.researchDuration
+        }
+      }
+    })
+  }
+
+  /**
+   * Claim this sector for the specified player
+   * @param {String} team 
+   * @param {Number} population 
+   */
+  claim(team, population)
+  {
+
+  }
+
+  tick(time, delta)
+  {
+    // Handle combat
+    if (this.armies.length > 0)
+    {
+      
+    }
+
+    // Check if the sector is claimed
+    if (this.buildings.castle === false)
+    {
+      // Handle castle building
+      if (this.armies.length === 1)
+      {
+
+      }
+    }
+    else
+    {
+      // Apply population growth
+
+      // Handle buildings (since the sector may not be claimed)
+
+      // Handle mining / resources
+
+      // Handle research
+      if (this.research)
+      {
+        if (this.research.researches > 0)
+        {
+          this.research.duration -= 1
+
+          if (this.research.duration <= 0)
+          {
+            // Research completed
+            this.technologies[this.research.name].researched = true
+
+            this.scene.emit(GameEvents.SECTOR_RESEARCH_COMPLETED, this)
+          }
+        }
+      }
+
+      // Handle Production
+      if (this.production)
+      {
+
+      }
+    }
   }
 
   beginResearch(technology)
@@ -100,6 +165,22 @@ export default class Store extends Phaser.Events.EventEmitter
 
     this.players = []
     this.sectors = {}
+
+    this.tickTimer = 0
+    this.tickCount = 0
+    this.tickSpeed = 1000 // 1s Normal speed
+  }
+
+  tick(time, delta)
+  {
+    this.tickTimer += delta
+    if (this.tickTimer > this.tickSpeed)
+    {
+      this.tickTimer = 0
+      this.tickCount++
+
+      Object.values(this.sectors).forEach(sector => sector.tick(time, delta))
+    }
   }
 
   setIsland(name)

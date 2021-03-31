@@ -41,31 +41,8 @@ export default class Sandbox extends Phaser.Scene
     Object.assign(this, ResearchController)
     this.setupResearch(this)
 
-    this.store.sectors[1].research = {
-      researches: 0,
-      name: 'cannon',
-      started: 0,
-      duration: Infinity,
-    }
-    this.store.sectors[1].technologies = {
-      rock: {},
-      pike: {}
-    }
-
-    this.store.sectors[2].research = {
-      researches: 10,
-      name: 'jet',
-      started: 0,
-      duration: 99,
-    }
-    this.store.sectors[2].technologies = {
-      jet: {
-        duration: 56
-      },
-      rifle: {
-        duration: 15
-      },
-    }
+    this.store.sectors[1].setup(1, null)
+    this.store.sectors[2].setup(2, null)
 
     this.add.text(10, 5, "One").setInteractive().on('pointerdown', () => {
       this.activeSector = 0
@@ -96,6 +73,10 @@ export default class Sandbox extends Phaser.Scene
     this.events.on(GameEvents.RESEARCH_CHANGED, sector => {
       views[sector.id].display(sector)
     })
+  }
 
+  update(time, delta)
+  {
+    this.store.tick(time, delta)
   }
 }
