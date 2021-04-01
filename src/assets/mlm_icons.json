@@ -175,35 +175,35 @@
       "frame": { "x": 96, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_shield_1",
+      "filename": "repair_1",
       "frame": { "x": 112, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_shield_2",
+      "filename": "repair_2",
       "frame": { "x": 128, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_shield_3",
+      "filename": "repair_3",
       "frame": { "x": 144, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_shield_4",
+      "filename": "repair_4",
       "frame": { "x": 160, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_shield_5",
+      "filename": "repair_advanced_1",
       "frame": { "x": 176, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_shield_6",
+      "filename": "repair_advanced_2",
       "frame": { "x": 192, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_shield_7",
+      "filename": "repair_advanced_3",
       "frame": { "x": 208, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_shield_8",
+      "filename": "repair_advanced_4",
       "frame": { "x": 224, "y": 32, "w": 16, "h": 16 }
     },
     {
@@ -622,43 +622,43 @@
     },
 
     {
-      "filename": "technology_rock",
+      "filename": "rock",
       "frame": { "x": 0, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_sling",
+      "filename": "sling",
       "frame": { "x": 16, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_pike",
+      "filename": "pike",
       "frame": { "x": 32, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_bowandarrow",
+      "filename": "bowandarrow",
       "frame": { "x": 48, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_catapult",
+      "filename": "catapult",
       "frame": { "x": 64, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_cannon",
+      "filename": "cannon",
       "frame": { "x": 80, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_biplane",
+      "filename": "biplane",
       "frame": { "x": 96, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_jet",
+      "filename": "jet",
       "frame": { "x": 112, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_nuke",
+      "filename": "nuke",
       "frame": { "x": 128, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_flyingsaucer",
+      "filename": "flyingsaucer",
       "frame": { "x": 144, "y": 237, "w": 16, "h": 16 }
     },
     {
@@ -687,43 +687,43 @@
     },
 
     {
-      "filename": "technology_stick",
+      "filename": "stick",
       "frame": { "x": 0, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_spear",
+      "filename": "spear",
       "frame": { "x": 16, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_bow",
+      "filename": "bow",
       "frame": { "x": 32, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_oil",
+      "filename": "oil",
       "frame": { "x": 48, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_crossbow",
+      "filename": "crossbow",
       "frame": { "x": 64, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_rifle",
+      "filename": "rifle",
       "frame": { "x": 80, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_machinegun",
+      "filename": "machinegun",
       "frame": { "x": 96, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_rocket",
+      "filename": "rocket",
       "frame": { "x": 112, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_antinuke",
+      "filename": "antinuke",
       "frame": { "x": 128, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "technology_laser",
+      "filename": "laser",
       "frame": { "x": 144, "y": 253, "w": 16, "h": 16 }
     },
     {

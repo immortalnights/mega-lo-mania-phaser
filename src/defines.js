@@ -93,5 +93,6 @@ export const GameEvents = {
   BUILDING_REMOVE_DEFENDER: 'game:building:remove_defender',
   TEAMS_CHANGED: 'game:teams:changed',
   RESEARCH_CHANGED: 'game:research:changed',
+  RESEARCH_COMPLETED: 'game:research:completed',
   POPULATION_ALLOCATION_CHANGED: 'game:population:allocation_changed',
 }

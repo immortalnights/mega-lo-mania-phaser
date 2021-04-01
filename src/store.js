@@ -72,7 +72,8 @@ class Sector
         this.technologies[technology.id] = {
           name: technology.name,
           category: technology.category,
-          duration: technology.researchDuration
+          researched: false,
+          duration: technology.researchDuration,
         }
       }
     })
@@ -85,7 +86,16 @@ class Sector
    */
   claim(team, population)
   {
+    console.assert(this.buildings.castle === false, `Sector ${this.index} is already owned!`)
 
+    this.buildings.castle = {
+      team,
+      // FIXME move defenders to root of sector and have building apply them from there?
+      defenders: []
+    }
+
+    this.startPopulation = population
+    this.availablePopulation = population
   }
 
   tick(time, delta)
@@ -118,15 +128,24 @@ class Sector
       {
         if (this.research.researches > 0)
         {
-          this.research.duration -= 1
+          this.research.remainingDuration -= 1
 
-          if (this.research.duration <= 0)
+          if (this.research.remainingDuration < 0)
           {
-            // Research completed
+            // Mark the technology as completed
             this.technologies[this.research.name].researched = true
 
-            this.scene.emit(GameEvents.SECTOR_RESEARCH_COMPLETED, this)
+            // Sector alert (map / audio)
+            this.scene.events.emit(GameEvents.RESEARCH_COMPLETED, this)
+
+            // Deallocate the researchers
+            this.availablePopulation = this.availablePopulation + this.research.researches
+
+            // Reset the current research
+            this.research = false
           }
+
+          this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
         }
       }
 
@@ -134,6 +153,113 @@ class Sector
       if (this.production)
       {
 
+      }
+    }
+  }
+
+  hasResourcesFor(technology)
+  {
+    return true
+  }
+
+  /**
+   * 
+   * @param {String} task 
+   * @param {String} detail 
+   * @param {Number} population 
+   */
+  modifyPopulation(task, detail, population)
+  {
+    let change = 0
+    switch (task)
+    {
+      case 'research':
+      {
+        if (this.research)
+        {
+          if (population < 0)
+          {
+            change = Math.min(this.research.researches, Math.abs(population))
+            this.research.researches = this.research.researches - change
+            this.availablePopulation = this.availablePopulation + change
+          }
+          else
+          {
+            change = Math.min(this.availablePopulation, population)
+            this.availablePopulation = this.availablePopulation - change
+            this.research.researches = this.research.researches + change
+          }
+
+          this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
+        }
+        break
+      }
+      case 'production':
+      {
+        if (this.production)
+        {
+          if (population < 0)
+          {
+            change = Math.min(this.production.workers, Math.abs(population))
+            this.production.workers = this.production.workers - change
+            this.availablePopulation = this.availablePopulation + change
+          }
+          else
+          {
+            change = Math.min(this.availablePopulation, population)
+            this.availablePopulation = this.availablePopulation - change
+            this.production.workers = this.production.workers + change
+          }
+        }
+        break
+      }
+      case 'building':
+      {
+        const construction = this.building.find(item => item.name === detail)
+        if (construction == null)
+        {
+          console.warn(`Failed to find construction of ${detail}`)
+        }
+        else
+        {
+          if (population < 0)
+          {
+            change = Math.min(construction.builders, Math.abs(population))
+            construction.builders = construction.builders - change
+            this.availablePopulation = this.availablePopulation + change
+          }
+          else
+          {
+            change = Math.min(this.availablePopulation, population)
+            this.availablePopulation = this.availablePopulation - change
+            construction.builders = construction.builders + change
+          }
+        }
+        break
+      }
+      case 'mining':
+      {
+        const resource = this.resources.find(item => item.name === detail)
+        if (resource == null)
+        {
+          console.warn(`Failed to find resource ${detail}`)
+        }
+        else
+        {
+          if (population < 0)
+          {
+            change = Math.min(resource.miners, Math.abs(population))
+            resource.miners = resource.miners - change
+            this.availablePopulation = this.availablePopulation + change
+          }
+          else
+          {
+            change = Math.min(this.availablePopulation, population)
+            this.availablePopulation = this.availablePopulation - change
+            resource.miners = resource.miners + change
+          }
+        }
+        break
       }
     }
   }
@@ -148,6 +274,7 @@ class Sector
         name: technology,
         started: 0,
         duration: tech.duration,
+        remainingDuration: tech.duration,
       }
 
       this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
@@ -193,7 +320,7 @@ export default class Store extends Phaser.Events.EventEmitter
     this.island.map.forEach((value, index) => {
       if (value)
       {
-        this.addEpock(index, getKeyForSector(index, island.map), 1)
+        this.addSector(index, getKeyForSector(index, island.map), 1)
       }
     })
   }
@@ -214,18 +341,18 @@ export default class Store extends Phaser.Events.EventEmitter
     })
   }
 
-  allocatePopulation(sector, task, population = 1)
+  allocatePopulation(index, task, detail, population = 1)
   {
-    const sec = this.sectors[sector]
-    sec.tasks[task] += population
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, task, sec.tasks[task])
+    const sector = this.sectors[index]
+    sector.modifyPopulation(task, detail, population)
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
-  deallocatePopulation(sector, task, population = 1)
+  deallocatePopulation(index, task, detail, population = 1)
   {
-    const sec = this.sectors[sector]
-    sec.tasks[task] -= population
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, task, sec.tasks[task])
+    const sector = this.sectors[index]
+    sector.modifyPopulation(task, detail, -population)
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   /**

@@ -45,13 +45,6 @@ export default class Task extends Phaser.GameObjects.Container
       this.setInteractive()
       this.on('pointerdown', onAllocateDeallocate)
     }
-
-    this.scene.events.on(GameEvents.POPULATION_ALLOCATION_CHANGED, (task, population) => {
-      if (this.name === task)
-      {
-        this.setData('population', population)
-      }
-    })
   }
 
   onAllocate()

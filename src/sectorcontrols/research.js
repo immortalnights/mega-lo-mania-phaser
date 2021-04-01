@@ -19,12 +19,12 @@ export default class Research extends Phaser.GameObjects.Container
 
     this.activeResearch = new Phaser.GameObjects.Group(this.scene)
 
-    this.activeResearchIcon = new Phaser.GameObjects.Image(this.scene, 0, 18, 'mlm_icons', 'technology_rock')
+    this.activeResearchIcon = new Phaser.GameObjects.Image(this.scene, 0, 18, 'mlm_icons', '')
     this.activeResearch.add(this.activeResearchIcon)
 
     this.activeResearch.add(new Phaser.GameObjects.Image(this.scene, 12, 18, 'mlm_icons', 'multiply_icon'))
 
-    this.activeResearchPopulation = new Task(this.scene, 26, 23, 'population_epoch_1', 'researches')
+    this.activeResearchPopulation = new Task(this.scene, 26, 23, 'population_epoch_1', 'research')
     this.activeResearchPopulation.setData('population', undefined)
     this.add(this.activeResearchPopulation)
 
@@ -47,18 +47,18 @@ export default class Research extends Phaser.GameObjects.Container
     const onClickTechnology = this.onClickTechnology.bind(this)
 
     this.technologies = new Phaser.GameObjects.Group(this.scene)
-    this.technologies.add(new Button(scene, 0, 62, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 78, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 94, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 110, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 62, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 78, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 94, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 110, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 62, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 78, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 94, 'technology_rock', onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 110, 'technology_rock', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 62, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 78, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 94, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 110, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 24, 62, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 24, 78, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 24, 94, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 24, 110, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 50, 62, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 50, 78, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 50, 94, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 50, 110, '', onClickTechnology))
     this.add(this.technologies.getChildren())
 
     // Hide all technology icons
@@ -88,19 +88,25 @@ export default class Research extends Phaser.GameObjects.Container
   display(sector)
   {
     this.setVisible(true)
+    this.technologies.setVisible(false)
 
     if (sector.research)
     {
       // Set researching icon
-      this.activeResearchIcon.setFrame(`technology_${sector.research.name}`)
+      this.activeResearchIcon.setFrame(sector.research.name)
 
       this.activeResearchPopulation.setData('population', sector.research.researches)
 
       // Set researching time
-      this.activeResearchClock.setDuration(sector.research.duration)
+      this.activeResearchClock.setDuration(sector.research.remainingDuration)
 
       // Display
       this.activeResearch.setVisible(true)
+    }
+    else
+    {
+      this.activeResearchPopulation.setData('population', undefined)
+      this.activeResearch.setVisible(false)
     }
 
     let repair = 0
@@ -108,29 +114,33 @@ export default class Research extends Phaser.GameObjects.Container
     let offence = 0
     for (const [ key, val ] of Object.entries(sector.technologies))
     {
-      let icon
-      if (val.category === 'repair')
+      if (val.researched === false && sector.hasResourcesFor(val))
       {
-        icon = this.technologies.getChildren()[repair]
-        repair++
-      }
-      else if (val.category === 'defence')
-      {
-        icon = this.technologies.getChildren()[4 + defence]
-        defence++
-      }
-      else if (val.category === 'offence')
-      {
-        icon = this.technologies.getChildren()[8 + offence]
-        offence++
+        let icon
+        if (val.category === 'repair')
+        {
+          icon = this.technologies.getChildren()[repair]
+          repair++
+        }
+        else if (val.category === 'defence')
+        {
+          icon = this.technologies.getChildren()[4 + defence]
+          defence++
+        }
+        else if (val.category === 'offence')
+        {
+          icon = this.technologies.getChildren()[8 + offence]
+          offence++
+        }
+  
+        if (icon)
+        {
+          icon.name = key
+          icon.setFrame(key)
+          icon.setVisible(true)
+        }
       }
 
-      if (icon)
-      {
-        icon.name = key
-        icon.setFrame(`technology_${key}`)
-        icon.setVisible(true)
-      }
     }
   }
 }
