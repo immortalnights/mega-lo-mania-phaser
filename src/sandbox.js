@@ -1,8 +1,40 @@
 import Phaser from 'phaser'
 import Store from './store'
+import { Root } from './sectorcontrols/'
 import Research from './sectorcontrols/research'
 import ResearchController from './components/researchcontroller'
 import { GameEvents, Teams, UserEvents } from "./defines"
+import SectorControls from './sectorcontrols'
+
+class SectorControl extends Phaser.GameObjects.Container
+{
+  constructor(scene, x, y)
+  {
+    super(scene, x, y)
+
+    this.activeSector = undefined
+
+    this.root = new Root(scene, -50, -50)
+    this.add(this.root)
+    this.researchView = new Research(scene, -150, -50)
+    this.add(this.researchView)
+
+    this.scene.events.on(GameEvents.RESEARCH_CHANGED, sector => {
+      if (this.activeSector === sector.id)
+      {
+        this.researchView.display(sector)
+      }
+    })
+  }
+
+  setSector(sector)
+  {
+    this.activeSector = sector.id
+    this.root.display(sector)
+    this.researchView.display(sector)
+  }
+}
+
 
 export default class Sandbox extends Phaser.Scene
 {
@@ -24,7 +56,6 @@ export default class Sandbox extends Phaser.Scene
 
   preload()
   {
-  
   }
 
   create()
@@ -48,11 +79,8 @@ export default class Sandbox extends Phaser.Scene
     this.store.sectors[1].claim(Teams.RED, 100)
     this.store.sectors[2].claim(Teams.BLUE, 10)
 
-    const margin = 25
-    const third = (width / 3)
-
-    const researchView = new Research(this, margin + third, 50)
-    this.add.existing(researchView)
+    const sectorControl = new SectorControl(this, width / 2, height / 2)
+    this.add.existing(sectorControl)
 
     const sectorSelectors = []
 
@@ -64,7 +92,7 @@ export default class Sandbox extends Phaser.Scene
       sectorSelectors.forEach(text => text.setColor('#555'))
       sectorSelectors[index].setColor('#FFF')
       this.activeSector = index
-      researchView.display(this.store.sectors[this.activeSector])
+      sectorControl.setSector(this.store.sectors[this.activeSector])
     }
 
     // Set the current sector
@@ -75,13 +103,6 @@ export default class Sandbox extends Phaser.Scene
       text.on('pointerdown', changeSector.bind(this, index))
     })
 
-    // Normally handled by the SectorController (why?)
-    this.events.on(GameEvents.RESEARCH_CHANGED, sector => {
-      if (this.activeSector === sector.id)
-      {
-        researchView.display(sector)
-      }
-    })
     this.events.on(UserEvents.ALLOCATE_POPULATION, (...args) => {
       this.store.allocatePopulation(this.activeSector, ...args)
     })
