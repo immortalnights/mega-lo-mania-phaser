@@ -5,38 +5,13 @@ import Task from '../task'
 import Button from '../button'
 import { UnitTypes, DefenderUnitTypes, UserEvents } from '../defines'
 
-export default class Research extends Phaser.GameObjects.Container
+export class CategorizedTechnologies extends Phaser.GameObjects.Container
 {
-  constructor(scene, x, y)
+  constructor(scene, x, y, config)
   {
     super(scene, x, y)
 
-    this.name = 'research'
-
-    this.add(new Header(this.scene, 26, 0, 'research_header', () => {
-      this.parentContainer.emit('sectorcontrol:change_view', 'root')
-    }))
-
-    this.activeResearch = new Phaser.GameObjects.Group(this.scene)
-
-    this.activeResearchIcon = new Phaser.GameObjects.Image(this.scene, 0, 18, 'mlm_icons', '')
-    this.activeResearch.add(this.activeResearchIcon)
-
-    this.activeResearch.add(new Phaser.GameObjects.Image(this.scene, 12, 18, 'mlm_icons', 'multiply_icon'))
-
-    this.activeResearchPopulation = new Task(this.scene, 26, 23, 'population_epoch_1', 'research')
-    this.activeResearchPopulation.setData('population', undefined)
-    this.add(this.activeResearchPopulation)
-
-    this.activeResearch.add(new Phaser.GameObjects.Image(this.scene, 38, 18, 'mlm_icons', 'equal_icon'))
-
-    this.activeResearchClock = new Clock(this.scene, 50, 19, Infinity)
-    // If `addToScene` is true, the clock `preUpdate` will be called
-    this.activeResearch.add(this.activeResearchClock, false)
-    this.add(this.activeResearch.getChildren())
-
-    // Hide active research related images
-    this.activeResearch.setVisible(false)
+    this.technologyPredicate = config.filter
 
     // Categories
     this.add(this.scene.add.image(0, 45, 'mlm_icons', 'category_repair'))
@@ -44,7 +19,9 @@ export default class Research extends Phaser.GameObjects.Container
     this.add(this.scene.add.image(50, 45, 'mlm_icons', 'category_offence'))
 
     // Technologies
-    const onClickTechnology = this.onClickTechnology.bind(this)
+    const onClickTechnology = button => {
+      this.emit('technology:selected', button.name)
+    }
 
     this.technologies = new Phaser.GameObjects.Group(this.scene)
     this.technologies.add(new Button(scene, 0, 62, '', onClickTechnology))
@@ -65,56 +42,16 @@ export default class Research extends Phaser.GameObjects.Container
     this.technologies.setVisible(false)
   }
 
-  onClickTechnology(button, pointer, localX, localY, event)
-  {
-    this.scene.events.emit(UserEvents.SELECT_RESEARCH_TECHNOLOGY, button.name)
-  }
-
-  // display({
-  //   epoch: 1,
-  //   researches: 0,
-  //   researching: {
-  //     name: 'rock',
-  //     started: 0,
-  //     duration: Infinity,
-  //   },
-  //   technologies: {
-  //     rock: {
-  //       wood: 0.5
-  //     }
-  //   }
-  // })
-
   display(sector)
   {
-    this.setVisible(true)
     this.technologies.setVisible(false)
-
-    if (sector.research)
-    {
-      // Set researching icon
-      this.activeResearchIcon.setFrame(sector.research.name)
-
-      this.activeResearchPopulation.setData('population', sector.research.researches)
-
-      // Set researching time
-      this.activeResearchClock.setDuration(sector.research.remainingDuration)
-
-      // Display
-      this.activeResearch.setVisible(true)
-    }
-    else
-    {
-      this.activeResearchPopulation.setData('population', undefined)
-      this.activeResearch.setVisible(false)
-    }
 
     let repair = 0
     let defence = 0
     let offence = 0
     for (const [ key, val ] of Object.entries(sector.technologies))
     {
-      if (val.researched === false && sector.hasResourcesFor(val))
+      if (this.technologyPredicate(sector, val))
       {
         let icon
         if (val.category === 'repair')
@@ -140,7 +77,78 @@ export default class Research extends Phaser.GameObjects.Container
           icon.setVisible(true)
         }
       }
-
     }
+  }
+}
+
+export default class Research extends Phaser.GameObjects.Container
+{
+  constructor(scene, x, y, config)
+  {
+    super(scene, x, y)
+
+    this.taskName = config.task
+
+    this.add(new Header(this.scene, 26, 0, config.header, () => {
+      this.parentContainer.emit('sectorcontrol:change_view', 'root')
+    }))
+
+    this.activeTask = new Phaser.GameObjects.Group(this.scene)
+
+    this.activeTaskIcon = new Phaser.GameObjects.Image(this.scene, 0, 18, 'mlm_icons', '')
+    this.activeTask.add(this.activeTaskIcon)
+
+    this.activeTask.add(new Phaser.GameObjects.Image(this.scene, 12, 18, 'mlm_icons', 'multiply_icon'))
+
+    this.activeTaskPopulation = new Task(this.scene, 26, 23, 'population_epoch_1', this.taskName)
+    this.activeTaskPopulation.setData('population', undefined)
+    this.add(this.activeTaskPopulation)
+
+    this.activeTask.add(new Phaser.GameObjects.Image(this.scene, 38, 18, 'mlm_icons', 'equal_icon'))
+
+    this.activeTaskClock = new Clock(this.scene, 50, 19, Infinity)
+    // If `addToScene` is true, the clock `preUpdate` will be called
+    this.activeTask.add(this.activeTaskClock, false)
+    this.add(this.activeTask.getChildren())
+
+    // Hide active task related images
+    this.activeTask.setVisible(false)
+
+    this.technologies = new CategorizedTechnologies(this.scene, 0, 0, {
+      iconStyle: undefined,
+      filter: config.technologyFilter
+    })
+    this.technologies.on('technology:selected', technology => {
+      this.emit('technology:selected', technology)
+    })
+    this.add(this.technologies)
+  }
+
+  display(sector)
+  {
+    this.setVisible(true)
+
+    const task = sector[this.taskName]
+
+    if (task)
+    {
+      // Set researching icon
+      this.activeTaskIcon.setFrame(task.name)
+
+      this.activeTaskPopulation.setData('population', task.allocated)
+
+      // Set researching time
+      this.activeTaskClock.setDuration(task.remainingDuration)
+
+      // Display
+      this.activeTask.setVisible(true)
+    }
+    else
+    {
+      this.activeTaskPopulation.setData('population', undefined)
+      this.activeTask.setVisible(false)
+    }
+
+    this.technologies.display(sector)
   }
 }

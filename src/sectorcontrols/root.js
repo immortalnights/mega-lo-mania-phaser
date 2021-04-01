@@ -1,0 +1,165 @@
+import Phaser from 'phaser'
+import Button from '../button'
+import Task from '../task'
+
+export default class Root extends Phaser.GameObjects.Container
+{
+  constructor(scene, x, y)
+  {
+    super(scene, x, y)
+
+    this.name = 'root'
+
+    // arrow_down_left_1
+    // arrow_down_right
+    // arrow_up_right_0
+    // arrow_up_right_1
+    // arrow_left
+    // arrow_right
+    // arrow_down
+    // arrow_up
+    // arrow_up_left
+    // arrow_down_left_1
+
+    this.blueprintNav = new Button(this.scene, 10, 0, 'blueprint_icon', () => {
+      this.parentContainer.emit('sectorcontrol:change_view', 'blueprints')
+    })
+
+    this.repairNav = new Button(this.scene, 31, 0, 'repair_icon', () => {
+      this.parentContainer.emit('sectorcontrol:change_view', 'repair')
+    })
+    this.repairArrow = new Phaser.GameObjects.Image(this.scene, 30, 15, 'mlm_icons', 'arrow_up_left')
+
+    this.defenceNav = new Button(this.scene, 51, 0, 'defence_icon', () => {
+      this.parentContainer.emit('sectorcontrol:change_view', 'defence')
+    })
+    this.defenceArrow = new Phaser.GameObjects.Image(this.scene, 50, 15, 'mlm_icons', 'arrow_up_right_1')
+
+    this.offenceNav = new Button(this.scene, 72, 0, 'offence_icon', () => {
+      this.parentContainer.emit('sectorcontrol:change_view', 'offence')
+    })
+    this.offenceArrow = new Phaser.GameObjects.Image(this.scene, 60, 15, 'mlm_icons', 'arrow_up_right_0')
+
+    this.researchNavTask = new Task(this.scene, 10, 30, 'research_icon', 'research', () => {
+      this.parentContainer.emit('sectorcontrol:change_view', 'research')
+    })
+    this.researchArrow = new Phaser.GameObjects.Image(this.scene, 25, 28, 'mlm_icons', 'arrow_left')
+
+    this.population = new Task(this.scene, 40, 30, 'population_epoch_1', 'population')
+    this.population.setDepth(1)
+
+    this.productionNavTask = new Task(this.scene, 72, 30, 'factory_icon', 'production')
+    this.productionArrow = new Phaser.GameObjects.Image(this.scene, 54, 28, 'mlm_icons', 'arrow_right')
+
+    this.miningNav = new Button(this.scene, 40, 65, 'mine_spade_icon', () => {
+      this.parentContainer.emit('sectorcontrol:change_view', 'mining')
+    })
+    this.miningArrow = new Phaser.GameObjects.Image(this.scene, 40, 50, 'mlm_icons', 'arrow_down')
+
+    this.add([
+      this.blueprintNav,
+      this.repairNav,
+      this.repairArrow,
+      this.defenceNav,
+      this.defenceArrow,
+      this.offenceNav,
+      this.offenceArrow,
+      this.researchNavTask,
+      this.researchArrow,
+      this.population,
+      this.productionNavTask,
+      this.productionArrow,
+      this.miningNav,
+      this.miningArrow,
+    ])
+  }
+
+  display(sector)
+  {
+    this.setVisible(true)
+
+    let blueprintsAvailable = false
+    let repairAvailable = false
+    let hasResourcesForRepair = false
+    let defenceAvailable = false
+    let hasResourcesForDefence = false
+    let researchAvailable = false
+    let productionAvailable = false
+    let hasResourcesForProduction = false
+    let miningAvailable = false
+    for (const [key, val] of Object.entries(sector.technologies))
+    {
+      // console.log(key, val.researched)
+
+      if (val.researched === true)
+      {
+        blueprintsAvailable = true
+        const hasResourcesFor = sector.hasResourcesFor(val)
+
+        switch (val.category)
+        {
+          case 'repair':
+          {
+            repairAvailable = true
+            hasResourcesForRepair |= hasResourcesFor
+            break
+          }
+          case 'defence':
+          {
+            defenceAvailable = true
+            hasResourcesForDefence |= hasResourcesFor
+            break
+          }
+        }
+
+        if (val.produced === true)
+        {
+          productionAvailable = true
+          hasResourcesForProduction |= hasResourcesFor
+        }
+      }
+      else if (sector.hasResourcesFor(val))
+      {
+        researchAvailable = true
+      }
+    }
+
+    this.blueprintNav.setVisible(blueprintsAvailable)
+    this.repairNav.setVisible(repairAvailable)
+    this.repairArrow.setVisible(repairAvailable && hasResourcesForRepair)
+    this.defenceNav.setVisible(defenceAvailable)
+    this.defenceArrow.setVisible(defenceAvailable && hasResourcesForDefence)
+    this.researchNavTask.setVisible(researchAvailable)
+    this.researchArrow.setVisible(researchAvailable)
+    this.productionNavTask.setVisible(productionAvailable && hasResourcesForProduction)
+    this.productionArrow.setVisible(productionAvailable)
+    this.miningNav.setVisible(miningAvailable)
+    this.miningArrow.setVisible(miningAvailable)
+
+    if (researchAvailable)
+    {
+      if (sector.research)
+      {
+        this.researchNavTask.setData('population', sector.research.allocated)
+      }
+      else
+      {
+        this.researchNavTask.setData('population', null)
+      }
+    }
+
+    if (productionAvailable)
+    {
+      if (sector.production)
+      {
+        this.productionNavTask.setData('population', sector.production.allocated)
+      }
+      else
+      {
+        this.productionNavTask.setData('population', null)
+      }
+    }
+
+    this.population.setData('population', sector.availablePopulation)
+  }
+}

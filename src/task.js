@@ -16,7 +16,7 @@ export default class Task extends Phaser.GameObjects.Container
     this.label.setOrigin(0.5, 0.5)
     this.add(this.label)
 
-    this.setData('population', 0)
+    this.setData('population', null)
 
     this.on('changedata-population', this.onPopulationChanged, this)
 

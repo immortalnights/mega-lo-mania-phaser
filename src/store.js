@@ -69,12 +69,7 @@ class Sector
     Technologies.forEach(technology => {
       if (technology.technologyLevel >= epoch && technology.technologyLevel < epoch + 4)
       {
-        this.technologies[technology.id] = {
-          name: technology.name,
-          category: technology.category,
-          researched: false,
-          duration: technology.researchDuration,
-        }
+        this.technologies[technology.id] = { ...technology, researched: false }
       }
     })
   }
@@ -126,7 +121,7 @@ class Sector
       // Handle research
       if (this.research)
       {
-        if (this.research.researches > 0)
+        if (this.research.allocated > 0)
         {
           this.research.remainingDuration -= 1
 
@@ -138,8 +133,8 @@ class Sector
             // Sector alert (map / audio)
             this.scene.events.emit(GameEvents.RESEARCH_COMPLETED, this)
 
-            // Deallocate the researchers
-            this.availablePopulation = this.availablePopulation + this.research.researches
+            // Deallocate the population
+            this.availablePopulation = this.availablePopulation + this.research.allocated
 
             // Reset the current research
             this.research = false
@@ -152,7 +147,29 @@ class Sector
       // Handle Production
       if (this.production)
       {
+        if (this.production.allocated > 0)
+        {
+          this.production.remainingDuration -= 1
 
+          if (this.production.remainingDuration < 0)
+          {
+            // Mark the technology as completed
+            this.technologies[this.production.name].available += 1
+
+            // Sector alert (map / audio) (for an individual item)
+            this.scene.events.emit(GameEvents.PRODUCTION_COMPLETED, this)
+            // Sector alert (map / audio) (for the entire run)
+            this.scene.events.emit(GameEvents.PRODUCTION_RUN_COMPLETED, this)
+
+            // Deallocate the population
+            this.availablePopulation = this.availablePopulation + this.production.allocated
+
+            // Reset the current production
+            this.production = false
+          }
+
+          this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
+        }
       }
     }
   }
@@ -179,15 +196,15 @@ class Sector
         {
           if (population < 0)
           {
-            change = Math.min(this.research.researches, Math.abs(population))
-            this.research.researches = this.research.researches - change
+            change = Math.min(this.research.allocated, Math.abs(population))
+            this.research.allocated = this.research.allocated - change
             this.availablePopulation = this.availablePopulation + change
           }
           else
           {
             change = Math.min(this.availablePopulation, population)
             this.availablePopulation = this.availablePopulation - change
-            this.research.researches = this.research.researches + change
+            this.research.allocated = this.research.allocated + change
           }
 
           this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
@@ -200,16 +217,18 @@ class Sector
         {
           if (population < 0)
           {
-            change = Math.min(this.production.workers, Math.abs(population))
-            this.production.workers = this.production.workers - change
+            change = Math.min(this.production.allocated, Math.abs(population))
+            this.production.allocated = this.production.allocated - change
             this.availablePopulation = this.availablePopulation + change
           }
           else
           {
             change = Math.min(this.availablePopulation, population)
             this.availablePopulation = this.availablePopulation - change
-            this.production.workers = this.production.workers + change
+            this.production.allocated = this.production.allocated + change
           }
+
+          this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
         }
         break
       }
@@ -234,6 +253,8 @@ class Sector
             this.availablePopulation = this.availablePopulation - change
             construction.builders = construction.builders + change
           }
+
+          this.scene.events.emit(GameEvents.CONSTRUCTION_CHANGED, this)
         }
         break
       }
@@ -258,6 +279,8 @@ class Sector
             this.availablePopulation = this.availablePopulation - change
             resource.miners = resource.miners + change
           }
+
+          this.scene.events.emit(GameEvents.MINING_CHANGED, this)
         }
         break
       }
@@ -270,14 +293,31 @@ class Sector
     if (tech)
     {
       this.research = {
-        researches: 0,
+        allocated: 0,
         name: technology,
         started: 0,
-        duration: tech.duration,
-        remainingDuration: tech.duration,
+        duration: tech.researchDuration,
+        remainingDuration: tech.researchDuration,
       }
 
       this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
+    }
+  }
+
+  beginProduction(technology)
+  {
+    const tech = this.technologies[technology]
+    if (tech)
+    {
+      this.production = {
+        allocated: 0,
+        name: technology,
+        started: 0,
+        duration: tech.productionDuration,
+        remainingDuration: tech.productionDuration,
+      }
+
+      this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
     }
   }
 }

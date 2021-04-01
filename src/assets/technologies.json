@@ -4,70 +4,82 @@
     "name": "rock",
     "category": "offence",
     "technologyLevel": 1,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
     "id": "sling",
     "name": "sling",
     "category": "offence",
     "technologyLevel": 2,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
     "id": "pike",
     "name": "pike",
     "category": "offence",
     "technologyLevel": 3,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
     "id": "bowandarrow",
     "name": "bowandarrow",
     "category": "offence",
     "technologyLevel": 4,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
     "id": "catapult",
     "name": "catapult",
     "category": "offence",
+    "produced": true,
     "technologyLevel": 5,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
     "id": "cannon",
     "name": "cannon",
     "category": "offence",
+    "produced": true,
     "technologyLevel": 6,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
     "id": "biplane",
     "name": "biplane",
     "category": "offence",
+    "produced": true,
     "technologyLevel": 7,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
     "id": "jet",
     "name": "jet",
     "category": "offence",
+    "produced": true,
     "technologyLevel": 8,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
     "id": "nuke",
     "name": "nuke",
     "category": "offence",
+    "produced": true,
     "technologyLevel": 9,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
     "id": "flyingsaucer",
     "name": "flyingsaucer",
     "category": "offence",
+    "produced": true,
     "technologyLevel": 10,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
 
   {
@@ -75,70 +87,82 @@
     "name": "stick",
     "category": "defence",
     "technologyLevel": 1,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
     "id": "spear",
     "name": "spear",
     "category": "defence",
     "technologyLevel": 2,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
    "id": "bow",
    "name": "bow",
    "category": "defence",
    "technologyLevel": 3,
-   "researchDuration": 10
+   "researchDuration": 3
   },
   {
     "id": "oil",
     "name": "oil",
     "category": "defence",
     "technologyLevel": 4,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
     "id": "crossbow",
     "name": "crossbow",
     "category": "defence",
+    "produced": true,
     "technologyLevel": 5,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
    "id": "rifle",
    "name": "rifle",
    "category": "defence",
+   "produced": true,
    "technologyLevel": 6,
-   "researchDuration": 10
+   "researchDuration": 3,
+   "productionDuration": 3
   },
   {
    "id": "machinegun",
    "name": "machinegun",
    "category": "defence",
+   "produced": true,
    "technologyLevel": 7,
-   "researchDuration": 10
+   "researchDuration": 3,
+   "productionDuration": 3
   },
   {
     "id": "rocketlauncher",
     "name": "rocketlauncher",
     "category": "defence",
+    "produced": true,
     "technologyLevel": 8,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
     "id": "antinuke",
     "name": "antinuke",
     "category": "defence",
+    "produced": true,
     "technologyLevel": 9,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
     "id": "laser",
     "name": "laser",
     "category": "defence",
+    "produced": true,
     "technologyLevel": 10,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
 
   {
@@ -146,55 +170,63 @@
     "name": "Repair 1",
     "category": "repair",
     "technologyLevel": 1,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
     "id": "repair_2",
     "name": "Repair 2",
     "category": "repair",
     "technologyLevel": 2,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
    "id": "repair_3",
    "name": "Repair 3",
    "category": "repair",
    "technologyLevel": 3,
-   "researchDuration": 10
+   "researchDuration": 3
   },
   {
     "id": "repair_4",
     "name": "Repair 4",
     "category": "repair",
     "technologyLevel": 4,
-    "researchDuration": 10
+    "researchDuration": 3
   },
   {
     "id": "repair_advanced_1",
     "name": "Repair Advanced 1",
     "category": "repair",
+    "produced": true,
     "technologyLevel": 5,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   },
   {
    "id": "repair_advanced_2",
    "name": "Repair Advanced 2",
    "category": "repair",
+   "produced": true,
    "technologyLevel": 6,
-   "researchDuration": 10
+   "researchDuration": 3,
+   "productionDuration": 3
   },
   {
    "id": "repair_advanced_3",
    "name": "Repair Advanced 3",
    "category": "repair",
+   "produced": true,
    "technologyLevel": 7,
-   "researchDuration": 10
+   "researchDuration": 3,
+   "productionDuration": 3
   },
   {
     "id": "repair_advanced_4",
     "name": "Repair Advanced 4",
     "category": "repair",
+    "produced": true,
     "technologyLevel": 8,
-    "researchDuration": 10
+    "researchDuration": 3,
+    "productionDuration": 3
   }
 ]

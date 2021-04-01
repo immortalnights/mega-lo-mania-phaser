@@ -72,7 +72,8 @@ export const UserEvents = {
   BREAK_ALLIANCES: 'user:break:alliances',
   ALLOCATE_POPULATION: 'user:allocate_population',
   DEALLOCATE_POPULATION: 'user:deallocate_population',
-  SELECT_RESEARCH_TECHNOLOGY: 'user:select_research_technology',
+  SELECT_RESEARCH: 'user:select_research',
+  SELECT_PRODUCTION: 'user:select_production',
 }
 
 // Game Sector events
@@ -94,5 +95,8 @@ export const GameEvents = {
   TEAMS_CHANGED: 'game:teams:changed',
   RESEARCH_CHANGED: 'game:research:changed',
   RESEARCH_COMPLETED: 'game:research:completed',
+  PRODUCTION_CHANGED: 'game:production:changed',
+  PRODUCTION_COMPLETED: 'game:production:completed',
+  PRODUCTION_RUN_COMPLETED: 'game:production_run:completed',
   POPULATION_ALLOCATION_CHANGED: 'game:population:allocation_changed',
 }

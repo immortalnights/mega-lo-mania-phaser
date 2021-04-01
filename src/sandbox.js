@@ -1,8 +1,7 @@
 import Phaser from 'phaser'
 import Store from './store'
-import { Root } from './sectorcontrols/'
+import Root from './sectorcontrols/root'
 import Research from './sectorcontrols/research'
-import ResearchController from './components/researchcontroller'
 import { GameEvents, Teams, UserEvents } from "./defines"
 import SectorControls from './sectorcontrols'
 
@@ -16,13 +15,48 @@ class SectorControl extends Phaser.GameObjects.Container
 
     this.root = new Root(scene, -50, -50)
     this.add(this.root)
-    this.researchView = new Research(scene, -150, -50)
+
+    this.researchView = new Research(scene, -150, -50, {
+      header: 'research_header',
+      task: 'research',
+      technologyFilter: (sector, technology) => {
+        return (technology.researched === false && sector.hasResourcesFor(technology))
+      }
+    })
+    this.researchView.on('technology:selected', technology => {
+      this.scene.events.emit(UserEvents.SELECT_RESEARCH, technology)
+    })
     this.add(this.researchView)
+
+    this.productionView = new Research(scene, 75, -50, {
+      header: 'production_header',
+      task: 'production',
+      technologyFilter: (sector, technology) => {
+        return (technology.researched === true && sector.hasResourcesFor(technology))
+      }
+    })
+    this.productionView.on('technology:selected', technology => {
+      this.scene.events.emit(UserEvents.SELECT_PRODUCTION, technology)
+    })
+
+    this.add(this.productionView)
 
     this.scene.events.on(GameEvents.RESEARCH_CHANGED, sector => {
       if (this.activeSector === sector.id)
       {
+        this.root.display(sector)
         this.researchView.display(sector)
+
+        // only required in this Sandbox sector control view
+        this.productionView.display(sector)
+      }
+    })
+
+    this.scene.events.on(GameEvents.PRODUCTION_CHANGED, sector => {
+      if (this.activeSector === sector.id)
+      {
+        this.root.display(sector)
+        this.productionView.display(sector)
       }
     })
   }
@@ -32,6 +66,7 @@ class SectorControl extends Phaser.GameObjects.Container
     this.activeSector = sector.id
     this.root.display(sector)
     this.researchView.display(sector)
+    this.productionView.display(sector)
   }
 }
 
@@ -69,9 +104,7 @@ export default class Sandbox extends Phaser.Scene
     this.store.addSector(1, '', 1)
     this.store.addSector(2, '', 1)
 
-    Object.assign(this, ResearchController)
-    this.setupResearch(this)
-
+    this.store.sectors[0].setup(1, null)
     this.store.sectors[1].setup(1, null)
     this.store.sectors[2].setup(3, null)
 
@@ -103,6 +136,13 @@ export default class Sandbox extends Phaser.Scene
       text.on('pointerdown', changeSector.bind(this, index))
     })
 
+    this.events.on(UserEvents.SELECT_RESEARCH, technology => {
+      this.store.sectors[this.activeSector].beginResearch(technology)
+    });
+    this.events.on(UserEvents.SELECT_PRODUCTION, technology => {
+      this.store.sectors[this.activeSector].beginProduction(technology)
+    });
+
     this.events.on(UserEvents.ALLOCATE_POPULATION, (...args) => {
       this.store.allocatePopulation(this.activeSector, ...args)
     })
@@ -110,9 +150,18 @@ export default class Sandbox extends Phaser.Scene
       this.store.deallocatePopulation(this.activeSector, ...args)
     })
 
+    // Alerts
     this.events.on(GameEvents.RESEARCH_COMPLETED, sector => {
       // TODO Check the sector owner is the current player team
       console.log(`Research of ${sector.research.name} completed in sector ${sector.id}`)
+    })
+    this.events.on(GameEvents.PRODUCTION_COMPLETED, sector => {
+      // TODO Check the sector owner is the current player team
+      console.log(`Production of ${sector.production.name} completed in sector ${sector.id}`)
+    })
+    this.events.on(GameEvents.PRODUCTION_RUN_COMPLETED, sector => {
+      // TODO Check the sector owner is the current player team
+      console.log(`Production run of ${sector.production.name} completed in sector ${sector.id}`)
     })
   }
 

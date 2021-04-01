@@ -299,20 +299,20 @@
     },
 
     {
-      "filename": "arrow_down_left",
-      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+      "filename": "arrow_down_left_0",
+      "frame": { "x": 0, "y": 96, "w": 15, "h": 11 }
     },
     {
       "filename": "arrow_down_right",
-      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+      "frame": { "x": 16, "y": 96, "w": 15, "h": 11 }
     },
     {
       "filename": "arrow_up_right_0",
-      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+      "frame": { "x": 32, "y": 96, "w": 15, "h": 11 }
     },
     {
       "filename": "arrow_up_right_1",
-      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+      "frame": { "x": 48, "y": 96, "w": 15, "h": 11 }
     },
     {
       "filename": "arrow_left",
@@ -328,11 +328,15 @@
     },
     {
       "filename": "arrow_up",
-      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+      "frame": { "x": 144, "y": 96, "w": 9, "h": 10 }
     },
     {
       "filename": "arrow_up_left",
-      "frame": { "x": 0, "y": 0, "w": 14, "h": 10 }
+      "frame": { "x": 159, "y": 96, "w": 9, "h": 10 }
+    },
+    {
+      "filename": "arrow_down_left_1",
+      "frame": { "x": 272, "y": 87, "w": 14, "h": 21 }
     },
     {
       "filename": "multiply_icon",
@@ -524,9 +528,20 @@
       "filename": "team_shield_blue_green_yellow",
       "frame": { "x": 224, "y": 189, "w": 11, "h": 14 }
     },
-
-
     
+    {
+      "filename": "game_speed_0",
+      "frame": { "x": 274, "y": 204, "w": 16, "h": 18 }
+    },
+    {
+      "filename": "game_speed_1",
+      "frame": { "x": 288, "y": 204, "w": 16, "h": 18 }
+    },
+    {
+      "filename": "game_speed_2",
+      "frame": { "x": 304, "y": 204, "w": 16, "h": 18 }
+    },
+
     {
       "filename": "ground_explosion_00",
       "frame": { "x": 176, "y": 92, "w": 7, "h": 4 }
