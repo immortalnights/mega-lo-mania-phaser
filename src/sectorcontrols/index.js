@@ -5,6 +5,7 @@ import Task from '../task'
 import Button from '../button'
 import { BuildingTypes, GameEvents } from '../defines'
 
+
 // merge with Sector (data)!
 class SectorManager
 {

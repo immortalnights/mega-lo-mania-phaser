@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import Store from './store'
 import Root from './sectorcontrols/root'
 import Research from './sectorcontrols/research'
+import Production from './sectorcontrols/production'
 import { GameEvents, Teams, UserEvents } from "./defines"
 import SectorControls from './sectorcontrols'
 
@@ -18,23 +19,13 @@ class SectorControl extends Phaser.GameObjects.Container
 
     this.researchView = new Research(scene, -150, -50, {
       header: 'research_header',
-      task: 'research',
-      technologyFilter: (sector, technology) => {
-        return (technology.researched === false && sector.hasResourcesFor(technology))
-      }
     })
     this.researchView.on('technology:selected', technology => {
       this.scene.events.emit(UserEvents.SELECT_RESEARCH, technology)
     })
     this.add(this.researchView)
 
-    this.productionView = new Research(scene, 75, -50, {
-      header: 'production_header',
-      task: 'production',
-      technologyFilter: (sector, technology) => {
-        return (technology.researched === true && sector.hasResourcesFor(technology))
-      }
-    })
+    this.productionView = new Production(scene, 75, -50)
     this.productionView.on('technology:selected', technology => {
       this.scene.events.emit(UserEvents.SELECT_PRODUCTION, technology)
     })
@@ -104,11 +95,12 @@ export default class Sandbox extends Phaser.Scene
     this.store.addSector(1, '', 1)
     this.store.addSector(2, '', 1)
 
-    this.store.sectors[0].setup(1, null)
+    this.store.sectors[0].setup(4, null)
     this.store.sectors[1].setup(1, null)
     this.store.sectors[2].setup(3, null)
 
     // Claims
+    this.store.sectors[0].claim(Teams.GREEN, 2)
     this.store.sectors[1].claim(Teams.RED, 100)
     this.store.sectors[2].claim(Teams.BLUE, 10)
 

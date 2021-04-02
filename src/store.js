@@ -153,19 +153,29 @@ class Sector
 
           if (this.production.remainingDuration < 0)
           {
+            this.production.runs -= 1
+
             // Mark the technology as completed
             this.technologies[this.production.name].available += 1
 
             // Sector alert (map / audio) (for an individual item)
             this.scene.events.emit(GameEvents.PRODUCTION_COMPLETED, this)
-            // Sector alert (map / audio) (for the entire run)
-            this.scene.events.emit(GameEvents.PRODUCTION_RUN_COMPLETED, this)
 
-            // Deallocate the population
-            this.availablePopulation = this.availablePopulation + this.production.allocated
-
-            // Reset the current production
-            this.production = false
+            if (this.production.runs > 0)
+            {
+              this.production.remainingDuration = this.production.duration
+            }
+            else
+            {
+              // Sector alert (map / audio) (for the entire run)
+              this.scene.events.emit(GameEvents.PRODUCTION_RUN_COMPLETED, this)
+  
+              // Deallocate the population
+              this.availablePopulation = this.availablePopulation + this.production.allocated
+  
+              // Reset the current production
+              this.production = false
+            }
           }
 
           this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
@@ -202,7 +212,7 @@ class Sector
           }
           else
           {
-            change = Math.min(this.availablePopulation, population)
+            change = Math.min(this.availablePopulation - 1, population)
             this.availablePopulation = this.availablePopulation - change
             this.research.allocated = this.research.allocated + change
           }
@@ -223,10 +233,20 @@ class Sector
           }
           else
           {
-            change = Math.min(this.availablePopulation, population)
+            change = Math.min(this.availablePopulation - 1, population)
             this.availablePopulation = this.availablePopulation - change
             this.production.allocated = this.production.allocated + change
           }
+
+          this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
+        }
+        break
+      }
+      case 'production_runs':
+      {
+        if (this.production)
+        {
+          this.production.runs = this.production.runs + population
 
           this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
         }
@@ -311,6 +331,7 @@ class Sector
     {
       this.production = {
         allocated: 0,
+        runs: 1,
         name: technology,
         started: 0,
         duration: tech.productionDuration,
