@@ -7,6 +7,7 @@ import Mining from './sectorcontrols/mining'
 import { GameEvents, Teams, UserEvents } from "./defines"
 import SectorControls from './sectorcontrols'
 
+
 class SectorControl extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y)
@@ -21,7 +22,7 @@ class SectorControl extends Phaser.GameObjects.Container
     this.root = new Root(scene, 0, 0)
     this.add(this.root)
 
-    this.researchView = new Research(scene, -150, -50, {
+    this.researchView = new Research(scene, 0, -(this.height / 2), {
       header: 'research_header',
     })
     this.researchView.on('technology:selected', technology => {
@@ -35,7 +36,7 @@ class SectorControl extends Phaser.GameObjects.Container
     })
     this.add(this.productionView)
 
-    this.miningView = new Mining(scene, 0, 35)
+    this.miningView = new Mining(scene, 0, 0)
     this.add(this.miningView)
 
     this.scene.events.on(GameEvents.RESEARCH_CHANGED, sector => {
@@ -58,7 +59,7 @@ class SectorControl extends Phaser.GameObjects.Container
     })
 
     // 
-    const displayAlignmentHelper = true
+    const displayAlignmentHelper = false
     if (displayAlignmentHelper)
     {
       // console.log("parent", this.parentContainer.width, this.parentContainer.height)
@@ -91,7 +92,6 @@ class SectorControl extends Phaser.GameObjects.Container
   }
 }
 
-
 export default class Sandbox extends Phaser.Scene
 {
   constructor(config)
@@ -112,6 +112,7 @@ export default class Sandbox extends Phaser.Scene
 
   preload()
   {
+    this.load.image('template', './template.png')
   }
 
   create()
@@ -120,12 +121,14 @@ export default class Sandbox extends Phaser.Scene
 
     this.activeSector = undefined
 
+    this.add.image(width / 2, height / 2, 'template').setScale(0.5, 0.5).setAlpha(0.25)
+
     this.store = new Store(this)
     this.store.addSector(0, '', 1)
     this.store.addSector(1, '', 1)
     this.store.addSector(2, '', 1)
 
-    this.store.sectors[0].setup(4, ["herbirite", "rock", "slate", "solarium"])
+    this.store.sectors[0].setup(9, ["herbirite", "rock", "slate", "solarium"])
     this.store.sectors[1].setup(1, [])
     this.store.sectors[2].setup(3, [])
 
@@ -134,7 +137,7 @@ export default class Sandbox extends Phaser.Scene
     this.store.sectors[1].claim(Teams.RED, 100)
     this.store.sectors[2].claim(Teams.BLUE, 10)
 
-    const sectorControl = new SectorControl(this, width / 2, height / 2)
+    const sectorControl = new SectorControl(this, 42, 118)
     this.add.existing(sectorControl)
 
     const sectorSelectors = []

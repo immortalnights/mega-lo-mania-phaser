@@ -11,11 +11,11 @@ export default class Research extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
-    this.add(new Header(this.scene, 26, 0, config.header, () => {
+    this.add(new Header(this.scene, 0, 0, config.header, () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'root')
     }))
 
-    this.inactiveLabel = new Phaser.GameObjects.Text(this.scene, 26, 23, '-')
+    this.inactiveLabel = new Phaser.GameObjects.Text(this.scene, 0, 23, '-')
 
     this.activeTask = new Phaser.GameObjects.Group(this.scene)
 
@@ -24,7 +24,7 @@ export default class Research extends Phaser.GameObjects.Container
 
     this.activeTask.add(new Phaser.GameObjects.Image(this.scene, 12, 18, 'mlm_icons', 'multiply_icon'))
 
-    this.activeTaskPopulation = new Task(this.scene, 26, 23, 'population_epoch_1', 'research')
+    this.activeTaskPopulation = new Task(this.scene, 0, 23, 'population_epoch_1', 'research')
     this.activeTaskPopulation.setData('population', undefined)
     this.add(this.activeTaskPopulation)
 

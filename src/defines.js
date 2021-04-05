@@ -64,6 +64,12 @@ export const PlayerStates = {
 }
 
 export const UserEvents = {
+  VALUE_CLICKED: 'value_clicked',
+  VALUE_RELEASED: 'value_released',
+  VALUE_CHANGE: 'value_change',
+  VALUE_LINK_DOWN: 'value_link_down',
+  VALUE_LINK_UP: 'value_link_up',
+
   SECTOR_MAP_SELECT: 'user:map:sector:select',
   SECTOR_SELECT: 'user:sector:select',
   BUILDING_SELECT: 'user:sector:building:select',

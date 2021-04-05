@@ -86,14 +86,14 @@ export default class Mining extends Phaser.GameObjects.Container
   {
     if (resource.depleted)
     {
-      this.add(new Phaser.GameObjects.Image(this.scene, 22, y, 'mlm_icons', `resource_${resource.id}`))
+      this.add(new Task(this.scene, 22, y, `resource_${resource.id}`))
     }
     else if (resource.type === 'surface')
     {
         // Surface resources are gathers passively and miners cannot be allocated
         this.add(new Phaser.GameObjects.Image(this.scene, -2, y, 'mlm_icons', 'mine_hand_icon'))
         this.add(new Phaser.GameObjects.Image(this.scene, 10, y - 1, 'mlm_icons', 'equal_icon'))
-        this.add(new Phaser.GameObjects.Image(this.scene, 22, y, 'mlm_icons', `resource_${resource.id}`))
+        this.add(new Task(this.scene, 22, y, `resource_${resource.id}`))
     }
     else
     {
@@ -103,7 +103,7 @@ export default class Mining extends Phaser.GameObjects.Container
       this.add(new Phaser.GameObjects.Image(this.scene, -16, y - 1, 'mlm_icons', 'multiply_icon'))
       this.add(new Task(this.scene, -2, y, 'mlm_icons', 'mine')) // resource.id
       this.add(new Phaser.GameObjects.Image(this.scene, 10, y - 1, 'mlm_icons', 'equal_icon'))
-      this.add(new Phaser.GameObjects.Image(this.scene, 22, y, 'mlm_icons', icon))
+      this.add(new Task(this.scene, 22, y, icon))
     }
   }
 }

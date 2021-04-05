@@ -56,24 +56,6 @@ export default class SectorControls extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
-    this.islandName = new Phaser.GameObjects.Text(scene, 0, 0, 'Rumbaba', {
-      fontFamily: 'Lucida Console',
-      fontSize: 12,
-    })
-    this.islandName.setOrigin(0, 1)
-    this.sectorDate = new Phaser.GameObjects.Text(scene, 55, 0, '1850', {
-      fontFamily: 'Lucida Console',
-      fontSize: 12,
-    })
-    this.sectorDate.setOrigin(0, 1)
-    this.sectorDateNotation = new Phaser.GameObjects.Text(scene, 95, 0, 'AD', {
-      fontFamily: 'Lucida Console',
-      fontSize: 8,
-    })
-    this.sectorDateNotation.setOrigin(1, 1)
-
-    this.add([ this.islandName, this.sectorDate, this.sectorDateNotation ])
-
     // this.add.existing(new Clock(this, 50, 200, 4))
     // this.add.existing(new Button(scene, 20, 120, 'blueprint_icon', ''))
     // this.add.existing(new Button(scene, 40, 120, 'repair_icon', ''))

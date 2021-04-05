@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import Button from '../button'
 import Task from '../task'
+import SectorLabel from './sectorlabel'
 
 
 export default class Root extends Phaser.GameObjects.Container
@@ -11,16 +12,8 @@ export default class Root extends Phaser.GameObjects.Container
 
     this.name = 'root'
 
-    // arrow_down_left_1
-    // arrow_down_right
-    // arrow_up_right_0
-    // arrow_up_right_1
-    // arrow_left
-    // arrow_right
-    // arrow_down
-    // arrow_up
-    // arrow_up_left
-    // arrow_down_left_1
+    this.sectorLabel = new SectorLabel(this.scene, 0, -30)
+    this.add(this.sectorLabel)
 
     this.blueprintNav = new Button(this.scene, -30, -22, 'blueprint_icon', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'blueprints')
@@ -78,7 +71,9 @@ export default class Root extends Phaser.GameObjects.Container
   display(sector)
   {
     this.setVisible(true)
-return
+
+    this.sectorLabel.display(sector)
+
     let blueprintsAvailable = false
     let repairAvailable = false
     let hasResourcesForRepair = false
