@@ -1,4 +1,8 @@
-export class Defence extends Phaser.GameObjects.Container
+import Phaser from 'phaser'
+import Header from './header'
+
+
+export default class Defence extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y)
   {

@@ -4,7 +4,27 @@
     "name": "rock",
     "category": "offence",
     "technologyLevel": 1,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": true,
+        "resources": {
+          "rock": 1.5
+        }
+      },
+      {
+        "perfect": true,
+        "resources": {
+          "wood": 1.5
+        }
+      },
+      {
+        "perfect": true,
+        "resources": {
+          "bone": 1.5
+        }
+      }
+    ]
   },
   {
     "id": "sling",

@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import Button from '../button'
 import Task from '../task'
 
+
 export default class Root extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y)
@@ -21,40 +22,40 @@ export default class Root extends Phaser.GameObjects.Container
     // arrow_up_left
     // arrow_down_left_1
 
-    this.blueprintNav = new Button(this.scene, 10, 0, 'blueprint_icon', () => {
+    this.blueprintNav = new Button(this.scene, -30, -22, 'blueprint_icon', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'blueprints')
     })
 
-    this.repairNav = new Button(this.scene, 31, 0, 'repair_icon', () => {
+    this.repairNav = new Button(this.scene, -10, -22, 'repair_icon', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'repair')
     })
-    this.repairArrow = new Phaser.GameObjects.Image(this.scene, 30, 15, 'mlm_icons', 'arrow_up_left')
+    this.repairArrow = new Phaser.GameObjects.Image(this.scene, -10, -10, 'mlm_icons', 'arrow_up_left')
 
-    this.defenceNav = new Button(this.scene, 51, 0, 'defence_icon', () => {
+    this.defenceNav = new Button(this.scene, 10, -22, 'defence_icon', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'defence')
     })
-    this.defenceArrow = new Phaser.GameObjects.Image(this.scene, 50, 15, 'mlm_icons', 'arrow_up_right_1')
+    this.defenceArrow = new Phaser.GameObjects.Image(this.scene, 10, -10, 'mlm_icons', 'arrow_up_right_1')
 
-    this.offenceNav = new Button(this.scene, 72, 0, 'offence_icon', () => {
+    this.offenceNav = new Button(this.scene, 32, -22, 'offence_icon', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'offence')
     })
-    this.offenceArrow = new Phaser.GameObjects.Image(this.scene, 60, 15, 'mlm_icons', 'arrow_up_right_0')
+    this.offenceArrow = new Phaser.GameObjects.Image(this.scene, 18, -10, 'mlm_icons', 'arrow_up_right_0')
 
-    this.researchNavTask = new Task(this.scene, 10, 30, 'research_icon', 'research', () => {
+    this.researchNavTask = new Task(this.scene, -30, 0, 'research_icon', 'research', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'research')
     })
-    this.researchArrow = new Phaser.GameObjects.Image(this.scene, 25, 28, 'mlm_icons', 'arrow_left')
+    this.researchArrow = new Phaser.GameObjects.Image(this.scene, -16, 0, 'mlm_icons', 'arrow_left')
 
-    this.population = new Task(this.scene, 40, 30, 'population_epoch_1', 'population')
+    this.population = new Task(this.scene, 0, 0, 'population_epoch_1', 'population')
     this.population.setDepth(1)
 
-    this.productionNavTask = new Task(this.scene, 72, 30, 'factory_icon', 'production')
-    this.productionArrow = new Phaser.GameObjects.Image(this.scene, 54, 28, 'mlm_icons', 'arrow_right')
+    this.productionNavTask = new Task(this.scene, 32, 0, 'factory_icon', 'production')
+    this.productionArrow = new Phaser.GameObjects.Image(this.scene, 15, 0, 'mlm_icons', 'arrow_right')
 
-    this.miningNav = new Button(this.scene, 40, 65, 'mine_spade_icon', () => {
+    this.miningNav = new Button(this.scene, 0, 36, 'mine_spade_icon', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'mining')
     })
-    this.miningArrow = new Phaser.GameObjects.Image(this.scene, 40, 50, 'mlm_icons', 'arrow_down')
+    this.miningArrow = new Phaser.GameObjects.Image(this.scene, 0, 22, 'mlm_icons', 'arrow_down')
 
     this.add([
       this.blueprintNav,
@@ -77,7 +78,7 @@ export default class Root extends Phaser.GameObjects.Container
   display(sector)
   {
     this.setVisible(true)
-
+return
     let blueprintsAvailable = false
     let repairAvailable = false
     let hasResourcesForRepair = false

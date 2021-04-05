@@ -9,10 +9,10 @@ export default class Task extends Phaser.GameObjects.Container
 
     this.name = name
 
-    const icon = new Phaser.GameObjects.Sprite(scene, 0, -4, 'mlm_icons', frame)
+    const icon = new Phaser.GameObjects.Sprite(scene, 0, 0, 'mlm_icons', frame)
     this.add(icon)
 
-    this.label = new Phaser.GameObjects.Text(scene, 0, 8, '0', { fontSize: 10 })
+    this.label = new Phaser.GameObjects.Text(scene, -1, 12, '0', { fontSize: 10 })
     this.label.setOrigin(0.5, 0.5)
     this.add(this.label)
 

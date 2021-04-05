@@ -2,6 +2,7 @@ import Phaser, { Game } from 'phaser'
 import { Teams, GameEvents, BuildingTypes, unitSet } from './defines.js'
 import Islands from './assets/islands.json'
 import Technologies from './assets/technologies.json'
+import Resources from './assets/resources.json'
 import { getKeyForSector } from './utilities'
 
 const getDefaultDefendersForBuilding = (type) => {
@@ -64,12 +65,25 @@ class Sector
   /**
    * Initialize the sector resources and technologies (based on the epoch)
    */
-  setup(epoch, resources)
+  setup(epoch, resources = [])
   {
     Technologies.forEach(technology => {
       if (technology.technologyLevel >= epoch && technology.technologyLevel < epoch + 4)
       {
         this.technologies[technology.id] = { ...technology, researched: false }
+      }
+    })
+
+    Resources.forEach(res => {
+      if (resources.includes(res.id))
+      {
+        this.resources.push({
+          ...res,
+          available: 0,
+          mined: 0,
+          depleted: false,
+          miners: 0,
+        })
       }
     })
   }

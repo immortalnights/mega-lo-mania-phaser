@@ -1,5 +1,8 @@
+import Phaser from 'phaser'
+import Header from './header'
 
-export class Blueprints extends Phaser.GameObjects.Container
+
+export default class Blueprints extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y)
   {

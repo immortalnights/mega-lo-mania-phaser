@@ -2,17 +2,23 @@
   {
     "name": "Aloha",
     "epoch": 1,
+    "players": 2,
     "style": "mud",
     "map": [
       0, 0, 0, 0,
       0, 0, 1, 0,
       0, 0, 1, 0,
       0, 0, 0, 0
-    ]
+    ],
+    "resources": {
+      "6": [ "herbirite", "rock", "slate", "solarium" ],
+      "10": [ "bethlium", "moonlite", "parasite", "wood" ]
+    }
   },
   {
     "name": "Bazooka",
     "epoch": 1,
+    "players": 2,
     "style": "grass",
     "map": [
       0, 0, 0, 0,
@@ -22,19 +28,9 @@
     ]
   },
   {
-    "name": "Dracula",
-    "epoch": 1,
-    "style": "snow",
-    "map": [
-      0, 0, 0, 0,
-      0, 1, 1, 1,
-      0, 1, 1, 0,
-      0, 0, 0, 0
-    ]
-  },
-  {
     "name": "Cilla",
     "epoch": 1,
+    "players": 3,
     "style": "snow",
     "map": [
       0, 0, 0, 0,
@@ -44,17 +40,305 @@
     ]
   },
 
-
+  {
+    "name": "Etcetra",
+    "epoch": 2,
+    "players": 3,
+    "style": "dessert",
+    "map": [
+      0, 0, 0, 0,
+      0, 1, 1, 1,
+      0, 1, 1, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Dracula",
+    "epoch": 2,
+    "players": 3,
+    "style": "snow",
+    "map": [
+      0, 0, 0, 0,
+      0, 1, 1, 1,
+      0, 1, 1, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Formica",
+    "epoch": 2,
+    "players": 3,
+    "style": "volcanic",
+    "map": [
+      0, 0, 0, 0,
+      0, 1, 1, 1,
+      0, 1, 1, 0,
+      0, 0, 0, 0
+    ]
+  },
 
   {
+    "name": "Gazza",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Hernia",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Ibiza",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Junta",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Karma",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Lada",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Mascara",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Nausea",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Ocarina",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Pyjama",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
     "name": "Quota",
-    "epoch": 1,
+    "epoch": 6,
+    "players": 4,
     "style": "ash",
     "map": [
       0, 1, 0, 0,
       1, 1, 1, 1,
       0, 1, 0, 0,
       0, 1, 0, 0
+    ]
+  },
+  {
+    "name": "Rumbaba",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Sinatra",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Tapioca",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Utopia",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Vespa",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Wonca",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Xtra",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Yoga",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Zappa",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Ohm",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0
+    ]
+  },
+  {
+    "name": "Megalomania",
+    "epoc": 2,
+    "players": 2,
+    "style": "",
+    "map": [
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1
     ]
   }
 ]

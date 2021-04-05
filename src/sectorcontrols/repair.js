@@ -1,4 +1,8 @@
-export class Repair extends Phaser.GameObjects.Container
+import Phaser from 'phaser'
+import Header from './header'
+
+
+export default class Repair extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y)
   {

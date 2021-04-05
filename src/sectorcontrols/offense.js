@@ -1,5 +1,8 @@
+import Phaser from 'phaser'
+import Header from './header'
 
-export class Offence extends Phaser.GameObjects.Container
+
+export default class Offence extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y)
   {

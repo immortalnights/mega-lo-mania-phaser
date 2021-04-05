@@ -1,0 +1,122 @@
+[
+  {
+    "id": "bone",
+    "name": "Bone",
+    "type": "surface",
+    "rate": 1
+  },
+  {
+    "id": "rock",
+    "name": "Rock",
+    "type": "surface",
+    "rate": 1
+  },
+  {
+    "id": "slate",
+    "name": "Slate",
+    "type": "surface",
+    "rate": 1
+  },
+  {
+    "id": "wood",
+    "name": "Wood",
+    "type": "surface",
+    "rate": 1
+  },
+  {
+    "id": "bethlium",
+    "name": "Bethlium",
+    "type": "pit",
+    "rate": 1
+  },
+  {
+    "id": "moonlite",
+    "name": "Moonlite",
+    "type": "pit",
+    "rate": 1
+  },
+  {
+    "id": "planetarium",
+    "name": "Planetarium",
+    "type": "pit",
+    "rate": 1
+  },
+  {
+    "id": "solarium",
+    "name": "Solarium",
+    "type": "pit",
+    "rate": 1
+  },
+  {
+    "id": "alien",
+    "name": "Alien",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "aquarium",
+    "name": "Aquarium",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "aruldite",
+    "name": "Aruldite",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "herbirite",
+    "name": "Herbirite",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "maamite",
+    "name": "Maamite",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "moron",
+    "name": "Moron",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "onion",
+    "name": "Onion",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "paladium",
+    "name": "Paladium",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "parasite",
+    "name": "Parasite",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "tedium",
+    "name": "Tedium",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "valium",
+    "name": "Valium",
+    "type": "mine",
+    "rate": 1
+  },
+  {
+    "id": "yeridium",
+    "name": "Yeridium",
+    "type": "mine",
+    "rate": 1
+  }
+]

@@ -134,8 +134,12 @@
       "frame": { "x": 192, "y": 16, "w": 16, "h": 16 }
     },
     {
-      "filename": "mined_resources_icon",
+      "filename": "mined_resource_icon",
       "frame": { "x": 208, "y": 16, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "pit_resource_icon",
+      "frame": { "x": 305, "y": 98, "w": 15, "h": 15 }
     },
     {
       "filename": "factory_box_icon",
@@ -250,6 +254,27 @@
     {
       "filename": "blueprint_header",
       "frame": { "x": 288, "y": 48, "w": 32, "h": 15 }
+    },
+    {
+      "filename": "gather_header",
+      "frame": { "x": 160, "y": 65, "w": 32, "h": 15 }
+    },
+
+    {
+      "filename": "build_lab",
+      "frame": { "x": 192, "y": 64, "w": 19, "h": 16 }
+    },
+    {
+      "filename": "build_castle",
+      "frame": { "x": 192, "y": 64, "w": 19, "h": 16 }
+    },
+    {
+      "filename": "build_laboratory",
+      "frame": { "x": 192, "y": 64, "w": 19, "h": 16 }
+    },
+    {
+      "filename": "build_factory",
+      "frame": { "x": 192, "y": 64, "w": 19, "h": 16 }
     },
 
 
@@ -373,6 +398,86 @@
       "frame": { "x": 143, "y": 114, "w": 7, "h": 2 }
     },
 
+    {
+      "filename": "resource_wood",
+      "frame": { "x": 0, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_rock",
+      "frame": { "x": 16, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_bone",
+      "frame": { "x": 32, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_slate",
+      "frame": { "x": 48, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_bethlium",
+      "frame": { "x": 64, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_moonlite",
+      "frame": { "x": 80, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_planetarium",
+      "frame": { "x": 96, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_solarium",
+      "frame": { "x": 112, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_alien",
+      "frame": { "x": 128, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_aquarium",
+      "frame": { "x": 144, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_aruldite",
+      "frame": { "x": 160, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_herbirite",
+      "frame": { "x": 176, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_maamite",
+      "frame": { "x": 192, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_moron",
+      "frame": { "x": 208, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_onion",
+      "frame": { "x": 224, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_paladium",
+      "frame": { "x": 240, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_parasite",
+      "frame": { "x": 256, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_tedium",
+      "frame": { "x": 272, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_valium",
+      "frame": { "x": 288, "y": 141, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "resource_yeridium",
+      "frame": { "x": 304, "y": 141, "w": 16, "h": 16 }
+    },
 
     {
       "filename": "spawn_00",
