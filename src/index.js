@@ -484,8 +484,8 @@ class IslandGameScene extends Phaser.Scene
 
 const config = {
   type: Phaser.WEBGL,
-  width: 320,
-  height: 200,
+  width: 450, // 320,
+  height: 300, // 200,
   zoom: 2,
   scene: [ Loader, Sandbox, IslandGameScene ],
   seed: [ 'T' ],

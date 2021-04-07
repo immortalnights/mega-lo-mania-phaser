@@ -5,7 +5,9 @@ export const getKeyForSector = (index, data) => {
 }
 
 export const yearFromEpoch = epoch => {
-  let year, notation
+  let year = ''
+  let notation = ''
+
   switch (epoch)
   {
     case 1:

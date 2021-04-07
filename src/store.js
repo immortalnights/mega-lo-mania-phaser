@@ -39,10 +39,11 @@ class Sector
 {
   constructor(scene, index, key)
   {
+    this.name = "Island" // island name
     this.scene = scene
     this.id = index,
     this.key = key
-    this.epoch = 0
+    this.epoch = 1
     this.startPopulation = 0
     this.availablePopulation = 0
     this.spawnedPopulation = 0
@@ -67,6 +68,8 @@ class Sector
    */
   setup(epoch, resources = [])
   {
+    this.epoch = 1
+
     Technologies.forEach(technology => {
       if (technology.technologyLevel >= epoch && technology.technologyLevel < epoch + 4)
       {
@@ -77,12 +80,23 @@ class Sector
     Resources.forEach(res => {
       if (resources.includes(res.id))
       {
+        let locked = false
+        if (res.type === 'mine' && this.buildings.mine === false)
+        {
+          locked = true
+        }
+        else if (res.type === 'pit' && this.epoch === 1)
+        {
+          locked = true
+        }
+
         this.resources.push({
           ...res,
-          available: 0,
+          available: 10,
           mined: 0,
           depleted: false,
-          miners: 0,
+          allocated: 0, // miners
+          locked,
         })
       }
     })
@@ -131,6 +145,57 @@ class Sector
       // Handle buildings (since the sector may not be claimed)
 
       // Handle mining / resources
+      // Event triggered after production to avoid multiple events
+      let resourcesChanged = false
+      this.resources.forEach(resource => {
+        if (resource.depleted === false)
+        {
+          switch (resource.type)
+          {
+            case 'mine':
+            {
+              if (resource.locked === false && resource.allocated < 0)
+              {
+                resourcesChanged = true
+              }
+              break
+            }
+            case 'pit':
+            {
+              if (resource.locked === false && resource.allocated < 0)
+              {
+                resourcesChanged = true
+              }
+              break;
+            }
+            case 'surface':
+            {
+              const mined = Math.min(resource.available, 0.5)
+              resource.mined = resource.mined + mined
+              resource.available = resource.available - mined
+              resourcesChanged = true
+
+              if (resource.mined > 3)
+              {
+                this.resources.forEach(r => r.locked = false)
+              }
+              break;
+            }
+            default:
+            {
+              console.assert(false, `Unhandled resource type ${resource.type} for ${resource.id}`)
+              break
+            }
+          }
+
+          if (resource.available <= 0)
+          {
+            resource.depleted = true
+            resourcesChanged = true
+            this.scene.events.emit(GameEvents.RESOURCE_DEPLETED, this, resource)
+          }
+        }
+      })
 
       // Handle research
       if (this.research)
@@ -167,6 +232,10 @@ class Sector
 
           if (this.production.remainingDuration < 0)
           {
+            // Check resources
+
+            resourcesChanged = true
+
             this.production.runs -= 1
 
             // Mark the technology as completed
@@ -194,6 +263,11 @@ class Sector
 
           this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
         }
+      }
+
+      if (resourcesChanged)
+      {
+        this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
       }
     }
   }

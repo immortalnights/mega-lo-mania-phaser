@@ -99,6 +99,8 @@ export const GameEvents = {
   BUILDING_ADD_DEFENDER: 'game:building:add_defender',
   BUILDING_REMOVE_DEFENDER: 'game:building:remove_defender',
   TEAMS_CHANGED: 'game:teams:changed',
+  RESOURCES_CHANGED: 'game:resources:changed',
+  RESOURCE_DEPLETED: 'game:resources:depleted',
   RESEARCH_CHANGED: 'game:research:changed',
   RESEARCH_COMPLETED: 'game:research:completed',
   PRODUCTION_CHANGED: 'game:production:changed',

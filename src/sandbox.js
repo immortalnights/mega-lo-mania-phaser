@@ -19,10 +19,10 @@ class SectorControl extends Phaser.GameObjects.Container
     const sceneZoom = this.scene.game.config.zoom
     this.setSize(165 / sceneZoom, 185 / sceneZoom)
 
-    this.root = new Root(scene, 0, 0)
+    this.root = new Root(scene, 0, -50)
     this.add(this.root)
 
-    this.researchView = new Research(scene, 0, -(this.height / 2), {
+    this.researchView = new Research(scene, -120, -100, {
       header: 'research_header',
     })
     this.researchView.on('technology:selected', technology => {
@@ -30,14 +30,25 @@ class SectorControl extends Phaser.GameObjects.Container
     })
     this.add(this.researchView)
 
-    this.productionView = new Production(scene, 75, -50)
+    this.productionView = new Production(scene, 75, -100)
     this.productionView.on('technology:selected', technology => {
       this.scene.events.emit(UserEvents.SELECT_PRODUCTION, technology)
     })
     this.add(this.productionView)
 
-    this.miningView = new Mining(scene, 0, 0)
+    this.miningView = new Mining(scene, 0, 30)
     this.add(this.miningView)
+
+    this.scene.events.on(GameEvents.RESOURCES_CHANGED, sector => {
+      if (this.activeSector === sector.id)
+      {
+        // TODO - only need to update the active controls
+        this.root.display(sector)
+        this.miningView.display(sector)
+        this.researchView.display(sector)
+        this.productionView.display(sector)
+      }
+    })
 
     this.scene.events.on(GameEvents.RESEARCH_CHANGED, sector => {
       if (this.activeSector === sector.id)
@@ -121,7 +132,7 @@ export default class Sandbox extends Phaser.Scene
 
     this.activeSector = undefined
 
-    this.add.image(width / 2, height / 2, 'template').setScale(0.5, 0.5).setAlpha(0.25)
+    // this.add.image(width / 2, height / 2, 'template').setScale(0.5, 0.5).setAlpha(0.25)
 
     this.store = new Store(this)
     this.store.addSector(0, '', 1)
@@ -137,7 +148,7 @@ export default class Sandbox extends Phaser.Scene
     this.store.sectors[1].claim(Teams.RED, 100)
     this.store.sectors[2].claim(Teams.BLUE, 10)
 
-    const sectorControl = new SectorControl(this, 42, 118)
+    const sectorControl = new SectorControl(this, width / 2, height / 2)
     this.add.existing(sectorControl)
 
     const sectorSelectors = []
@@ -176,6 +187,10 @@ export default class Sandbox extends Phaser.Scene
     })
 
     // Alerts
+    this.events.on(GameEvents.RESOURCE_DEPLETED, (sector, resource) => {
+      // TODO Check the sector owner is the current player team
+      console.log(`Resource ${resource.name} has depleted in sector ${sector.id}`)
+    })
     this.events.on(GameEvents.RESEARCH_COMPLETED, sector => {
       // TODO Check the sector owner is the current player team
       console.log(`Research of ${sector.research.name} completed in sector ${sector.id}`)

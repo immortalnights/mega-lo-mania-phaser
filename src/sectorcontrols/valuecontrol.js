@@ -51,13 +51,13 @@ export default class ValueControl extends Phaser.GameObjects.Container
     this.add(this.value)
 
     const onValueChanged = (obj, val, prev) => {
-      if (val === null)
-      {
-        this.value.setText('')
-      }
-      else if (val === undefined)
+      if (val === undefined)
       {
         this.value.setText('-')
+      }
+      else if (val === null)
+      {
+        this.value.setText('')
       }
       else
       {
@@ -142,9 +142,16 @@ export default class ValueControl extends Phaser.GameObjects.Container
     return this
   }
 
+  setIcon(icon)
+  {
+    this.icon.setFrame(icon)
+    return this
+  }
+
   setValue(val)
   {
     this.setData('value', val)
+    return this
   }
 
   preUpdate(time, delta)

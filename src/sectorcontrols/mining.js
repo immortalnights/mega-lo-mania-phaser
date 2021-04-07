@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import Header from './header'
 import Task from '../task'
+import ValueControl from './valuecontrol'
 
 
 export default class Mining extends Phaser.GameObjects.Container
@@ -16,6 +17,35 @@ export default class Mining extends Phaser.GameObjects.Container
     })
 
     this.add(this.header)
+
+    const createRow = yOffset => {
+      const left = new Phaser.GameObjects.Image(this.scene, -28, yOffset, 'mlm_icons', ``)
+      const multiply = new Phaser.GameObjects.Image(this.scene, -16, yOffset - 1, 'mlm_icons', 'multiply_icon')
+      const center = new ValueControl(this.scene, -2, yOffset, 'mlm_icons', '')
+      const equal = new Phaser.GameObjects.Image(this.scene, 10, yOffset - 1, 'mlm_icons', 'equal_icon')
+      const right = new ValueControl(this.scene, 22, yOffset, '')
+
+      return {
+        left,
+        multiply,
+        center,
+        equal,
+        right
+      }
+    }
+
+    this.rows = []
+    for (let index = 0; index < 4; index++)
+    {
+      const row = createRow(18 + (26 * index))
+
+      const gameObjects = Object.values(row)
+      // Hide all the row items
+      gameObjects.forEach(o => o.setVisible(false))
+      // Add to this container
+      this.add(gameObjects)
+      this.rows.push(row)
+    }
   }
 
   display(sector)
@@ -38,72 +68,85 @@ export default class Mining extends Phaser.GameObjects.Container
       this.header
     }
 
-    let resourceY = 18
-    sector.resources.forEach(resource => {
-      let displayed = false
+    // Assumes the resources are ordered by when they become available
+    sector.resources.forEach((resource, index) => {
+      const row = this.rows[index]
 
-      switch (resource.type)
+      if (resource.locked === true)
       {
-        case 'mine':
-        {
-          if (sector.buildings.mine !== false)
-          {
-            this.displayResource(resourceY, resource)
-            displayed = true
-          }
-          break
-        }
-        case 'pit':
-        {
-          if (sector.epoch > 2)
-          {
-            this.displayResource(resourceY, resource)
-            displayed = true
-          }
-          break;
-        }
-        case 'surface':
-        {
-          this.displayResource(resourceY, resource)
-          displayed = true
-          break;
-        }
-        default:
-        {
-          console.assert(false, `Unhandled resource type ${resource.type} for ${resource.id}`)
-          break
-        }
+        // Skip, already hidden
+        // Object.values(this.rows_basic[index]).forEach(i => i.setVisible(false))
       }
-
-      if (displayed)
+      else if (resource.depleted)
       {
-        resourceY = resourceY + 26
+        row.left.setVisible(false)
+        row.multiply.setVisible(false)
+        row.center.setVisible(false)
+        row.equal.setVisible(false)
+        row.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.mined)
+      }
+      else if (resource.type === 'surface')
+      {
+        row.left.setVisible(false)
+        row.multiply.setVisible(false)
+        row.center.setVisible(true).setIcon('mine_hand_icon').setValue(null)
+        row.equal.setVisible(true)
+        row.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.mined)
+      }
+      else
+      {
+        const icon = resource.type === 'pit' ? 'pit_resource_icon' : 'mined_resource_icon'
+        row.left.setVisible(true).setFrame(`resource_${resource.id}`)
+        row.multiply.setVisible(true)
+        row.center.setVisible(true).setIcon('').setValue(resource.allocated)
+        row.equal.setVisible(true)
+        row.right.setVisible(true).setIcon(icon).setValue(resource.mined)
       }
     })
   }
 
-  displayResource(y, resource)
+  displayResource(y, resource, i)
   {
+    const row = this.rows_basic[i]
     if (resource.depleted)
     {
-      this.add(new Task(this.scene, 22, y, `resource_${resource.id}`))
+      row.left.setVisible(false)
+      row.multiply.setVisible(false)
+      row.center.setVisible(false)
+      row.equal.setVisible(false)
+      row.right.setIcon(`resource_${resource.id}`).setValue(resource.mined)
     }
     else if (resource.type === 'surface')
     {
-        // Surface resources are gathers passively and miners cannot be allocated
-        this.add(new Phaser.GameObjects.Image(this.scene, -2, y, 'mlm_icons', 'mine_hand_icon'))
-        this.add(new Phaser.GameObjects.Image(this.scene, 10, y - 1, 'mlm_icons', 'equal_icon'))
-        this.add(new Task(this.scene, 22, y, `resource_${resource.id}`))
+        
     }
     else
     {
       const icon = resource.type === 'pit' ? 'pit_resource_icon' : 'mined_resource_icon'
 
-      this.add(new Phaser.GameObjects.Image(this.scene, -28, y, 'mlm_icons', `resource_${resource.id}`))
-      this.add(new Phaser.GameObjects.Image(this.scene, -16, y - 1, 'mlm_icons', 'multiply_icon'))
-      this.add(new Task(this.scene, -2, y, 'mlm_icons', 'mine')) // resource.id
-      this.add(new Phaser.GameObjects.Image(this.scene, 10, y - 1, 'mlm_icons', 'equal_icon'))
-      this.add(new Task(this.scene, 22, y, icon))
+      
     }
+
+    // if (resource.depleted)
+    // {
+    //   this.add(new ValueControl(this.scene, 22, y, `resource_${resource.id}`, resource.mined))
+    // }
+    // else if (resource.type === 'surface')
+    // {
+    //     // Surface resources are gathers passively and miners cannot be allocated
+    //     this.rows.add(new Phaser.GameObjects.Image(this.scene, -2, y, 'mlm_icons', 'mine_hand_icon'))
+    //     this.rows.add(new Phaser.GameObjects.Image(this.scene, 10, y - 1, 'mlm_icons', 'equal_icon'))
+    //     this.rows.add(new Task(this.scene, 22, y, `resource_${resource.id}`))
+    // }
+    // else
+    // {
+    //   const icon = resource.type === 'pit' ? 'pit_resource_icon' : 'mined_resource_icon'
+
+    //   this.rows.add(new Phaser.GameObjects.Image(this.scene, -28, y, 'mlm_icons', `resource_${resource.id}`))
+    //   this.rows.add(new Phaser.GameObjects.Image(this.scene, -16, y - 1, 'mlm_icons', 'multiply_icon'))
+    //   this.rows.add(new Task(this.scene, -2, y, 'mlm_icons', 'mine')) // resource.id
+    //   this.rows.add(new Phaser.GameObjects.Image(this.scene, 10, y - 1, 'mlm_icons', 'equal_icon'))
+    //   this.rows.add(new Task(this.scene, 22, y, icon))
+    // }
   }
 }
