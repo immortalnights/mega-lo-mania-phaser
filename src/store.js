@@ -61,6 +61,11 @@ class Sector
     this.production = null
     this.armies = []
     this.nuked = false
+
+    // debugging
+    this.timeUntilNextPop = 0
+    this.timeSinceLastSpawn = 0
+    this.lastGrowth = 0
   }
 
   /**
@@ -81,19 +86,28 @@ class Sector
       if (resources.includes(res.id))
       {
         let locked = false
-        if (res.type === 'mine' && this.buildings.mine === false)
+        let available = 0
+        let mined = 0
+        if (res.type === 'mine')
         {
-          locked = true
+          available = 75
+          locked = this.buildings.mine === false
         }
-        else if (res.type === 'pit' && this.epoch === 1)
+        else if (res.type === 'pit')
         {
-          locked = true
+          available = 50
+          locked = this.epoch === 1
+        }
+        else
+        {
+          available = 90
+          mined = 10
         }
 
         this.resources.push({
           ...res,
-          available: 10,
-          mined: 0,
+          available,
+          mined,
           depleted: false,
           allocated: 0, // miners
           locked,
@@ -121,7 +135,7 @@ class Sector
     this.availablePopulation = population
   }
 
-  tick(time, delta)
+  tick(tickDelta, tickCount)
   {
     // Handle combat
     if (this.armies.length > 0)
@@ -141,6 +155,17 @@ class Sector
     else
     {
       // Apply population growth
+      let currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+      this.timeSinceLastSpawn += tickDelta / 1000
+
+      while (this.timeSinceLastSpawn > currentTimeUntilNextSpawn)
+      {
+        this.spawnedPopulation = this.spawnedPopulation + 1
+        this.availablePopulation = this.availablePopulation + 1
+        this.timeSinceLastSpawn -= currentTimeUntilNextSpawn
+
+        currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+      }
 
       // Handle buildings (since the sector may not be claimed)
 
@@ -170,14 +195,12 @@ class Sector
             }
             case 'surface':
             {
-              const mined = Math.min(resource.available, 0.5)
-              resource.mined = resource.mined + mined
-              resource.available = resource.available - mined
-              resourcesChanged = true
-
-              if (resource.mined > 3)
+              if (resource.available < 21)
               {
-                this.resources.forEach(r => r.locked = false)
+                const mined = Math.min(resource.available, 0.5)
+                resource.mined = resource.mined + mined
+                resource.available = resource.available - mined
+                resourcesChanged = true
               }
               break;
             }
@@ -269,6 +292,12 @@ class Sector
       {
         this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
       }
+
+
+
+      // The population of a sector always changes
+      // though may change by < 1
+      this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
     }
   }
 
@@ -452,10 +481,10 @@ export default class Store extends Phaser.Events.EventEmitter
     this.tickTimer += delta
     if (this.tickTimer > this.tickSpeed)
     {
+      Object.values(this.sectors).forEach(sector => sector.tick(this.tickTimer, this.tickCount))
+
       this.tickTimer = 0
       this.tickCount++
-
-      Object.values(this.sectors).forEach(sector => sector.tick(time, delta))
     }
   }
 

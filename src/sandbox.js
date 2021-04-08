@@ -50,6 +50,13 @@ class SectorControl extends Phaser.GameObjects.Container
       }
     })
 
+    this.scene.events.on(GameEvents.POPULATION_CHANGED, sector => {
+      if (this.activeSector === sector.id)
+      {
+        this.root.display(sector)
+      }
+    })
+
     this.scene.events.on(GameEvents.RESEARCH_CHANGED, sector => {
       if (this.activeSector === sector.id)
       {
@@ -139,13 +146,13 @@ export default class Sandbox extends Phaser.Scene
     this.store.addSector(1, '', 1)
     this.store.addSector(2, '', 1)
 
-    this.store.sectors[0].setup(9, ["herbirite", "rock", "slate", "solarium"])
+    this.store.sectors[0].setup(1, ["rock", "slate", "solarium", "herbirite"])
     this.store.sectors[1].setup(1, [])
     this.store.sectors[2].setup(3, [])
 
     // Claims
-    this.store.sectors[0].claim(Teams.GREEN, 2)
-    this.store.sectors[1].claim(Teams.RED, 100)
+    this.store.sectors[0].claim(Teams.GREEN, 90)
+    this.store.sectors[1].claim(Teams.RED, 10)
     this.store.sectors[2].claim(Teams.BLUE, 10)
 
     const sectorControl = new SectorControl(this, width / 2, height / 2)
@@ -210,7 +217,7 @@ export default class Sandbox extends Phaser.Scene
   update(time, delta)
   {
     const pointer = this.input.activePointer
-    this.debugText.setText(`${pointer.x}, ${pointer.y}`)
+    this.debugText.setText(`${pointer.x.toFixed(1)}, ${pointer.y.toFixed(1)}`)
 
     this.store.tick(time, delta)
   }

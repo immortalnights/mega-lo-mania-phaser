@@ -62,6 +62,7 @@ export default class ValueControl extends Phaser.GameObjects.Container
       else
       {
         // Prevent negative numbers
+        // this.value.setText(Math.max(Math.floor(val), 0))
         this.value.setText(Math.max(val, 0))
       }
     }

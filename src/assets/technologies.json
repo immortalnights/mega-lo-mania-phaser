@@ -31,21 +31,47 @@
     "name": "sling",
     "category": "offence",
     "technologyLevel": 2,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": false,
+        "resources": {
+          "rock": 1
+        }
+      }
+    ]
   },
   {
     "id": "pike",
     "name": "pike",
     "category": "offence",
     "technologyLevel": 3,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": false,
+        "resources": {
+          "rock": 0.5,
+          "slate": 1
+        }
+      }
+    ]
   },
   {
-    "id": "bowandarrow",
-    "name": "bowandarrow",
+    "id": "longbow",
+    "name": "longbow",
     "category": "offence",
     "technologyLevel": 4,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": false,
+        "resources": {
+          "slate": 1.5,
+          "solarium": 0.5
+        }
+      }
+    ]
   },
   {
     "id": "catapult",
@@ -107,28 +133,62 @@
     "name": "stick",
     "category": "defence",
     "technologyLevel": 1,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": true,
+        "resources": {
+          "slate": 1.5
+        }
+      }
+    ]
   },
   {
     "id": "spear",
     "name": "spear",
     "category": "defence",
     "technologyLevel": 2,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": true,
+        "resources": {
+          "rock": 0.5,
+          "slate": 1
+        }
+      }
+    ]
   },
   {
    "id": "bow",
    "name": "bow",
    "category": "defence",
    "technologyLevel": 3,
-   "researchDuration": 3
+   "researchDuration": 3,
+   "recipes": [
+     {
+       "perfect": false,
+       "resources": {
+         "rock": 1,
+         "slate": 0.5
+       }
+     }
+   ]
   },
   {
     "id": "oil",
     "name": "oil",
     "category": "defence",
     "technologyLevel": 4,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": false,
+        "resources": {
+          "solarium": 3
+        }
+      }
+    ]
   },
   {
     "id": "crossbow",
@@ -190,28 +250,62 @@
     "name": "Repair 1",
     "category": "repair",
     "technologyLevel": 1,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": true,
+        "resources": {
+          "rock": 2
+        }
+      }
+    ]
   },
   {
     "id": "repair_2",
     "name": "Repair 2",
     "category": "repair",
     "technologyLevel": 2,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": false,
+        "resources": {
+          "rock": 3
+        }
+      }
+    ]
   },
   {
    "id": "repair_3",
    "name": "Repair 3",
    "category": "repair",
    "technologyLevel": 3,
-   "researchDuration": 3
+   "researchDuration": 3,
+   "recipes": [
+     {
+       "perfect": false,
+       "resources": {
+         "rock": 0.5,
+         "slate": 2.5
+       }
+     }
+   ]
   },
   {
     "id": "repair_4",
     "name": "Repair 4",
     "category": "repair",
     "technologyLevel": 4,
-    "researchDuration": 3
+    "researchDuration": 3,
+    "recipes": [
+      {
+        "perfect": false,
+        "resources": {
+          "rock": 2,
+          "herbirite": 2
+        }
+      }
+    ]
   },
   {
     "id": "repair_advanced_1",

@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import Button from '../button'
 import Task from '../task'
 import SectorLabel from './sectorlabel'
+import ValueControl from './valuecontrol'
 
 
 export default class Root extends Phaser.GameObjects.Container
@@ -39,7 +40,7 @@ export default class Root extends Phaser.GameObjects.Container
     })
     this.researchArrow = new Phaser.GameObjects.Image(this.scene, -16, 0, 'mlm_icons', 'arrow_left')
 
-    this.population = new Task(this.scene, 0, 0, 'population_epoch_1', 'population')
+    this.population = new ValueControl(this.scene, 0, 0, 'population_epoch_1', 1)
     this.population.setDepth(1)
 
     this.productionNavTask = new Task(this.scene, 32, 0, 'factory_icon', 'production')
@@ -73,6 +74,8 @@ export default class Root extends Phaser.GameObjects.Container
     this.setVisible(true)
 
     this.sectorLabel.display(sector)
+
+    this.population.setValue(sector.availablePopulation)
 
     let blueprintsAvailable = false
     let repairAvailable = false
