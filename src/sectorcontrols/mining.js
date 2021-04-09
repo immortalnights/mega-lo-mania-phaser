@@ -83,7 +83,7 @@ export default class Mining extends Phaser.GameObjects.Container
         row.multiply.setVisible(false)
         row.center.setVisible(false)
         row.equal.setVisible(false)
-        row.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.mined)
+        row.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.owned)
       }
       else if (resource.type === 'surface')
       {
@@ -91,7 +91,7 @@ export default class Mining extends Phaser.GameObjects.Container
         row.multiply.setVisible(false)
         row.center.setVisible(true).setIcon('mine_hand_icon').setValue(null)
         row.equal.setVisible(true)
-        row.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.mined)
+        row.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.owned)
       }
       else
       {
@@ -100,7 +100,7 @@ export default class Mining extends Phaser.GameObjects.Container
         row.multiply.setVisible(true)
         row.center.setVisible(true).setIcon('').setValue(resource.allocated)
         row.equal.setVisible(true)
-        row.right.setVisible(true).setIcon(icon).setValue(resource.mined)
+        row.right.setVisible(true).setIcon(icon).setValue(resource.owned)
       }
     })
   }
@@ -114,7 +114,7 @@ export default class Mining extends Phaser.GameObjects.Container
       row.multiply.setVisible(false)
       row.center.setVisible(false)
       row.equal.setVisible(false)
-      row.right.setIcon(`resource_${resource.id}`).setValue(resource.mined)
+      row.right.setIcon(`resource_${resource.id}`).setValue(resource.owned)
     }
     else if (resource.type === 'surface')
     {

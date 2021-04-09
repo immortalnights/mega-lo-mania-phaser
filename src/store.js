@@ -75,19 +75,12 @@ class Sector
   {
     this.epoch = 1
 
-    Technologies.forEach(technology => {
-      if (technology.technologyLevel >= epoch && technology.technologyLevel < epoch + 4)
-      {
-        this.technologies[technology.id] = { ...technology, researched: false }
-      }
-    })
-
     Resources.forEach(res => {
       if (resources.includes(res.id))
       {
         let locked = false
         let available = 0
-        let mined = 0
+        let owned = 0
         if (res.type === 'mine')
         {
           available = 75
@@ -101,17 +94,46 @@ class Sector
         else
         {
           available = 90
-          mined = 10
+          owned = 10
         }
 
         this.resources.push({
           ...res,
           available,
-          mined,
+          owned,
           depleted: false,
           allocated: 0, // miners
           locked,
         })
+      }
+    })
+
+    Technologies.forEach(technology => {
+      if (technology.technologyLevel >= epoch && technology.technologyLevel < epoch + 4)
+      {
+        // find a matching recipe, perfect if possible
+        let bestRecipe
+        // Required until all technologies have recipes.
+        if (technology.recipes)
+        {
+          technology.recipes.forEach(recipe => {
+            if (Object.entries(recipe.resources).every(([ key, quantity ]) => {
+              return !!this.resources.find(r => r.id === key)
+            }))
+            {
+              if (bestRecipe == undefined || recipe.perfect)
+              {
+                bestRecipe = recipe
+              }
+            }
+          })
+        }
+        
+        this.technologies[technology.id] = {
+          ...technology,
+          recipe: bestRecipe,
+          researched: false
+        }
       }
     })
   }
@@ -155,16 +177,22 @@ class Sector
     else
     {
       // Apply population growth
-      let currentTimeUntilNextSpawn = (180 / this.availablePopulation)
-      this.timeSinceLastSpawn += tickDelta / 1000
-
-      while (this.timeSinceLastSpawn > currentTimeUntilNextSpawn)
+      if (this.availablePopulation < 500)
       {
-        this.spawnedPopulation = this.spawnedPopulation + 1
-        this.availablePopulation = this.availablePopulation + 1
-        this.timeSinceLastSpawn -= currentTimeUntilNextSpawn
+        let currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+        this.timeSinceLastSpawn += tickDelta / 1000
+  
+        while (this.timeSinceLastSpawn > currentTimeUntilNextSpawn)
+        {
+          this.spawnedPopulation = this.spawnedPopulation + 1
+          this.availablePopulation = this.availablePopulation + 1
+          this.timeSinceLastSpawn -= currentTimeUntilNextSpawn
+  
+          currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+        }
 
-        currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+        // Cap population to 500.
+        this.availablePopulation = Math.min(this.availablePopulation, 500)
       }
 
       // Handle buildings (since the sector may not be claimed)
@@ -195,10 +223,10 @@ class Sector
             }
             case 'surface':
             {
-              if (resource.available < 21)
+              if (resource.owned < 21)
               {
                 const mined = Math.min(resource.available, 0.5)
-                resource.mined = resource.mined + mined
+                resource.owned = resource.owned + mined
                 resource.available = resource.available - mined
                 resourcesChanged = true
               }
@@ -303,7 +331,17 @@ class Sector
 
   hasResourcesFor(technology)
   {
-    return true
+    let available = false
+    if (technology.recipe)
+    {
+      // for (const [ key, quantity ] of Object.entries(technology.recipe.resources))
+      available = Object.entries(technology.recipe.resources).every(([ key, quantity ]) => {
+        const resource = this.resources.find(r => r.id === key)
+        return resource && resource.owned >= quantity
+      })
+    }
+
+    return available
   }
 
   /**
