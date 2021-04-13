@@ -80,6 +80,9 @@ export const UserEvents = {
   DEALLOCATE_POPULATION: 'user:deallocate_population',
   SELECT_RESEARCH: 'user:select_research',
   SELECT_PRODUCTION: 'user:select_production',
+
+  ADD_TO_ARMY: 'user:offense:add_army',
+  DISCARD_ARMY_IN_HAND: 'user:offense:discard_army',
 }
 
 // Game Sector events
@@ -108,4 +111,5 @@ export const GameEvents = {
   PRODUCTION_COMPLETED: 'game:production:completed',
   PRODUCTION_RUN_COMPLETED: 'game:production_run:completed',
   POPULATION_ALLOCATION_CHANGED: 'game:population:allocation_changed',
+  ARMY_CHANGED: 'game:offensive:army_changed',
 }

@@ -59,6 +59,7 @@ class Sector
     this.research = null
     this.construction = null
     this.production = null
+    this.pendingArmy = []
     this.armies = []
     this.nuked = false
 
@@ -132,7 +133,9 @@ class Sector
         this.technologies[technology.id] = {
           ...technology,
           recipe: bestRecipe,
-          researched: false
+          researched: false,
+          produced: 0,
+          available: false
         }
       }
     })
@@ -177,23 +180,23 @@ class Sector
     else
     {
       // Apply population growth
-      if (this.availablePopulation < 500)
-      {
-        let currentTimeUntilNextSpawn = (180 / this.availablePopulation)
-        this.timeSinceLastSpawn += tickDelta / 1000
+      // if (this.availablePopulation < 500)
+      // {
+      //   let currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+      //   this.timeSinceLastSpawn += tickDelta / 1000
   
-        while (this.timeSinceLastSpawn > currentTimeUntilNextSpawn)
-        {
-          this.spawnedPopulation = this.spawnedPopulation + 1
-          this.availablePopulation = this.availablePopulation + 1
-          this.timeSinceLastSpawn -= currentTimeUntilNextSpawn
+      //   while (this.timeSinceLastSpawn > currentTimeUntilNextSpawn)
+      //   {
+      //     this.spawnedPopulation = this.spawnedPopulation + 1
+      //     this.availablePopulation = this.availablePopulation + 1
+      //     this.timeSinceLastSpawn -= currentTimeUntilNextSpawn
   
-          currentTimeUntilNextSpawn = (180 / this.availablePopulation)
-        }
+      //     currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+      //   }
 
-        // Cap population to 500.
-        this.availablePopulation = Math.min(this.availablePopulation, 500)
-      }
+      //   // Cap population to 500.
+      //   this.availablePopulation = Math.min(this.availablePopulation, 500)
+      // }
 
       // Handle buildings (since the sector may not be claimed)
 
@@ -321,12 +324,35 @@ class Sector
         this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
       }
 
+      // Update the states of any researched technologies
+      for (const [ key, value ] of Object.entries(this.technologies))
+      {
+        const technology = value
 
+        if (value.researched)
+        {
+          if (technology.produced === 0 && this.hasResourcesFor(technology))
+          {
+            technology.available = (this.availablePopulation - 1) >= technology.requiredPopulation
+          }
+        }
+      }
 
       // The population of a sector always changes
       // though may change by < 1
       this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
     }
+  }
+
+  getPendingArmySize()
+  {
+    let size = 0
+
+    this.pendingArmy.forEach(item => {
+      size += item.quantity
+    })
+
+    return size
   }
 
   hasResourcesFor(technology)
@@ -479,6 +505,44 @@ class Sector
     }
   }
 
+  addUnitsToArmy(quantity, type)
+  {
+    let group = this.pendingArmy.find(p => p.type === type)
+
+    if (group == null)
+    {
+      group = {
+        type,
+        quantity: 0
+      }
+
+      this.pendingArmy.push(group)
+    }
+
+    let transfer = 0
+    if (quantity > 0)
+    {
+      transfer = Math.min(this.availablePopulation, quantity)
+    }
+    else
+    {
+      transfer = -Math.min(group.quantity, Math.abs(quantity))
+    }
+
+    group.quantity = group.quantity + transfer
+    this.availablePopulation = this.availablePopulation - transfer
+
+    this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
+  }
+
+  disbandPendingArmy()
+  {
+    const size = this.getPendingArmySize()
+
+    this.availablePopulation = this.availablePopulation + size
+    this.pendingArmy = []
+  }
+
   beginProduction(technology)
   {
     const tech = this.technologies[technology]
@@ -569,6 +633,18 @@ export default class Store extends Phaser.Events.EventEmitter
     const sector = this.sectors[index]
     sector.modifyPopulation(task, detail, -population)
     this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+  }
+
+  addToArmy(index, quantity, type)
+  {
+    const sector = this.sectors[index]
+    sector.addUnitsToArmy(quantity, type)
+  }
+
+  discardPendingArmy(index)
+  {
+    const sector = this.sectors[index]
+    sector.disbandPendingArmy()
   }
 
   /**

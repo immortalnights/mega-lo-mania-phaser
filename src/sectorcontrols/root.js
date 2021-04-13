@@ -30,10 +30,10 @@ export default class Root extends Phaser.GameObjects.Container
     })
     this.defenceArrow = new Phaser.GameObjects.Image(this.scene, 10, -10, 'mlm_icons', 'arrow_up_right_1')
 
-    this.offenceNav = new Button(this.scene, 32, -22, 'offence_icon', () => {
-      this.parentContainer.emit('sectorcontrol:change_view', 'offence')
+    this.offenseNav = new Button(this.scene, 32, -22, 'offense_icon', () => {
+      this.parentContainer.emit('sectorcontrol:change_view', 'offense')
     })
-    this.offenceArrow = new Phaser.GameObjects.Image(this.scene, 18, -10, 'mlm_icons', 'arrow_up_right_0')
+    this.offenseArrow = new Phaser.GameObjects.Image(this.scene, 18, -10, 'mlm_icons', 'arrow_up_right_0')
 
     this.researchNavTask = new Task(this.scene, -30, 0, 'research_icon', 'research', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'research')
@@ -57,8 +57,8 @@ export default class Root extends Phaser.GameObjects.Container
       this.repairArrow,
       this.defenceNav,
       this.defenceArrow,
-      this.offenceNav,
-      this.offenceArrow,
+      this.offenseNav,
+      this.offenseArrow,
       this.researchNavTask,
       this.researchArrow,
       this.population,

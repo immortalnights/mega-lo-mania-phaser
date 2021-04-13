@@ -60,7 +60,7 @@ export default class SectorControls extends Phaser.GameObjects.Container
     // this.add.existing(new Button(scene, 20, 120, 'blueprint_icon', ''))
     // this.add.existing(new Button(scene, 40, 120, 'repair_icon', ''))
     // this.add.existing(new Button(scene, 60, 120, 'defence_icon', ''))
-    // this.add.existing(new Button(scene, 80, 120, 'offence_icon', ''))
+    // this.add.existing(new Button(scene, 80, 120, 'offense_icon', ''))
     // this.add.existing(new Task(scene, 20, 150, 'research_icon', 'research'))
     // this.add.existing(new Task(scene, 50, 150, 'population_epoch_1', 'population'))
     // this.add.existing(new Task(scene, 80, 150, 'factory_icon', 'production'))
@@ -98,8 +98,8 @@ export default class SectorControls extends Phaser.GameObjects.Container
     const defence = new Defence(this.scene, 0, 0)
     this.add(defence)
 
-    const offence = new Offence(this.scene, 0, 0)
-    this.add(offence)
+    const offense = new Offense(this.scene, 0, 0)
+    this.add(offense)
 
     const research = new Research(this.scene, 0, 0)
     this.add(research)
@@ -115,7 +115,7 @@ export default class SectorControls extends Phaser.GameObjects.Container
       blueprints,
       repair,
       defence,
-      offence,
+      offense,
       research,
       production,
       mining,
@@ -183,10 +183,10 @@ export default class SectorControls extends Phaser.GameObjects.Container
     this.defence.setVisible(true)
   }
 
-  displayOffence()
+  displayOffense()
   {
     this.hideAll()
-    this.offence.setVisible(true)
+    this.offense.setVisible(true)
   }
 
   displayResearch()

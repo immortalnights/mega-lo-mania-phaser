@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { UserEvents } from '../defines'
 
 /**
  * Display an icon and a value
@@ -50,30 +51,13 @@ export default class ValueControl extends Phaser.GameObjects.Container
     this.value.setOrigin(0.5, 0.5)
     this.add(this.value)
 
-    const onValueChanged = (obj, val, prev) => {
-      if (val === undefined)
-      {
-        this.value.setText('-')
-      }
-      else if (val === null)
-      {
-        this.value.setText('')
-      }
-      else
-      {
-        // Prevent negative numbers
-        // this.value.setText(Math.max(Math.floor(val), 0))
-        this.value.setText(Math.max(val, 0))
-      }
-    }
-
     this.once('setdata', (obj, key, val) => {
       if (key === 'value')
       {
-        onValueChanged(obj, val, undefined)
+        this.onValueChanged(obj, val, undefined)
       }
     })
-    this.on('changedata-value', onValueChanged, this)
+    this.on('changedata-value', this.onValueChanged, this)
     this.setData('value', value)
 
     // Having the icon and value interactive, block pointer events on the container; so attach
@@ -121,8 +105,30 @@ export default class ValueControl extends Phaser.GameObjects.Container
     })
     this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_WHEEL, (pointer, deltaX, deltaY, deltaZ, event) => {
       // console.log("ValueControl click wheel container", deltaX, deltaY, deltaZ)
-      this.emit(UserEvents.VALUE_CHANGE, deltaX / 100)
+      this.emit(UserEvents.VALUE_CHANGE, Math.floor(deltaY / 100))
     })
+  }
+
+  onValueChanged(obj, val, prev)
+  {
+    if (val === undefined)
+    {
+      this.value.setText('-')
+    }
+    else if (val === null)
+    {
+      this.value.setText('')
+    }
+    else if (Number.isFinite(val) === true)
+    {
+      // Prevent negative numbers
+      // this.value.setText(Math.max(Math.floor(val), 0))
+      this.value.setText(Math.max(val, 0))
+    }
+    else
+    {
+      this.value.setText(val)
+    }
   }
 
   reset()
@@ -185,7 +191,7 @@ export default class ValueControl extends Phaser.GameObjects.Container
       if (duration < 125)
       {
         const dir = this.pointerButton === 2 ? -1 : 1
-        this.emit(UserEvents.VALUE_CLICKED, dir)
+        this.emit(UserEvents.VALUE_CHANGE, dir)
       }
       else
       {

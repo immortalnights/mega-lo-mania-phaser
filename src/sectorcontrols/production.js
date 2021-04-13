@@ -52,7 +52,7 @@ export default class Production extends Phaser.GameObjects.Container
     this.technologies = new CategorizedTechnologies(this.scene, 0, 25, {
       iconStyle: undefined,
       filter: (sector, technology) => {
-        return (technology.researched === true && sector.hasResourcesFor(technology))
+        return (technology.researched === true && technology.produced === true && sector.hasResourcesFor(technology))
       }
     })
     this.technologies.on('technology:selected', technology => {

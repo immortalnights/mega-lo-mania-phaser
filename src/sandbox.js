@@ -4,6 +4,7 @@ import Root from './sectorcontrols/root'
 import Research from './sectorcontrols/research'
 import Production from './sectorcontrols/production'
 import Mining from './sectorcontrols/mining'
+import Offense from './sectorcontrols/offense'
 import { GameEvents, Teams, UserEvents } from "./defines"
 import SectorControls from './sectorcontrols'
 
@@ -30,11 +31,15 @@ class SectorControl extends Phaser.GameObjects.Container
     })
     this.add(this.researchView)
 
+    this.offenseView = new Offense(scene, 120, -100)
+    
+    this.add(this.offenseView)
+
     this.productionView = new Production(scene, 75, -100)
     this.productionView.on('technology:selected', technology => {
       this.scene.events.emit(UserEvents.SELECT_PRODUCTION, technology)
     })
-    this.add(this.productionView)
+    // this.add(this.productionView)
 
     this.miningView = new Mining(scene, 0, 30)
     this.add(this.miningView)
@@ -46,6 +51,7 @@ class SectorControl extends Phaser.GameObjects.Container
         this.root.display(sector)
         this.miningView.display(sector)
         this.researchView.display(sector)
+        this.offenseView.display(sector)
         this.productionView.display(sector)
       }
     })
@@ -54,6 +60,15 @@ class SectorControl extends Phaser.GameObjects.Container
       if (this.activeSector === sector.id)
       {
         this.root.display(sector)
+        this.offenseView.display(sector)
+      }
+    })
+
+    this.scene.events.on(GameEvents.ARMY_CHANGED, sector => {
+      if (this.activeSector === sector.id)
+      {
+        this.root.display(sector)
+        this.offenseView.display(sector)
       }
     })
 
@@ -64,6 +79,7 @@ class SectorControl extends Phaser.GameObjects.Container
         this.researchView.display(sector)
 
         // only required in this Sandbox sector control view
+        this.offenseView.display(sector)
         this.productionView.display(sector)
       }
     })
@@ -73,6 +89,9 @@ class SectorControl extends Phaser.GameObjects.Container
       {
         this.root.display(sector)
         this.productionView.display(sector)
+
+        // Sandbox must update all affected views
+        this.offenseView.display(sector)
       }
     })
 
@@ -191,6 +210,13 @@ export default class Sandbox extends Phaser.Scene
     })
     this.events.on(UserEvents.DEALLOCATE_POPULATION, (...args) => {
       this.store.deallocatePopulation(this.activeSector, ...args)
+    })
+
+    this.events.on(UserEvents.ADD_TO_ARMY, (...args) => {
+      this.store.addToArmy(this.activeSector, ...args)
+    })
+    this.events.on(UserEvents.DISCARD_ARMY_IN_HAND, (...args) => {
+      this.store.discardPendingArmy(this.activeSector, ...args)
     })
 
     // Alerts
