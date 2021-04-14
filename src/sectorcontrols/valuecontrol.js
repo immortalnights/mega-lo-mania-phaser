@@ -41,6 +41,10 @@ export default class ValueControl extends Phaser.GameObjects.Container
     this.setSize(16, 24)
     this.setInteractive()
 
+    // for the click/hold to function, this Object must be added to the update list
+    // this.addToUpdateList() // next?
+    this.scene.add.existing(this)
+
     // Does clicking the icon have a different effect to clicking the text
     this.isLink = false
 

@@ -10,9 +10,9 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
     this.technologyPredicate = config.filter
 
     // Categories
-    this.add(this.scene.add.image(0, 45, 'mlm_icons', 'category_repair'))
-    this.add(this.scene.add.image(24, 45, 'mlm_icons', 'category_defence'))
-    this.add(this.scene.add.image(50, 45, 'mlm_icons', 'category_offense'))
+    this.add(this.scene.add.image(-25, 0, 'mlm_icons', 'category_repair'))
+    this.add(this.scene.add.image(0, 0, 'mlm_icons', 'category_defence'))
+    this.add(this.scene.add.image(25, 0, 'mlm_icons', 'category_offense'))
 
     // Technologies
     const onClickTechnology = button => {
@@ -20,18 +20,18 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
     }
 
     this.technologies = new Phaser.GameObjects.Group(this.scene)
-    this.technologies.add(new Button(scene, 0, 62, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 78, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 94, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 110, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 62, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 78, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 94, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 24, 110, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 62, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 78, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 94, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 50, 110, '', onClickTechnology))
+    this.technologies.add(new Button(scene, -25, 18, '', onClickTechnology))
+    this.technologies.add(new Button(scene, -25, 34, '', onClickTechnology))
+    this.technologies.add(new Button(scene, -25, 50, '', onClickTechnology))
+    this.technologies.add(new Button(scene, -25, 66, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 18, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 34, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 50, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 66, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 25, 18, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 25, 34, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 25, 50, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 25, 66, '', onClickTechnology))
     this.add(this.technologies.getChildren())
 
     // Hide all technology icons

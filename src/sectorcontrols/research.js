@@ -3,6 +3,10 @@ import Header from './header'
 import Clock from '../clock'
 import Task from '../task'
 import CategorizedTechnologies from './categorizedtechnologies'
+import ValueControl from './valuecontrol'
+import { UserEvents } from '../defines'
+
+
 
 
 export default class Research extends Phaser.GameObjects.Container
@@ -19,18 +23,21 @@ export default class Research extends Phaser.GameObjects.Container
 
     this.activeTask = new Phaser.GameObjects.Group(this.scene)
 
-    this.activeTaskIcon = new Phaser.GameObjects.Image(this.scene, 0, 18, 'mlm_icons', '')
+    this.activeTaskIcon = new Phaser.GameObjects.Image(this.scene, -25, 18, 'mlm_icons', '')
     this.activeTask.add(this.activeTaskIcon)
 
-    this.activeTask.add(new Phaser.GameObjects.Image(this.scene, 12, 18, 'mlm_icons', 'multiply_icon'))
+    this.activeTask.add(new Phaser.GameObjects.Image(this.scene, -13, 18, 'mlm_icons', 'multiply_icon'))
 
-    this.activeTaskPopulation = new Task(this.scene, 0, 23, 'population_epoch_1', 'research')
+    this.activeTaskPopulation = new ValueControl(this.scene, 0, 20, 'population_epoch_1')
+    this.activeTaskPopulation.on(UserEvents.VALUE_CHANGE, value => {
+      this.scene.events.emit(UserEvents.CHANGE_RESEARCHERS, value)
+    })
     this.activeTaskPopulation.setData('population', undefined)
     this.add(this.activeTaskPopulation)
 
-    this.activeTask.add(new Phaser.GameObjects.Image(this.scene, 38, 18, 'mlm_icons', 'equal_icon'))
+    this.activeTask.add(new Phaser.GameObjects.Image(this.scene, 11, 18, 'mlm_icons', 'equal_icon'))
 
-    this.activeTaskClock = new Clock(this.scene, 50, 19, Infinity)
+    this.activeTaskClock = new Clock(this.scene, 25, 19, Infinity)
     // If `addToScene` is true, the clock `preUpdate` will be called
     this.activeTask.add(this.activeTaskClock, false)
 
@@ -39,7 +46,7 @@ export default class Research extends Phaser.GameObjects.Container
     // Hide active task related images
     this.activeTask.setVisible(false)
 
-    this.technologies = new CategorizedTechnologies(this.scene, 0, 0, {
+    this.technologies = new CategorizedTechnologies(this.scene, 0, 45, {
       iconStyle: undefined,
       filter: (sector, technology) => {
         return (technology.researched === false && sector.hasResourcesFor(technology))
@@ -62,7 +69,7 @@ export default class Research extends Phaser.GameObjects.Container
       // Set researching icon
       this.activeTaskIcon.setFrame(task.name)
 
-      this.activeTaskPopulation.setData('population', task.allocated)
+      this.activeTaskPopulation.setValue(task.allocated)
 
       // Set researching time
       this.activeTaskClock.setDuration(task.remainingDuration)

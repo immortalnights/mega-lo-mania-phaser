@@ -256,7 +256,9 @@ class Sector
       {
         if (this.research.allocated > 0)
         {
-          this.research.remainingDuration -= 1
+          this.research.progress += 1
+
+          this.research.remainingDuration = this.research.duration - this.research.progress
 
           if (this.research.remainingDuration < 0)
           {
@@ -270,7 +272,7 @@ class Sector
             this.availablePopulation = this.availablePopulation + this.research.allocated
 
             // Reset the current research
-            this.research = false
+            this.research = null
           }
 
           this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
@@ -335,6 +337,10 @@ class Sector
           {
             technology.available = (this.availablePopulation - 1) >= technology.requiredPopulation
           }
+          else
+          {
+            technology.available = false
+          }
         }
       }
 
@@ -355,19 +361,83 @@ class Sector
     return size
   }
 
+  findTechnology(name)
+  {
+    return this.technologies[name]
+  }
+
   hasResourcesFor(technology)
   {
     let available = false
     if (technology.recipe)
     {
-      // for (const [ key, quantity ] of Object.entries(technology.recipe.resources))
       available = Object.entries(technology.recipe.resources).every(([ key, quantity ]) => {
         const resource = this.resources.find(r => r.id === key)
-        return resource && resource.owned >= quantity
+
+        let ok = false
+        console.assert(resource, `Failed to find resource ${key} for technology ${technology.id}`)
+
+        if (resource.type === 'surface')
+        {
+          ok = (resource.available + resource.owned) >= quantity
+        }
+        else
+        {
+          ok = resource.owned >= quantity
+        }
+
+        return ok
       })
     }
 
     return available
+  }
+
+  takeResourcesFor(technology)
+  {
+    if (technology.recipe)
+    {
+      for (const [ key, quantity ] of Object.entries(technology.recipe.resources))
+      {
+        const resource = this.resources.find(r => r.id === key)
+
+        if (resource.type === 'surface')
+        {
+          // Take the resources from "available" before "owned"
+          // Since players wont typically see the resource count and the consumer at the same time
+          // how it looks is not important.
+          let required = quantity
+          if (resource.owned > 0)
+          {
+            const take = Math.min(resource.owned, required)
+            resource.owned = resource.owned - take
+            required = required - take
+          }
+
+          if (resource.available >= required)
+          {
+            resource.available = resource.available - required
+          }
+        }
+        else
+        {
+          console.assert(resource.owned < quantity, `Attempted to take too many of ${resource}`)
+          resource.owned = resource.owned - quantity
+        }
+      }
+    }
+  }
+
+  returnResourcesFor(technology)
+  {
+    if (technology.recipe)
+    {
+      for (const [ key, quantity ] of Object.entries(technology.recipe.resources))
+      {
+        const resource = this.resources.find(r => r.id === key)
+        resource.owned = resource.owned + quantity
+      }
+    }
   }
 
   /**
@@ -385,17 +455,30 @@ class Sector
       {
         if (this.research)
         {
+          const research = this.research
+
           if (population < 0)
           {
-            change = Math.min(this.research.allocated, Math.abs(population))
-            this.research.allocated = this.research.allocated - change
+            change = Math.min(research.allocated, Math.abs(population))
+            research.allocated = research.allocated - change
             this.availablePopulation = this.availablePopulation + change
           }
           else
           {
             change = Math.min(this.availablePopulation - 1, population)
             this.availablePopulation = this.availablePopulation - change
-            this.research.allocated = this.research.allocated + change
+            research.allocated = research.allocated + change
+          }
+
+          if (research.allocated > 0)
+          {
+            research.duration = Math.ceil(research.baseDuration / research.allocated)
+            research.remainingDuration = research.duration - research.progress
+          }
+          else
+          {
+            research.duration = research.baseDuration
+            research.remainingDuration = Infinity
           }
 
           this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
@@ -493,19 +576,185 @@ class Sector
     const tech = this.technologies[technology]
     if (tech)
     {
-      this.research = {
-        allocated: 0,
-        name: technology,
-        started: 0,
-        duration: tech.researchDuration,
-        remainingDuration: tech.researchDuration,
-      }
+      if (this.research === null || this.research.id !== tech.id)
+      {
+        if (this.research)
+        {
+          // Cancel current research
+          this.availablePopulation = this.availablePopulation + this.research.allocated
+        }
 
-      this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
+        this.research = {
+          id: tech.id,
+          name: tech.name,
+          allocated: 0,
+          started: 0,
+          // Base duration
+          baseDuration: tech.researchDuration,
+          // duration based on allocated population
+          duration: 0,
+          // research progress
+          progress: 0,
+          // Remaining duration (base duration - progress)
+          remainingDuration: Infinity,
+        }
+  
+        this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
+      }
     }
   }
 
-  addUnitsToArmy(quantity, type)
+  // from user event
+  /**
+   * FIXME - change to addUnitsToGroup so this can work with deployed/returned armies
+   * @param {*} assigned 
+   * @param {*} type 
+   */
+  addUnitsToArmy(assigned, type)
+  {
+    if (type === 'unarmed')
+    {
+      if (this.availablePopulation > 2)
+      {
+        const quantity = Math.min(this.availablePopulation, assigned)
+        this._addUnitsToArmy(type, quantity, quantity)
+      }
+    }
+    else
+    {
+      const technology = this.findTechnology(type)
+      console.assert(technology, `Failed to find technology ${type}`)
+
+      // Allocate up to `assigned`
+      for (let count = 0, done = false; count < assigned && done === false; count++)
+      {
+        if (technology.productionRequired)
+        {
+          /**
+           * FIXME current there is `available` used as true / false to update the UI
+           * and there is `produced` to indicate how many of the technology has been
+           * made (factory not required)
+           * but maybe `available` boolean is not required and confusing. The UI can use
+           * produced to show a number or if produced === 0 check productionRequired
+           * and display accordingly.
+           */
+
+          if (technology.produced === 0)
+          {
+            done = true
+            console.log(`No more produced ${type}`)
+          }
+          else if (technology.requiredPopulation > (this.availablePopulation - 1))
+          {
+            done = true
+            console.log(`Not enough population to add ${type}, required ${technology.requiredPopulation} have ${this.availablePopulation - 1}`)
+          }
+          else
+          {
+            this._addUnitsToArmy(type, 1, technology.requiredPopulation)
+            technology.produced = technology.produced - 1
+          }
+        }
+        else
+        {
+          if (technology.produced > 0)
+          {
+            this._addUnitsToArmy(type, 1, technology.requiredPopulation)
+            technology.production = technology.produced - 1
+          }
+          else if (this.hasResourcesFor(technology) === false)
+          {
+            // Cannot allocate more without resources
+            console.log(`Not enough resources to add ${type}`)
+          }
+          else if (technology.requiredPopulation > (this.availablePopulation - 1))
+          {
+            done = true
+            console.log(`Not enough population to add ${type}, required ${technology.requiredPopulation} have ${this.availablePopulation - 1}`)
+          }
+          else
+          {
+            this._addUnitsToArmy(type, 1, technology.requiredPopulation)
+            this.takeResourcesFor(technology)
+          }
+          break
+        }
+      }
+    }
+
+    this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
+    this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
+  }
+
+  // from user event
+  removeUnitsFromArmy(quantity, type)
+  {
+    const group = this.pendingArmy.find(group => group.type === type)
+    if (group)
+    {
+      const amount = Math.min(quantity, group.quantity)
+      this._removeUnitsFromArmy(type, amount)
+      group.quantity = group.quantity - amount
+    }
+
+    this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
+    this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
+  }
+
+  _removeUnitsFromArmy(type, quantity)
+  {
+    // FIXME
+    const armyInHand = true
+
+    if (type === 'unarmed')
+    {
+      this.availablePopulation = this.availablePopulation + quantity
+    }
+    else
+    {
+      const technology = this.findTechnology(type)
+      console.assert(technology, `Failed to find technology ${type}`)
+
+      for (let count = 0; count < quantity; count++)
+      {
+        if (technology.productionRequired)
+        {
+          technology.produced = technology.produced + 1
+          this.availablePopulation = this.availablePopulation + technology.requiredPopulation
+        }
+        else if (armyInHand === true)
+        {
+          this.returnResourcesFor(technology)
+          this.availablePopulation = this.availablePopulation + technology.requiredPopulation
+        }
+        else
+        {
+          technology.produced = technology.produced + 1
+          this.availablePopulation = this.availablePopulation + technology.requiredPopulation
+        }
+      }
+    }
+  }
+
+  _addUnitsToArmy(type, quantity, population)
+  {
+    let group = this.pendingArmy.find(p => p.type === type)
+
+    if (group == null)
+    {
+      group = {
+        type,
+        quantity: 0
+      }
+
+      this.pendingArmy.push(group)
+    }
+
+    group.quantity = group.quantity + quantity
+    this.availablePopulation = this.availablePopulation - population
+  }
+
+  _addUnitsToArmyOLD(type, quantity, population)
   {
     let group = this.pendingArmy.find(p => p.type === type)
 
@@ -537,10 +786,14 @@ class Sector
 
   disbandPendingArmy()
   {
-    const size = this.getPendingArmySize()
+    this.pendingArmy.forEach(group => {
+      this._removeUnitsFromArmy(group.type, group.quantity)
+    })
 
-    this.availablePopulation = this.availablePopulation + size
     this.pendingArmy = []
+
+    this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
+    this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
   }
 
   beginProduction(technology)
@@ -621,6 +874,13 @@ export default class Store extends Phaser.Events.EventEmitter
     })
   }
 
+  changeResearchers(index, value)
+  {
+    const sector = this.sectors[index]
+    sector.modifyPopulation('research', undefined, value)
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+  }
+
   allocatePopulation(index, task, detail, population = 1)
   {
     const sector = this.sectors[index]
@@ -638,7 +898,14 @@ export default class Store extends Phaser.Events.EventEmitter
   addToArmy(index, quantity, type)
   {
     const sector = this.sectors[index]
-    sector.addUnitsToArmy(quantity, type)
+    if (quantity < 0)
+    {
+      sector.removeUnitsFromArmy(Math.abs(quantity), type)
+    }
+    else
+    {
+      sector.addUnitsToArmy(quantity, type)
+    }
   }
 
   discardPendingArmy(index)

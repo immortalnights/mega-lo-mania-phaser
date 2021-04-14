@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import Button from '../button'
+import { UserEvents } from '../defines'
 import Task from '../task'
 import SectorLabel from './sectorlabel'
 import ValueControl from './valuecontrol'
@@ -35,8 +36,13 @@ export default class Root extends Phaser.GameObjects.Container
     })
     this.offenseArrow = new Phaser.GameObjects.Image(this.scene, 18, -10, 'mlm_icons', 'arrow_up_right_0')
 
-    this.researchNavTask = new Task(this.scene, -30, 0, 'research_icon', 'research', () => {
+    this.researchNavTask = new ValueControl(this.scene, -30, 0, 'research_icon', null)
+    this.researchNavTask.setLink(true)
+    this.researchNavTask.on(UserEvents.VALUE_LINK_UP, () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'research')
+    })
+    this.researchNavTask.on(UserEvents.VALUE_CHANGE, value => {
+      this.scene.events.emit(UserEvents.CHANGE_RESEARCHERS, value)
     })
     this.researchArrow = new Phaser.GameObjects.Image(this.scene, -16, 0, 'mlm_icons', 'arrow_left')
 
@@ -139,11 +145,11 @@ export default class Root extends Phaser.GameObjects.Container
     {
       if (sector.research)
       {
-        this.researchNavTask.setData('population', sector.research.allocated)
+        this.researchNavTask.setValue(sector.research.allocated)
       }
       else
       {
-        this.researchNavTask.setData('population', null)
+        this.researchNavTask.setValue(null)
       }
     }
 

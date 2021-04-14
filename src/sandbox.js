@@ -205,6 +205,9 @@ export default class Sandbox extends Phaser.Scene
       this.store.sectors[this.activeSector].beginProduction(technology)
     });
 
+    this.events.on(UserEvents.CHANGE_RESEARCHERS, (...args) => {
+      this.store.changeResearchers(this.activeSector, ...args)
+    })
     this.events.on(UserEvents.ALLOCATE_POPULATION, (...args) => {
       this.store.allocatePopulation(this.activeSector, ...args)
     })

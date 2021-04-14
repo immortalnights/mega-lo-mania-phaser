@@ -33,7 +33,7 @@
     "category": "offense",
     "requiredPopulation": 1,
     "technologyLevel": 2,
-    "researchDuration": 3,
+    "researchDuration": 1200,
     "recipes": [
       {
         "perfect": false,
@@ -49,7 +49,7 @@
     "category": "offense",
     "requiredPopulation": 1,
     "technologyLevel": 3,
-    "researchDuration": 3,
+    "researchDuration": 2400,
     "recipes": [
       {
         "perfect": false,
@@ -82,7 +82,7 @@
     "name": "catapult",
     "category": "offense",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 5,
     "researchDuration": 3,
     "productionDuration": 3
@@ -92,7 +92,7 @@
     "name": "cannon",
     "category": "offense",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 6,
     "researchDuration": 3,
     "productionDuration": 3
@@ -102,7 +102,7 @@
     "name": "biplane",
     "category": "offense",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 7,
     "researchDuration": 3,
     "productionDuration": 3
@@ -112,7 +112,7 @@
     "name": "jet",
     "category": "offense",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 8,
     "researchDuration": 3,
     "productionDuration": 3
@@ -122,7 +122,7 @@
     "name": "nuke",
     "category": "offense",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 9,
     "researchDuration": 3,
     "productionDuration": 3
@@ -132,7 +132,7 @@
     "name": "flyingsaucer",
     "category": "offense",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 10,
     "researchDuration": 3,
     "productionDuration": 3
@@ -209,7 +209,7 @@
     "name": "crossbow",
     "category": "defence",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 5,
     "researchDuration": 3,
     "productionDuration": 3
@@ -219,7 +219,7 @@
    "name": "rifle",
    "category": "defence",
    "requiredPopulation": 1,
-   "produced": true,
+   "productionRequired": true,
    "technologyLevel": 6,
    "researchDuration": 3,
    "productionDuration": 3
@@ -229,7 +229,7 @@
    "name": "machinegun",
    "category": "defence",
    "requiredPopulation": 1,
-   "produced": true,
+   "productionRequired": true,
    "technologyLevel": 7,
    "researchDuration": 3,
    "productionDuration": 3
@@ -239,7 +239,7 @@
     "name": "rocketlauncher",
     "category": "defence",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 8,
     "researchDuration": 3,
     "productionDuration": 3
@@ -249,7 +249,7 @@
     "name": "antinuke",
     "category": "defence",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 9,
     "researchDuration": 3,
     "productionDuration": 3
@@ -259,7 +259,7 @@
     "name": "laser",
     "category": "defence",
     "requiredPopulation": 1,
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 10,
     "researchDuration": 3,
     "productionDuration": 3
@@ -331,7 +331,7 @@
     "id": "repair_advanced_1",
     "name": "Repair Advanced 1",
     "category": "repair",
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 5,
     "researchDuration": 3,
     "productionDuration": 3
@@ -340,7 +340,7 @@
    "id": "repair_advanced_2",
    "name": "Repair Advanced 2",
    "category": "repair",
-   "produced": true,
+   "productionRequired": true,
    "technologyLevel": 6,
    "researchDuration": 3,
    "productionDuration": 3
@@ -349,7 +349,7 @@
    "id": "repair_advanced_3",
    "name": "Repair Advanced 3",
    "category": "repair",
-   "produced": true,
+   "productionRequired": true,
    "technologyLevel": 7,
    "researchDuration": 3,
    "productionDuration": 3
@@ -358,7 +358,7 @@
     "id": "repair_advanced_4",
     "name": "Repair Advanced 4",
     "category": "repair",
-    "produced": true,
+    "productionRequired": true,
     "technologyLevel": 8,
     "researchDuration": 3,
     "productionDuration": 3

@@ -13,8 +13,16 @@ class ConsumableValueControl extends ValueControl
 
   setValue(value, available)
   {
-    super.setValue(value)
-    this.value.setColor(available ? '#ffff00' : '#444444')
+    if (available)
+    {
+      super.setValue(value || 'OK')
+      this.value.setColor(available ? '#ffff00' : '#444444')
+    }
+    else
+    {
+      super.setValue(value)
+      this.value.setColor(available ? '#ffff00' : '#444444')
+    }
   }
 
   setAvailable(available)
@@ -39,7 +47,6 @@ export default class Offense extends Phaser.GameObjects.Container
     this.population.on(UserEvents.VALUE_CHANGE, amount => {
       this.scene.events.emit(UserEvents.ADD_TO_ARMY, amount, 'unarmed')
     })
-    this.scene.add.existing(this.population)
     this.add(this.population)
 
     this.weapons = []
@@ -94,7 +101,7 @@ export default class Offense extends Phaser.GameObjects.Container
         }
         else
         {
-          icon.setAvailable(technology.available)
+          icon.setValue(undefined, technology.available)
         }
 
         icon.setIcon(technology.id)
