@@ -263,7 +263,7 @@ class Sector
           if (this.research.remainingDuration < 0)
           {
             // Mark the technology as completed
-            this.technologies[this.research.name].researched = true
+            this.technologies[this.research.id].researched = true
 
             // Sector alert (map / audio)
             this.scene.events.emit(GameEvents.RESEARCH_COMPLETED, this)

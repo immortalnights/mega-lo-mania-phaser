@@ -5,6 +5,7 @@ import Research from './sectorcontrols/research'
 import Production from './sectorcontrols/production'
 import Mining from './sectorcontrols/mining'
 import Offense from './sectorcontrols/offense'
+import Blueprints from './sectorcontrols/blueprints'
 import { GameEvents, Teams, UserEvents } from "./defines"
 import SectorControls from './sectorcontrols'
 
@@ -23,7 +24,10 @@ class SectorControl extends Phaser.GameObjects.Container
     this.root = new Root(scene, 0, -50)
     this.add(this.root)
 
-    this.researchView = new Research(scene, -120, -100, {
+    this.blueprintView = new Blueprints(scene, -120, 40)
+    this.add(this.blueprintView)
+
+    this.researchView = new Research(scene, -120, -120, {
       header: 'research_header',
     })
     this.researchView.on('technology:selected', technology => {
@@ -31,11 +35,11 @@ class SectorControl extends Phaser.GameObjects.Container
     })
     this.add(this.researchView)
 
-    this.offenseView = new Offense(scene, 120, -100)
+    this.offenseView = new Offense(scene, 120, -120)
     
     this.add(this.offenseView)
 
-    this.productionView = new Production(scene, 75, -100)
+    this.productionView = new Production(scene, 75, -120)
     this.productionView.on('technology:selected', technology => {
       this.scene.events.emit(UserEvents.SELECT_PRODUCTION, technology)
     })
@@ -44,11 +48,14 @@ class SectorControl extends Phaser.GameObjects.Container
     this.miningView = new Mining(scene, 0, 30)
     this.add(this.miningView)
 
+
+    // Game events
     this.scene.events.on(GameEvents.RESOURCES_CHANGED, sector => {
       if (this.activeSector === sector.id)
       {
         // TODO - only need to update the active controls
         this.root.display(sector)
+        this.blueprintView.display(sector)
         this.miningView.display(sector)
         this.researchView.display(sector)
         this.offenseView.display(sector)
@@ -79,6 +86,7 @@ class SectorControl extends Phaser.GameObjects.Container
         this.researchView.display(sector)
 
         // only required in this Sandbox sector control view
+        this.blueprintView.display(sector)
         this.offenseView.display(sector)
         this.productionView.display(sector)
       }
@@ -123,6 +131,7 @@ class SectorControl extends Phaser.GameObjects.Container
   {
     this.activeSector = sector.id
     this.root.display(sector)
+    this.blueprintView.display(sector)
     this.researchView.display(sector)
     this.miningView.display(sector)
     this.productionView.display(sector)

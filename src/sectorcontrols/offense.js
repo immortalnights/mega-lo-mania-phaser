@@ -54,13 +54,13 @@ export default class Offense extends Phaser.GameObjects.Container
     let weapon = new ConsumableValueControl(this.scene, 0, 20, 'rock', undefined)
     this.weapons.push(weapon)
 
-    weapon = new ValueControl(this.scene, 25, 20, 'rock', undefined)
+    weapon = new ConsumableValueControl(this.scene, 25, 20, 'rock', undefined)
     this.weapons.push(weapon)
 
-    weapon = new ValueControl(this.scene, -25, 50, 'rock', undefined)
+    weapon = new ConsumableValueControl(this.scene, -25, 50, 'rock', undefined)
     this.weapons.push(weapon)
 
-    weapon = new ValueControl(this.scene, 0, 50, 'rock', undefined)
+    weapon = new ConsumableValueControl(this.scene, 0, 50, 'rock', undefined)
     this.weapons.push(weapon)
 
     this.weapons.forEach(item => {
@@ -95,13 +95,21 @@ export default class Offense extends Phaser.GameObjects.Container
 
         icon.setData('technology', technology.id)
 
+        // Available if there is enough people, cannot use the last person
+        const available = (sector.availablePopulation - 1) >= technology.requiredPopulation
+
+        // If items exist; display a number, available if there is enough population
         if (technology.produced > 0)
         {
-          icon.setValue(technology.produced, technology.available)
+          icon.setValue(technology.produced, available)
+        }
+        else if (sector.hasResourcesFor(technology))
+        {
+          icon.setValue('OK', available)
         }
         else
         {
-          icon.setValue(undefined, technology.available)
+          icon.setValue(undefined, false)
         }
 
         icon.setIcon(technology.id)

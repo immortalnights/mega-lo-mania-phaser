@@ -397,6 +397,10 @@
       "filename": "minus_icon",
       "frame": { "x": 143, "y": 114, "w": 7, "h": 2 }
     },
+    {
+      "filename": "perfect_recipe",
+      "frame": { "x": 176, "y": 111, "w": 12, "h": 16 }
+    },
 
     {
       "filename": "resource_wood",

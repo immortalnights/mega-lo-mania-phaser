@@ -16,7 +16,7 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
 
     // Technologies
     const onClickTechnology = button => {
-      this.emit('technology:selected', button.name)
+      this.emit('technology:selected', button.name, button.technology)
     }
 
     this.technologies = new Phaser.GameObjects.Group(this.scene)
@@ -69,6 +69,7 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
         if (icon)
         {
           icon.name = key
+          icon.technology = val
           icon.setFrame(key)
           icon.setVisible(true)
         }

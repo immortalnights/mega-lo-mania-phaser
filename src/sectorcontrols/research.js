@@ -79,7 +79,7 @@ export default class Research extends Phaser.GameObjects.Container
     }
     else
     {
-      this.activeTaskPopulation.setData('population', undefined)
+      this.activeTaskPopulation.setValue(undefined)
       this.activeTask.setVisible(false)
     }
 
