@@ -2,34 +2,8 @@ import Phaser from 'phaser'
 import { UserEvents } from '../defines'
 import Header from './header'
 import ValueControl from './valuecontrol'
+import ConsumableValueControl from './consumablevaluecontrol'
 
-
-class ConsumableValueControl extends ValueControl
-{
-  constructor(scene, x, y, icon, value)
-  {
-    super(scene, x, y, icon, value)
-  }
-
-  setValue(value, available)
-  {
-    if (available)
-    {
-      super.setValue(value || 'OK')
-      this.value.setColor(available ? '#ffff00' : '#444444')
-    }
-    else
-    {
-      super.setValue(value)
-      this.value.setColor(available ? '#ffff00' : '#444444')
-    }
-  }
-
-  setAvailable(available)
-  {
-    this.setValue('OK', available)
-  }
-}
 
 export default class Offense extends Phaser.GameObjects.Container
 {
@@ -95,24 +69,8 @@ export default class Offense extends Phaser.GameObjects.Container
 
         icon.setData('technology', technology.id)
 
-        // Available if there is enough people, cannot use the last person
-        const available = (sector.availablePopulation - 1) >= technology.requiredPopulation
-
-        // If items exist; display a number, available if there is enough population
-        if (technology.produced > 0)
-        {
-          icon.setValue(technology.produced, available)
-        }
-        else if (sector.hasResourcesFor(technology))
-        {
-          icon.setValue('OK', available)
-        }
-        else
-        {
-          icon.setValue(undefined, false)
-        }
-
-        icon.setIcon(technology.id)
+        icon.setIcon(technology.primaryIcon)
+        icon.setValueFromTechnology(sector, technology)
         icon.setVisible(true)
 
         offensiveIndex++

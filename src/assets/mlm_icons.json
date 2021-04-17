@@ -746,132 +746,132 @@
     },
 
     {
-      "filename": "rock",
+      "filename": "research_rock",
       "frame": { "x": 0, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "sling",
+      "filename": "research_sling",
       "frame": { "x": 16, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "pike",
+      "filename": "research_pike",
       "frame": { "x": 32, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "longbow",
+      "filename": "research_longbow",
       "frame": { "x": 48, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "catapult",
+      "filename": "research_catapult",
       "frame": { "x": 64, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "cannon",
+      "filename": "research_cannon",
       "frame": { "x": 80, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "biplane",
+      "filename": "research_biplane",
       "frame": { "x": 96, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "jet",
+      "filename": "research_jet",
       "frame": { "x": 112, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "nuke",
+      "filename": "research_nuke",
       "frame": { "x": 128, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "flyingsaucer",
+      "filename": "research_flyingsaucer",
       "frame": { "x": 144, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_catapult",
+      "filename": "production_catapult",
       "frame": { "x": 160, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_cannon",
+      "filename": "production_cannon",
       "frame": { "x": 176, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_biplane",
+      "filename": "production_biplane",
       "frame": { "x": 192, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_jet",
+      "filename": "production_jet",
       "frame": { "x": 208, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_nuke",
+      "filename": "production_nuke",
       "frame": { "x": 224, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_flyingsaucer",
+      "filename": "production_flyingsaucer",
       "frame": { "x": 240, "y": 237, "w": 16, "h": 16 }
     },
 
     {
-      "filename": "stick",
+      "filename": "research_stick",
       "frame": { "x": 0, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear",
+      "filename": "research_spear",
       "frame": { "x": 16, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "bow",
+      "filename": "research_bow",
       "frame": { "x": 32, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "oil",
+      "filename": "research_oil",
       "frame": { "x": 48, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "crossbow",
+      "filename": "research_crossbow",
       "frame": { "x": 64, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "rifle",
+      "filename": "research_rifle",
       "frame": { "x": 80, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "machinegun",
+      "filename": "research_machinegun",
       "frame": { "x": 96, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "rocket",
+      "filename": "research_rocket",
       "frame": { "x": 112, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "antinuke",
+      "filename": "research_antinuke",
       "frame": { "x": 128, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "laser",
+      "filename": "research_laser",
       "frame": { "x": 144, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_crossbow",
+      "filename": "production_crossbow",
       "frame": { "x": 160, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_rifle",
+      "filename": "production_rifle",
       "frame": { "x": 176, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_machinegun",
+      "filename": "production_machinegun",
       "frame": { "x": 192, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_rocket",
+      "filename": "production_rocket",
       "frame": { "x": 208, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_antinuke",
+      "filename": "production_antinuke",
       "frame": { "x": 224, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "manufacturing_laser",
+      "filename": "production_laser",
       "frame": { "x": 240, "y": 253, "w": 16, "h": 16 }
     },
 

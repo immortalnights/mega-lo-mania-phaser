@@ -69,6 +69,8 @@ export const UserEvents = {
   VALUE_CHANGE: 'value_change',
   VALUE_LINK_DOWN: 'value_link_down',
   VALUE_LINK_UP: 'value_link_up',
+  VALUE_TOGGLE_DOWN: 'value_toggle_down',
+  VALUE_TOGGLE_UP: 'value_toggle_up',
 
   SECTOR_MAP_SELECT: 'user:map:sector:select',
   SECTOR_SELECT: 'user:sector:select',
@@ -100,6 +102,7 @@ export const GameEvents = {
   SECTOR_START_CLAIM: 'game:sector:start_claim',
   SECTOR_STOP_CLAIM: 'game:sector:stop_claim',
   SECTOR_NUKED: 'game:sector:nuke',
+  ADVANCED_TECH_LEVEL: 'game:sector:advanced_tech_level',
   BUILDING_ADD_DEFENDER: 'game:building:add_defender',
   BUILDING_REMOVE_DEFENDER: 'game:building:remove_defender',
   TEAMS_CHANGED: 'game:teams:changed',
@@ -113,4 +116,6 @@ export const GameEvents = {
   PRODUCTION_RUN_COMPLETED: 'game:production_run:completed',
   POPULATION_ALLOCATION_CHANGED: 'game:population:allocation_changed',
   ARMY_CHANGED: 'game:offensive:army_changed',
+  ENABLE_REPAIR_MODE: 'game:repair:enable_repair',
+  ENABLE_DEFENDER_PLACEMENT_MODE: 'game:defensive:enable_placement',
 }

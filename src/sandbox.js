@@ -8,6 +8,7 @@ import Offense from './sectorcontrols/offense'
 import Blueprints from './sectorcontrols/blueprints'
 import { GameEvents, Teams, UserEvents } from "./defines"
 import SectorControls from './sectorcontrols'
+import Repair from './sectorcontrols/repair'
 
 
 class SectorControl extends Phaser.GameObjects.Container
@@ -35,11 +36,13 @@ class SectorControl extends Phaser.GameObjects.Container
     })
     this.add(this.researchView)
 
-    this.offenseView = new Offense(scene, 120, -120)
-    
+    this.repairView = new Repair(scene, 120, -120)
+    this.add(this.repairView)
+
+    this.offenseView = new Offense(scene, 120, -40)
     this.add(this.offenseView)
 
-    this.productionView = new Production(scene, 75, -120)
+    this.productionView = new Production(scene, 120, -40)
     this.productionView.on('technology:selected', technology => {
       this.scene.events.emit(UserEvents.SELECT_PRODUCTION, technology)
     })
@@ -58,6 +61,7 @@ class SectorControl extends Phaser.GameObjects.Container
         this.blueprintView.display(sector)
         this.miningView.display(sector)
         this.researchView.display(sector)
+        this.repairView.display(sector)
         this.offenseView.display(sector)
         this.productionView.display(sector)
       }
@@ -67,6 +71,7 @@ class SectorControl extends Phaser.GameObjects.Container
       if (this.activeSector === sector.id)
       {
         this.root.display(sector)
+        this.repairView.display(sector)
         this.offenseView.display(sector)
       }
     })
@@ -75,6 +80,7 @@ class SectorControl extends Phaser.GameObjects.Container
       if (this.activeSector === sector.id)
       {
         this.root.display(sector)
+        this.repairView.display(sector)
         this.offenseView.display(sector)
       }
     })
@@ -87,6 +93,7 @@ class SectorControl extends Phaser.GameObjects.Container
 
         // only required in this Sandbox sector control view
         this.blueprintView.display(sector)
+        this.repairView.display(sector)
         this.offenseView.display(sector)
         this.productionView.display(sector)
       }
@@ -232,6 +239,9 @@ export default class Sandbox extends Phaser.Scene
     })
 
     // Alerts
+    this.events.on(GameEvents.ADVANCED_TECH_LEVEL, sector => {
+      console.log(`Sector ${sector.id} has advanced a technology level ${sector.epoch}`)
+    })
     this.events.on(GameEvents.RESOURCE_DEPLETED, (sector, resource) => {
       // TODO Check the sector owner is the current player team
       console.log(`Resource ${resource.name} has depleted in sector ${sector.id}`)

@@ -55,17 +55,16 @@ export default class Mining extends Phaser.GameObjects.Container
     if (sector.buildings.mine !== false)
     {
       // mine_header
-      this.header
+      this.header.setFrame('advanced_mine_header')
     }
-    else if (sector.epoch > 2)
+    else if (sector.epoch >= 2)
     {
       // dig_header
-      this.header
+      this.header.setFrame('mine_header')
     }
     else
     {
       // gather_header
-      this.header
     }
 
     // Assumes the resources are ordered by when they become available
@@ -98,55 +97,10 @@ export default class Mining extends Phaser.GameObjects.Container
         const icon = resource.type === 'pit' ? 'pit_resource_icon' : 'mined_resource_icon'
         row.left.setVisible(true).setFrame(`resource_${resource.id}`)
         row.multiply.setVisible(true)
-        row.center.setVisible(true).setIcon('').setValue(resource.allocated)
+        row.center.setVisible(true).setIcon(`population_epoch_${sector.epoch}`).setValue(resource.allocated)
         row.equal.setVisible(true)
         row.right.setVisible(true).setIcon(icon).setValue(resource.owned)
       }
     })
-  }
-
-  displayResource(y, resource, i)
-  {
-    const row = this.rows_basic[i]
-    if (resource.depleted)
-    {
-      row.left.setVisible(false)
-      row.multiply.setVisible(false)
-      row.center.setVisible(false)
-      row.equal.setVisible(false)
-      row.right.setIcon(`resource_${resource.id}`).setValue(resource.owned)
-    }
-    else if (resource.type === 'surface')
-    {
-        
-    }
-    else
-    {
-      const icon = resource.type === 'pit' ? 'pit_resource_icon' : 'mined_resource_icon'
-
-      
-    }
-
-    // if (resource.depleted)
-    // {
-    //   this.add(new ValueControl(this.scene, 22, y, `resource_${resource.id}`, resource.mined))
-    // }
-    // else if (resource.type === 'surface')
-    // {
-    //     // Surface resources are gathers passively and miners cannot be allocated
-    //     this.rows.add(new Phaser.GameObjects.Image(this.scene, -2, y, 'mlm_icons', 'mine_hand_icon'))
-    //     this.rows.add(new Phaser.GameObjects.Image(this.scene, 10, y - 1, 'mlm_icons', 'equal_icon'))
-    //     this.rows.add(new Task(this.scene, 22, y, `resource_${resource.id}`))
-    // }
-    // else
-    // {
-    //   const icon = resource.type === 'pit' ? 'pit_resource_icon' : 'mined_resource_icon'
-
-    //   this.rows.add(new Phaser.GameObjects.Image(this.scene, -28, y, 'mlm_icons', `resource_${resource.id}`))
-    //   this.rows.add(new Phaser.GameObjects.Image(this.scene, -16, y - 1, 'mlm_icons', 'multiply_icon'))
-    //   this.rows.add(new Task(this.scene, -2, y, 'mlm_icons', 'mine')) // resource.id
-    //   this.rows.add(new Phaser.GameObjects.Image(this.scene, 10, y - 1, 'mlm_icons', 'equal_icon'))
-    //   this.rows.add(new Task(this.scene, 22, y, icon))
-    // }
   }
 }

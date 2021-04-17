@@ -47,6 +47,8 @@ export default class ValueControl extends Phaser.GameObjects.Container
 
     // Does clicking the icon have a different effect to clicking the text
     this.isLink = false
+    // Don't allow click-hold and just emit one event for mouse down and up
+    this.isToggle = false
 
     this.icon = new Phaser.GameObjects.Image(this.scene, 0, -3, 'mlm_icons', icon)
     this.add(this.icon)
@@ -70,33 +72,8 @@ export default class ValueControl extends Phaser.GameObjects.Container
     this.reset()
 
     // Handle clicking on the icon
-    this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, (pointer, localX, localY, event) => {
-      // console.log("ValueControl click down cont")
-
-      if (this.isLink && localY < 16)
-      {
-        this.emit(UserEvents.VALUE_LINK_DOWN)
-      }
-      else
-      {
-        this.isPointerDown = true
-        this.pointerButton = pointer.buttons
-        this.pointerDownTime = this.scene.game.getTime()
-      }
-    })
-    this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, (pointer, localX, localY, event) => {
-      // console.log("ValueControl click up cont")
-
-      if (this.isLink && localY < 16)
-      {
-        this.emit(UserEvents.VALUE_LINK_UP)
-      }
-      else
-      {
-        this.isPointerDown = false
-        this.pointerUpTime = this.scene.game.getTime()
-      }
-    })
+    this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, this.onPointerDown, this)
+    this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, this.onPointerUp, this)
 
     this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, (pointer, localX, localY, event) => {
       // console.log("ValueControl container over")
@@ -132,6 +109,37 @@ export default class ValueControl extends Phaser.GameObjects.Container
     else
     {
       this.value.setText(val)
+    }
+  }
+
+  onPointerDown(pointer, localX, localY, event)
+  {
+    // console.log("ValueControl click down cont")
+
+    if (this.isLink && localY < 16)
+    {
+      this.emit(UserEvents.VALUE_LINK_DOWN)
+    }
+    else
+    {
+      this.isPointerDown = true
+      this.pointerButton = pointer.buttons
+      this.pointerDownTime = this.scene.game.getTime()
+    }
+  }
+
+  onPointerUp(pointer, localX, localY, event)
+  {
+    // console.log("ValueControl click up cont")
+
+    if (this.isLink && localY < 16)
+    {
+      this.emit(UserEvents.VALUE_LINK_UP)
+    }
+    else
+    {
+      this.isPointerDown = false
+      this.pointerUpTime = this.scene.game.getTime()
     }
   }
 

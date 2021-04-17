@@ -47,7 +47,7 @@ export default class Research extends Phaser.GameObjects.Container
     this.activeTask.setVisible(false)
 
     this.technologies = new CategorizedTechnologies(this.scene, 0, 45, {
-      iconStyle: undefined,
+      iconClass: 'researchIcon',
       filter: (sector, technology) => {
         return (technology.researched === false && sector.hasResourcesFor(technology))
       }
@@ -67,9 +67,10 @@ export default class Research extends Phaser.GameObjects.Container
     if (task)
     {
       // Set researching icon
-      this.activeTaskIcon.setFrame(task.name)
+      this.activeTaskIcon.setFrame(task.icon)
 
       this.activeTaskPopulation.setValue(task.allocated)
+      this.activeTaskPopulation.setIcon(`population_epoch_${sector.epoch}`)
 
       // Set researching time
       this.activeTaskClock.setDuration(task.remainingDuration)

@@ -81,6 +81,7 @@ export default class Root extends Phaser.GameObjects.Container
 
     this.sectorLabel.display(sector)
 
+    this.population.setIcon(`population_epoch_${sector.epoch}`)
     this.population.setValue(sector.availablePopulation)
 
     let blueprintsAvailable = false

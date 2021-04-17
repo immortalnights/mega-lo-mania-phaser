@@ -44,6 +44,8 @@ class Sector
     this.id = index,
     this.key = key
     this.epoch = 1
+    this.maxEpoch = 1
+    this.technologyLevel = 0
     this.startPopulation = 0
     this.availablePopulation = 0
     this.spawnedPopulation = 0
@@ -74,7 +76,8 @@ class Sector
    */
   setup(epoch, resources = [])
   {
-    this.epoch = 1
+    this.epoch = epoch
+    this.maxEpoch = epoch + 3
 
     Resources.forEach(res => {
       if (resources.includes(res.id))
@@ -158,6 +161,12 @@ class Sector
 
     this.startPopulation = population
     this.availablePopulation = population
+
+    // TESTING
+    if (this.technologies['rock'])
+    {
+      this.technologies['rock'].researched = true
+    }
   }
 
   tick(tickDelta, tickCount)
@@ -210,6 +219,7 @@ class Sector
           {
             case 'mine':
             {
+              resource.locked = (this.buildings.mine === false)
               if (resource.locked === false && resource.allocated < 0)
               {
                 resourcesChanged = true
@@ -218,6 +228,7 @@ class Sector
             }
             case 'pit':
             {
+              resource.locked = (this.epoch === 1)
               if (resource.locked === false && resource.allocated < 0)
               {
                 resourcesChanged = true
@@ -262,8 +273,17 @@ class Sector
 
           if (this.research.remainingDuration < 0)
           {
+            const tech = this.technologies[this.research.id]
+
             // Mark the technology as completed
-            this.technologies[this.research.id].researched = true
+            tech.researched = true
+
+            this.technologyLevel = this.technologyLevel + tech.technologyLevel
+            if (Math.floor(this.technologyLevel / 3) >= this.epoch && this.epoch < this.maxEpoch)
+            {
+              this.epoch = this.epoch + 1
+              this.scene.events.emit(GameEvents.ADVANCED_TECH_LEVEL, this)
+            }
 
             // Sector alert (map / audio)
             this.scene.events.emit(GameEvents.RESEARCH_COMPLETED, this)
@@ -587,6 +607,8 @@ class Sector
         this.research = {
           id: tech.id,
           name: tech.name,
+          // FIXME - remove "OR" later
+          icon: tech.researchIcon || tech.id,
           allocated: 0,
           started: 0,
           // Base duration

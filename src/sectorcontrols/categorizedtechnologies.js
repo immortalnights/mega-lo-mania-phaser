@@ -8,6 +8,8 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
     super(scene, x, y)
 
     this.technologyPredicate = config.filter
+    // TODO remove
+    this.iconClass = config.iconClass
 
     // Categories
     this.add(this.scene.add.image(-25, 0, 'mlm_icons', 'category_repair'))
@@ -70,7 +72,7 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
         {
           icon.name = key
           icon.technology = val
-          icon.setFrame(key)
+          icon.setFrame(val[this.iconClass])
           icon.setVisible(true)
         }
       }
