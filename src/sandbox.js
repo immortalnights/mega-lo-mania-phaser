@@ -1,14 +1,15 @@
 import Phaser from 'phaser'
 import Store from './store'
 import Root from './sectorcontrols/root'
+import Blueprints from './sectorcontrols/blueprints'
+import Repair from './sectorcontrols/repair'
+import Defense from './sectorcontrols/defense'
+import Offense from './sectorcontrols/offense'
 import Research from './sectorcontrols/research'
 import Production from './sectorcontrols/production'
 import Mining from './sectorcontrols/mining'
-import Offense from './sectorcontrols/offense'
-import Blueprints from './sectorcontrols/blueprints'
 import { GameEvents, Teams, UserEvents } from "./defines"
 import SectorControls from './sectorcontrols'
-import Repair from './sectorcontrols/repair'
 
 
 class SectorControl extends Phaser.GameObjects.Container
@@ -38,6 +39,9 @@ class SectorControl extends Phaser.GameObjects.Container
 
     this.repairView = new Repair(scene, 120, -120)
     this.add(this.repairView)
+
+    this.defenseView = new Defense(scene, 120, -40)
+    // this.add(this.offenseView)
 
     this.offenseView = new Offense(scene, 120, -40)
     this.add(this.offenseView)
@@ -139,9 +143,12 @@ class SectorControl extends Phaser.GameObjects.Container
     this.activeSector = sector.id
     this.root.display(sector)
     this.blueprintView.display(sector)
+    this.repairView.display(sector)
+    this.defenseView.display(sector)
+    this.offenseView.display(sector)
     this.researchView.display(sector)
-    this.miningView.display(sector)
     this.productionView.display(sector)
+    this.miningView.display(sector)
   }
 }
 
@@ -182,12 +189,12 @@ export default class Sandbox extends Phaser.Scene
     this.store.addSector(2, '', 1)
 
     this.store.sectors[0].setup(1, ["rock", "slate", "solarium", "herbirite"])
-    this.store.sectors[1].setup(1, [])
+    this.store.sectors[1].setup(7, ["parasite", "aquarium", "onion", "tedium"])
     this.store.sectors[2].setup(3, [])
 
     // Claims
     this.store.sectors[0].claim(Teams.GREEN, 90)
-    this.store.sectors[1].claim(Teams.RED, 10)
+    this.store.sectors[1].claim(Teams.RED, 20)
     this.store.sectors[2].claim(Teams.BLUE, 10)
 
     const sectorControl = new SectorControl(this, width / 2, height / 2)

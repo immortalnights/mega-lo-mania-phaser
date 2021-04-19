@@ -57,6 +57,48 @@ export default class Root extends Phaser.GameObjects.Container
     })
     this.miningArrow = new Phaser.GameObjects.Image(this.scene, 0, 22, 'mlm_icons', 'arrow_down')
 
+    let icon = null
+
+    this.resources = []
+    icon = new ValueControl(this.scene, 32, 0, 'resource_rock', 0)
+    icon.name = 'resource_1'
+    this.resources.push(icon)
+    icon = new ValueControl(this.scene, 32, 36, 'resource_rock', 0)
+    icon.name = 'resource_2'
+    this.resources.push(icon)
+    icon = new ValueControl(this.scene, 0, 36, 'resource_rock', 0)
+    icon.name = 'resource_3'
+    this.resources.push(icon)
+    icon = new ValueControl(this.scene, -30, 36, 'resource_rock', 0)
+    icon.name = 'resource_4'
+    this.resources.push(icon)
+
+    this.resources.forEach(icon => {
+      // icon.setVisible(false)
+      // icon.isLink(true)
+      // icon.on(UserEvents.VALUE_LINK_UP, () => {
+
+      // })
+
+      this.add(icon)
+    })
+
+    this.buildings = []
+    icon = new ValueControl(this.scene, -30, 30, 'construct_laboratory', 0)
+    icon.name = 'construct_laboratory'
+    this.buildings.push(icon)
+    icon = new ValueControl(this.scene, 32, 0, 'construct_factory', 0)
+    icon.name = 'construct_factory'
+    this.buildings.push(icon)
+    icon = new ValueControl(this.scene, 0, 36, 'construct_mine', 0)
+    icon.name = 'construct_mine'
+    this.buildings.push(icon)
+
+    this.buildings.forEach(icon => {
+      icon.setVisible(false)
+      this.add(icon)
+    })
+
     this.add([
       this.blueprintNav,
       this.repairNav,
@@ -165,6 +207,22 @@ export default class Root extends Phaser.GameObjects.Container
         this.productionNavTask.setData('population', null)
       }
     }
+
+    // update resources
+    // let surfaceIndex
+    // let resourceIndex
+    // sector.resources.forEach(r => {
+    //   if (r.available)
+    //   {
+    //     if (r.type === 'surface')
+    //     {
+
+    //     }
+    //   }
+    // })
+
+
+    // update buildings
 
     this.population.setData('population', sector.availablePopulation)
   }

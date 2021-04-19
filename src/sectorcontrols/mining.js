@@ -26,25 +26,32 @@ export default class Mining extends Phaser.GameObjects.Container
       const right = new ValueControl(this.scene, 22, yOffset, '')
 
       return {
-        left,
-        multiply,
-        center,
-        equal,
-        right
+        items: {
+          left,
+          multiply,
+          center,
+          equal,
+          right,
+        },
+
+        // Show / Hide all the row items
+        setVisible(b)
+        {
+          const gameObjects = Object.values(this.items)
+          gameObjects.forEach(o => o.setVisible(false))
+        }
       }
     }
 
-    this.rows = []
+    this.resources = []
     for (let index = 0; index < 4; index++)
     {
       const row = createRow(18 + (26 * index))
 
-      const gameObjects = Object.values(row)
-      // Hide all the row items
-      gameObjects.forEach(o => o.setVisible(false))
+      row.setVisible(false)
       // Add to this container
-      this.add(gameObjects)
-      this.rows.push(row)
+      this.add(Object.values(row.items))
+      this.resources.push(row)
     }
   }
 
@@ -65,42 +72,47 @@ export default class Mining extends Phaser.GameObjects.Container
     else
     {
       // gather_header
+      this.header.setFrame('gather_header')
     }
 
+    Object.values(this.resources).forEach(g => g.setVisible(false))
+
     // Assumes the resources are ordered by when they become available
-    sector.resources.forEach((resource, index) => {
-      const row = this.rows[index]
+    let displayIndex = 0
+    sector.resources.forEach(resource => {
+      const items = this.resources[displayIndex].items
 
       if (resource.locked === true)
       {
         // Skip, already hidden
-        // Object.values(this.rows_basic[index]).forEach(i => i.setVisible(false))
       }
       else if (resource.depleted)
       {
-        row.left.setVisible(false)
-        row.multiply.setVisible(false)
-        row.center.setVisible(false)
-        row.equal.setVisible(false)
-        row.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.owned)
+        items.left.setVisible(false)
+        items.multiply.setVisible(false)
+        items.center.setVisible(false)
+        items.equal.setVisible(false)
+        items.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.owned)
       }
       else if (resource.type === 'surface')
       {
-        row.left.setVisible(false)
-        row.multiply.setVisible(false)
-        row.center.setVisible(true).setIcon('mine_hand_icon').setValue(null)
-        row.equal.setVisible(true)
-        row.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.owned)
+        items.left.setVisible(false)
+        items.multiply.setVisible(false)
+        items.center.setVisible(true).setIcon('mine_hand_icon').setValue(null)
+        items.equal.setVisible(true)
+        items.right.setVisible(true).setIcon(`resource_${resource.id}`).setValue(resource.owned)
       }
       else
       {
         const icon = resource.type === 'pit' ? 'pit_resource_icon' : 'mined_resource_icon'
-        row.left.setVisible(true).setFrame(`resource_${resource.id}`)
-        row.multiply.setVisible(true)
-        row.center.setVisible(true).setIcon(`population_epoch_${sector.epoch}`).setValue(resource.allocated)
-        row.equal.setVisible(true)
-        row.right.setVisible(true).setIcon(icon).setValue(resource.owned)
+        items.left.setVisible(true).setFrame(`resource_${resource.id}`)
+        items.multiply.setVisible(true)
+        items.center.setVisible(true).setIcon(`population_epoch_${sector.epoch}`).setValue(resource.allocated)
+        items.equal.setVisible(true)
+        items.right.setVisible(true).setIcon(icon).setValue(resource.owned)
       }
+
+      displayIndex++
     })
   }
 }

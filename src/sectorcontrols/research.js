@@ -15,9 +15,10 @@ export default class Research extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
-    this.add(new Header(this.scene, 0, 0, config.header, () => {
+    this.header = new Header(this.scene, 0, 0, config.header, () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'root')
-    }))
+    })
+    this.add(this.header)
 
     this.inactiveLabel = new Phaser.GameObjects.Text(this.scene, 0, 23, '-')
 
@@ -62,6 +63,16 @@ export default class Research extends Phaser.GameObjects.Container
   {
     this.setVisible(true)
 
+    // or through constructor?
+    // if (sector.buildings.laboratory !== false)
+    // {
+    //   this.header.setFrame('advanced_research_header')
+    // }
+    // else
+    // {
+    //   this.header.setFrame('research_header')
+    // }
+
     const task = sector['research']
 
     if (task)
@@ -69,8 +80,8 @@ export default class Research extends Phaser.GameObjects.Container
       // Set researching icon
       this.activeTaskIcon.setFrame(task.icon)
 
-      this.activeTaskPopulation.setValue(task.allocated)
       this.activeTaskPopulation.setIcon(`population_epoch_${sector.epoch}`)
+      this.activeTaskPopulation.setValue(task.allocated)
 
       // Set researching time
       this.activeTaskClock.setDuration(task.remainingDuration)
@@ -80,6 +91,7 @@ export default class Research extends Phaser.GameObjects.Container
     }
     else
     {
+      this.activeTaskPopulation.setIcon(`population_epoch_${sector.epoch}`)
       this.activeTaskPopulation.setValue(undefined)
       this.activeTask.setVisible(false)
     }

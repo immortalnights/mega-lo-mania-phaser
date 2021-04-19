@@ -116,7 +116,7 @@ class Sector
       if (technology.technologyLevel >= epoch && technology.technologyLevel < epoch + 4)
       {
         // find a matching recipe, perfect if possible
-        let bestRecipe
+        let bestRecipe = null
         // Required until all technologies have recipes.
         if (technology.recipes)
         {
@@ -389,7 +389,12 @@ class Sector
   hasResourcesFor(technology)
   {
     let available = false
-    if (technology.recipe)
+    if (technology.recipe === null)
+    {
+      // FIXME - temp while recipes are missing
+      available = true
+    }
+    else if (technology != null)
     {
       available = Object.entries(technology.recipe.resources).every(([ key, quantity ]) => {
         const resource = this.resources.find(r => r.id === key)

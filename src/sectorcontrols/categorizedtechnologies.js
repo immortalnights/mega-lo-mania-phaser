@@ -22,18 +22,18 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
     }
 
     this.technologies = new Phaser.GameObjects.Group(this.scene)
-    this.technologies.add(new Button(scene, -25, 18, '', onClickTechnology))
+    this.technologies.add(new Button(scene, -25, 17, '', onClickTechnology))
     this.technologies.add(new Button(scene, -25, 34, '', onClickTechnology))
-    this.technologies.add(new Button(scene, -25, 50, '', onClickTechnology))
-    this.technologies.add(new Button(scene, -25, 66, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 18, '', onClickTechnology))
+    this.technologies.add(new Button(scene, -25, 52, '', onClickTechnology))
+    this.technologies.add(new Button(scene, -25, 70, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 17, '', onClickTechnology))
     this.technologies.add(new Button(scene, 0, 34, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 50, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 0, 66, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 25, 18, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 52, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 0, 70, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 25, 17, '', onClickTechnology))
     this.technologies.add(new Button(scene, 25, 34, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 25, 50, '', onClickTechnology))
-    this.technologies.add(new Button(scene, 25, 66, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 25, 52, '', onClickTechnology))
+    this.technologies.add(new Button(scene, 25, 70, '', onClickTechnology))
     this.add(this.technologies.getChildren())
 
     // Hide all technology icons
