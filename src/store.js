@@ -59,7 +59,7 @@ class Sector
     }
     this.technologies = {}
     this.research = null
-    this.construction = null
+    this.construction = []
     this.production = null
     this.pendingArmy = []
     this.armies = []
@@ -159,6 +159,8 @@ class Sector
       defenders: []
     }
 
+    this.setupConstructionProjects()
+
     this.startPopulation = population
     this.availablePopulation = population
 
@@ -189,25 +191,65 @@ class Sector
     else
     {
       // Apply population growth
-      // if (this.availablePopulation < 500)
-      // {
-      //   let currentTimeUntilNextSpawn = (180 / this.availablePopulation)
-      //   this.timeSinceLastSpawn += tickDelta / 1000
-  
-      //   while (this.timeSinceLastSpawn > currentTimeUntilNextSpawn)
-      //   {
-      //     this.spawnedPopulation = this.spawnedPopulation + 1
-      //     this.availablePopulation = this.availablePopulation + 1
-      //     this.timeSinceLastSpawn -= currentTimeUntilNextSpawn
-  
-      //     currentTimeUntilNextSpawn = (180 / this.availablePopulation)
-      //   }
+      if (false)
+      {
+        if (this.availablePopulation < 500)
+        {
+          let currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+          this.timeSinceLastSpawn += tickDelta / 1000
+    
+          while (this.timeSinceLastSpawn > currentTimeUntilNextSpawn)
+          {
+            this.spawnedPopulation = this.spawnedPopulation + 1
+            this.availablePopulation = this.availablePopulation + 1
+            this.timeSinceLastSpawn -= currentTimeUntilNextSpawn
+    
+            currentTimeUntilNextSpawn = (180 / this.availablePopulation)
+          }
 
-      //   // Cap population to 500.
-      //   this.availablePopulation = Math.min(this.availablePopulation, 500)
-      // }
+          // Cap population to 500.
+          this.availablePopulation = Math.min(this.availablePopulation, 500)
+        }
+      }
 
-      // Handle buildings (since the sector may not be claimed)
+      // Handle buildings (what about the castle building if the sector is not claimed?)
+      // backwards, so completed buildings can be removed from the array
+      for (let index = this.construction.length - 1; index >= 0; index--)
+      {
+        const construction = this.construction[index]
+
+        if (construction.allocated > 0)
+        {
+          construction.progress += 1
+          construction.remainingDuration = construction.duration - construction.progress
+
+          if (construction.remainingDuration < 0)
+          {
+            this.availablePopulation = this.availablePopulation + construction.allocated
+
+            switch (construction.id)
+            {
+              case 'mine':
+              {
+                this.buildings.mine = {
+                  defenders: []
+                }
+                break
+              }
+              default:
+              {
+                console.warn(`Construction of the ${construction.id} is not yet implemented`)
+                break
+              }
+            }
+
+            this.scene.events.emit(GameEvents.BUILDING_CONSTRUCTED, this, construction.id)
+
+            // Remove the construction project
+            this.construction.splice(index, 1)
+          }
+        }
+      }
 
       // Handle mining / resources
       // Event triggered after production to avoid multiple events
@@ -282,6 +324,7 @@ class Sector
             if (Math.floor(this.technologyLevel / 3) >= this.epoch && this.epoch < this.maxEpoch)
             {
               this.epoch = this.epoch + 1
+              this.onAdvancedTechnologyLevel()
               this.scene.events.emit(GameEvents.ADVANCED_TECH_LEVEL, this)
             }
 
@@ -367,6 +410,36 @@ class Sector
       // The population of a sector always changes
       // though may change by < 1
       this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
+    }
+  }
+
+  onAdvancedTechnologyLevel()
+  {
+    // unlock available resources
+    // add construction projects
+
+  }
+
+  setupConstructionProjects()
+  {
+    this.construction = []
+
+    if (this.epoch >= 4 && this.buildings.mine === false)
+    {
+      this.construction.push({
+        id: 'mine',
+        icon: '?',
+        allocated: 0,
+        started: 0,
+        // Base duration
+        baseDuration: 480,
+        // duration based on allocated population
+        duration: 0,
+        // research progress
+        progress: 0,
+        // Remaining duration (base duration - progress)
+        remainingDuration: Infinity,
+      })
     }
   }
 
@@ -514,18 +587,20 @@ class Sector
       {
         if (this.production)
         {
-          if (population < 0)
-          {
-            change = Math.min(this.production.allocated, Math.abs(population))
-            this.production.allocated = this.production.allocated - change
-            this.availablePopulation = this.availablePopulation + change
-          }
-          else
-          {
-            change = Math.min(this.availablePopulation - 1, population)
-            this.availablePopulation = this.availablePopulation - change
-            this.production.allocated = this.production.allocated + change
-          }
+          /// copy research
+          console.log("FIXME")
+          // if (population < 0)
+          // {
+          //   change = Math.min(this.production.allocated, Math.abs(population))
+          //   this.production.allocated = this.production.allocated - change
+          //   this.availablePopulation = this.availablePopulation + change
+          // }
+          // else
+          // {
+          //   change = Math.min(this.availablePopulation - 1, population)
+          //   this.availablePopulation = this.availablePopulation - change
+          //   this.production.allocated = this.production.allocated + change
+          // }
 
           this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
         }
@@ -543,7 +618,7 @@ class Sector
       }
       case 'building':
       {
-        const construction = this.building.find(item => item.name === detail)
+        const construction = this.construction.find(item => item.id === detail)
         if (construction == null)
         {
           console.warn(`Failed to find construction of ${detail}`)
@@ -552,18 +627,29 @@ class Sector
         {
           if (population < 0)
           {
-            change = Math.min(construction.builders, Math.abs(population))
-            construction.builders = construction.builders - change
+            change = Math.min(construction.allocated, Math.abs(population))
+            construction.allocated = construction.allocated - change
             this.availablePopulation = this.availablePopulation + change
           }
           else
           {
-            change = Math.min(this.availablePopulation, population)
+            change = Math.min(this.availablePopulation - 1, population)
             this.availablePopulation = this.availablePopulation - change
-            construction.builders = construction.builders + change
+            construction.allocated = construction.allocated + change
           }
 
-          this.scene.events.emit(GameEvents.CONSTRUCTION_CHANGED, this)
+          if (construction.allocated > 0)
+          {
+            construction.duration = Math.ceil(construction.baseDuration / construction.allocated)
+            construction.remainingDuration = construction.duration - construction.progress
+          }
+          else
+          {
+            construction.duration = construction.baseDuration
+            construction.remainingDuration = Infinity
+          }
+
+          this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
         }
         break
       }
@@ -905,6 +991,13 @@ export default class Store extends Phaser.Events.EventEmitter
   {
     const sector = this.sectors[index]
     sector.modifyPopulation('research', undefined, value)
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+  }
+
+  changeBuilders(index, value, building)
+  {
+    const sector = this.sectors[index]
+    sector.modifyPopulation('building', building, value)
     this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 

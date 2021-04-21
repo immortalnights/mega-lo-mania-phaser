@@ -364,6 +364,14 @@
       "frame": { "x": 272, "y": 87, "w": 14, "h": 21 }
     },
     {
+      "filename": "arrow_up_left_green",
+      "frame": { "x": 224, "y": 87, "w": 15, "h": 22 }
+    },
+    {
+      "filename": "arrow_up_left_green_1",
+      "frame": { "x": 304, "y": 16, "w": 16, "h": 30 }
+    },
+    {
       "filename": "multiply_icon",
       "frame": { "x": 112, "y": 97, "w": 7, "h": 7 }
     },
@@ -450,8 +458,7 @@
     },
     {
       "filename": "resource_valium",
-      "frame": { "x": 144, "y": 141, "w": 16, "h": 16 },
-      "hint": "little jar?"
+      "frame": { "x": 144, "y": 141, "w": 16, "h": 16 }
     },
     {
       "filename": "resource_parasite",

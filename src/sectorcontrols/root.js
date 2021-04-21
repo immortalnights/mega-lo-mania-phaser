@@ -58,46 +58,72 @@ export default class Root extends Phaser.GameObjects.Container
     this.miningArrow = new Phaser.GameObjects.Image(this.scene, 0, 22, 'mlm_icons', 'arrow_down')
 
     let icon = null
+    let arrow = null
+    let gatherArrow = null
 
     this.resources = []
-    icon = new ValueControl(this.scene, 32, 0, 'resource_rock', 0)
-    icon.name = 'resource_1'
-    this.resources.push(icon)
-    icon = new ValueControl(this.scene, 32, 36, 'resource_rock', 0)
-    icon.name = 'resource_2'
-    this.resources.push(icon)
-    icon = new ValueControl(this.scene, 0, 36, 'resource_rock', 0)
-    icon.name = 'resource_3'
-    this.resources.push(icon)
-    icon = new ValueControl(this.scene, -30, 36, 'resource_rock', 0)
-    icon.name = 'resource_4'
-    this.resources.push(icon)
 
-    this.resources.forEach(icon => {
-      // icon.setVisible(false)
+    icon = new ValueControl(this.scene, 32, 36, 'resource_rock', 0)
+    icon.name = 'resource_1'
+    arrow = new Phaser.GameObjects.Image(this.scene, 22, 22, 'mlm_icons', 'arrow_right')
+    gatherArrow = new Phaser.GameObjects.Image(this.scene, 22, 22, 'mlm_icons', 'arrow_up_left_green')
+    this.resources.push({ icon, arrow, gatherArrow })
+
+    icon = new ValueControl(this.scene, 32, 72, 'resource_rock', 0)
+    icon.name = 'resource_2'
+    arrow = new Phaser.GameObjects.Image(this.scene, 22, 32, 'mlm_icons', 'arrow_down_right')
+    gatherArrow = new Phaser.GameObjects.Image(this.scene, 22, 32, 'mlm_icons', 'arrow_up_left_green_1')
+    this.resources.push({ icon, arrow, gatherArrow })
+
+    icon.name = 'resource_3'
+    icon = new ValueControl(this.scene, 0, 72, 'resource_rock', 0)
+    arrow = new Phaser.GameObjects.Image(this.scene, 0, 50, 'mlm_icons', 'arrow_down')
+    this.resources.push({ icon, arrow })
+
+    icon.name = 'resource_4'
+    icon = new ValueControl(this.scene, -30, 72, 'resource_rock', 0)
+    arrow = new Phaser.GameObjects.Image(this.scene, -16, 50, 'mlm_icons', 'arrow_down_left_0')
+    this.resources.push({ icon, arrow })
+
+    this.resources.forEach(item => {
+      item.icon.setVisible(false)
       // icon.isLink(true)
       // icon.on(UserEvents.VALUE_LINK_UP, () => {
-
+        
       // })
+      item.arrow.setVisible(false)
 
-      this.add(icon)
+      this.add([ item.icon, item.arrow ])
+
+      if (item.gatherArrow)
+      {
+        this.add(item.gatherArrow)
+      }
     })
 
-    this.buildings = []
+    this.buildings = {}
     icon = new ValueControl(this.scene, -30, 30, 'construct_laboratory', 0)
-    icon.name = 'construct_laboratory'
-    this.buildings.push(icon)
+    arrow = new Phaser.GameObjects.Image(this.scene, 22, 22, 'mlm_icons', 'arrow_right')
+    this.buildings.laboratory = { icon, arrow }
+
     icon = new ValueControl(this.scene, 32, 0, 'construct_factory', 0)
     icon.name = 'construct_factory'
-    this.buildings.push(icon)
-    icon = new ValueControl(this.scene, 0, 36, 'construct_mine', 0)
-    icon.name = 'construct_mine'
-    this.buildings.push(icon)
+    arrow = new Phaser.GameObjects.Image(this.scene, 22, 22, 'mlm_icons', 'arrow_right')
+    this.buildings.factory = { icon, arrow }
 
-    this.buildings.forEach(icon => {
-      icon.setVisible(false)
-      this.add(icon)
+    icon = new ValueControl(this.scene, -30, 66, 'construct_mine', 0)
+    icon.on(UserEvents.VALUE_CHANGE, inc => {
+      this.scene.events.emit(UserEvents.CHANGE_BUILDERS, inc, 'mine')
     })
+    arrow = new Phaser.GameObjects.Image(this.scene, -12, 48, 'mlm_icons', 'arrow_down_left_0')
+    this.buildings.mine = { icon, arrow }
+
+    for (const [ key, item ] of Object.entries(this.buildings))
+    {
+      item.icon.setVisible(false)
+      item.arrow.setVisible(false)
+      this.add([ item.icon, item.arrow ])
+    }
 
     this.add([
       this.blueprintNav,
@@ -135,6 +161,7 @@ export default class Root extends Phaser.GameObjects.Container
     let productionAvailable = false
     let hasResourcesForProduction = false
     let miningAvailable = false
+
     for (const [key, val] of Object.entries(sector.technologies))
     {
       // console.log(key, val.researched)
@@ -171,6 +198,14 @@ export default class Root extends Phaser.GameObjects.Container
         researchAvailable = true
       }
     }
+
+    // if (sector.epoch > 1 && sector.resources.some(res => {
+      // return res.available > 0
+    // }))
+    {
+      miningAvailable = true
+    }
+
 
     this.blueprintNav.setVisible(blueprintsAvailable)
     this.repairNav.setVisible(repairAvailable)
@@ -221,8 +256,25 @@ export default class Root extends Phaser.GameObjects.Container
     //   }
     // })
 
+    const constructionProjectsAvailable = sector.construction.map(item => item.id)
 
     // update buildings
+    for (const [ key, item ] of Object.entries(this.buildings))
+    {
+      const construction = sector.construction.find(item => item.id === key)
+
+      const available = !!construction
+      const allocated = construction ? construction.allocated : 0
+
+      item.icon.setVisible(available)
+      item.icon.setValue(allocated)
+      item.arrow.setVisible(available)
+
+      if (item.gatherArrow)
+      {
+        item.gatherArrow.setVisible(available)
+      }
+    }
 
     this.population.setData('population', sector.availablePopulation)
   }
