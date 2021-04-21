@@ -10,6 +10,7 @@ import Production from './sectorcontrols/production'
 import Mining from './sectorcontrols/mining'
 import { GameEvents, Teams, UserEvents } from "./defines"
 import SectorControls from './sectorcontrols'
+import Construction from './sectorcontrols/construction'
 
 
 class SectorControl extends Phaser.GameObjects.Container
@@ -55,6 +56,9 @@ class SectorControl extends Phaser.GameObjects.Container
     this.miningView = new Mining(scene, 0, 30)
     this.add(this.miningView)
 
+    this.constructionView = new Construction(scene, 120, 30)
+    this.add(this.constructionView)
+
 
     // Game events
     this.scene.events.on(GameEvents.RESOURCES_CHANGED, sector => {
@@ -76,7 +80,12 @@ class SectorControl extends Phaser.GameObjects.Container
       {
         this.root.display(sector)
         this.repairView.display(sector)
+        this.defenseView.display(sector)
         this.offenseView.display(sector)
+        this.researchView.display(sector)
+        this.productionView.display(sector)
+        this.miningView.display(sector)
+        this.constructionView.display(sector)
       }
     })
 
@@ -98,8 +107,11 @@ class SectorControl extends Phaser.GameObjects.Container
         // only required in this Sandbox sector control view
         this.blueprintView.display(sector)
         this.repairView.display(sector)
+        this.defenseView.display(sector)
         this.offenseView.display(sector)
         this.productionView.display(sector)
+        this.miningView.display(sector)
+        this.constructionView.display(sector)
       }
     })
 
@@ -149,6 +161,7 @@ class SectorControl extends Phaser.GameObjects.Container
     this.researchView.display(sector)
     this.productionView.display(sector)
     this.miningView.display(sector)
+    this.constructionView.display(sector)
   }
 }
 
@@ -228,6 +241,9 @@ export default class Sandbox extends Phaser.Scene
       this.store.sectors[this.activeSector].beginProduction(technology)
     });
 
+    this.events.on(UserEvents.CHANGE_MINERS, (...args) => {
+      this.store.changeMiners(this.activeSector, ...args)
+    })
     this.events.on(UserEvents.CHANGE_RESEARCHERS, (...args) => {
       this.store.changeResearchers(this.activeSector, ...args)
     })

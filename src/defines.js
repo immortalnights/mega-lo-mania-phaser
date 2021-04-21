@@ -78,6 +78,7 @@ export const UserEvents = {
   BUILDING_SELECT_DEFENDER_POSITION: 'user:sector:building:defender_position:select',
   REQUEST_ALLIANCE: 'user:request:alliance',
   BREAK_ALLIANCES: 'user:break:alliances',
+  CHANGE_MINERS: 'user:change_miners',
   CHANGE_RESEARCHERS: 'user:change_researchers',
   CHANGE_BUILDERS: 'user:change_builders',
   ALLOCATE_POPULATION: 'user:allocate_population',

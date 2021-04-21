@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import Header from './header'
 import Task from '../task'
 import ValueControl from './valuecontrol'
+import { UserEvents } from '../defines'
 
 
 export default class Mining extends Phaser.GameObjects.Container
@@ -20,10 +21,14 @@ export default class Mining extends Phaser.GameObjects.Container
 
     const createRow = yOffset => {
       const left = new Phaser.GameObjects.Image(this.scene, -28, yOffset, 'mlm_icons', ``)
-      const multiply = new Phaser.GameObjects.Image(this.scene, -16, yOffset - 1, 'mlm_icons', 'multiply_icon')
+      const multiply = new Phaser.GameObjects.Image(this.scene, -15, yOffset - 1, 'mlm_icons', 'multiply_icon')
       const center = new ValueControl(this.scene, -2, yOffset, 'mlm_icons', '')
       const equal = new Phaser.GameObjects.Image(this.scene, 10, yOffset - 1, 'mlm_icons', 'equal_icon')
       const right = new ValueControl(this.scene, 22, yOffset, '')
+
+      center.on(UserEvents.VALUE_CHANGE, inc => {
+        this.scene.events.emit(UserEvents.CHANGE_MINERS, inc, center.name)
+      })
 
       return {
         items: {
@@ -107,7 +112,7 @@ export default class Mining extends Phaser.GameObjects.Container
         const icon = resource.type === 'pit' ? 'pit_resource_icon' : 'mined_resource_icon'
         items.left.setVisible(true).setFrame(`resource_${resource.id}`)
         items.multiply.setVisible(true)
-        items.center.setVisible(true).setIcon(`population_epoch_${sector.epoch}`).setValue(resource.allocated)
+        items.center.setVisible(true).setName(resource.id).setIcon(`population_epoch_${sector.epoch}`).setValue(resource.allocated)
         items.equal.setVisible(true)
         items.right.setVisible(true).setIcon(icon).setValue(resource.owned)
       }

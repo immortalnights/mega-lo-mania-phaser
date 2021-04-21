@@ -19,6 +19,12 @@ export default class Clock extends Phaser.GameObjects.Container
     })
   }
 
+  // for consistency with ValueControl
+  setValue(val)
+  {
+    this.setDuration(val)
+  }
+
   setDuration(val)
   {
     if (val == null)

@@ -106,7 +106,10 @@ class Sector
           available,
           owned,
           depleted: false,
-          allocated: 0, // miners
+          allocated: 0,
+          progress: 0,
+          baseDuration: 90,
+          remainingDuration: 0,
           locked,
         })
       }
@@ -223,7 +226,7 @@ class Sector
           construction.progress += 1
           construction.remainingDuration = construction.duration - construction.progress
 
-          if (construction.remainingDuration < 0)
+          if (construction.remainingDuration <= 0)
           {
             this.availablePopulation = this.availablePopulation + construction.allocated
 
@@ -262,18 +265,40 @@ class Sector
             case 'mine':
             {
               resource.locked = (this.buildings.mine === false)
-              if (resource.locked === false && resource.allocated < 0)
+              if (resource.locked === false && resource.allocated > 0)
               {
-                resourcesChanged = true
+                resource.progress += 1
+                resource.remainingDuration = resource.duration - resource.progress
+                if (resource.remainingDuration <= 0)
+                {
+                  resource.progress = 0
+
+                  // TODO handle mining more then one block at a time
+                  const mined = Math.min(resource.available, 0.5)
+                  resource.owned = resource.owned + 0.5
+                  resource.available = resource.available - 0.5
+                  resourcesChanged = true
+                }
               }
               break
             }
             case 'pit':
             {
               resource.locked = (this.epoch === 1)
-              if (resource.locked === false && resource.allocated < 0)
+              if (resource.locked === false && resource.allocated > 0)
               {
-                resourcesChanged = true
+                resource.progress += 1
+                resource.remainingDuration = resource.duration - resource.progress
+                if (resource.remainingDuration <= 0)
+                {
+                  resource.progress = 0
+
+                  // TODO handle mining more then one block at a time
+                  const mined = Math.min(resource.available, 0.5)
+                  resource.owned = resource.owned + 0.5
+                  resource.available = resource.available - 0.5
+                  resourcesChanged = true
+                }
               }
               break;
             }
@@ -298,6 +323,8 @@ class Sector
           if (resource.available <= 0)
           {
             resource.depleted = true
+            this.availablePopulation = this.availablePopulation + resource.allocated
+
             resourcesChanged = true
             this.scene.events.emit(GameEvents.RESOURCE_DEPLETED, this, resource)
           }
@@ -547,6 +574,9 @@ class Sector
   modifyPopulation(task, detail, population)
   {
     let change = 0
+
+    const availablePopulation = this.availablePopulation - 1
+
     switch (task)
     {
       case 'research':
@@ -563,7 +593,7 @@ class Sector
           }
           else
           {
-            change = Math.min(this.availablePopulation - 1, population)
+            change = Math.min(availablePopulation, population)
             this.availablePopulation = this.availablePopulation - change
             research.allocated = research.allocated + change
           }
@@ -597,7 +627,7 @@ class Sector
           // }
           // else
           // {
-          //   change = Math.min(this.availablePopulation - 1, population)
+          //   change = Math.min(availablePopulation - 1, population)
           //   this.availablePopulation = this.availablePopulation - change
           //   this.production.allocated = this.production.allocated + change
           // }
@@ -633,7 +663,7 @@ class Sector
           }
           else
           {
-            change = Math.min(this.availablePopulation - 1, population)
+            change = Math.min(availablePopulation - 1, population)
             this.availablePopulation = this.availablePopulation - change
             construction.allocated = construction.allocated + change
           }
@@ -655,7 +685,7 @@ class Sector
       }
       case 'mining':
       {
-        const resource = this.resources.find(item => item.name === detail)
+        const resource = this.resources.find(item => item.id === detail)
         if (resource == null)
         {
           console.warn(`Failed to find resource ${detail}`)
@@ -664,18 +694,29 @@ class Sector
         {
           if (population < 0)
           {
-            change = Math.min(resource.miners, Math.abs(population))
-            resource.miners = resource.miners - change
+            change = Math.min(resource.allocated, Math.abs(population))
+            resource.allocated = resource.allocated - change
             this.availablePopulation = this.availablePopulation + change
           }
           else
           {
-            change = Math.min(this.availablePopulation, population)
+            change = Math.min(availablePopulation, population)
             this.availablePopulation = this.availablePopulation - change
-            resource.miners = resource.miners + change
+            resource.allocated = resource.allocated + change
           }
 
-          this.scene.events.emit(GameEvents.MINING_CHANGED, this)
+          if (resource.allocated > 0)
+          {
+            resource.duration = Math.ceil(resource.baseDuration / resource.allocated)
+            resource.remainingDuration = resource.duration - resource.progress
+          }
+          else
+          {
+            resource.duration = resource.baseDuration
+            resource.remainingDuration = Infinity
+          }
+
+          this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
         }
         break
       }
@@ -985,6 +1026,13 @@ export default class Store extends Phaser.Events.EventEmitter
         allies: []
       })
     })
+  }
+
+  changeMiners(index, value, resource)
+  {
+    const sector = this.sectors[index]
+    sector.modifyPopulation('mining', resource, value)
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   changeResearchers(index, value)
