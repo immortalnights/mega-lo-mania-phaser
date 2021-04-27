@@ -239,6 +239,20 @@ class Sector
                 }
                 break
               }
+              case 'factory':
+              {
+                this.buildings.factory = {
+                  defenders: []
+                }
+                break
+              }
+              case 'laboratory':
+              {
+                this.buildings.laboratory = {
+                  defenders: []
+                }
+                break
+              }
               default:
               {
                 console.warn(`Construction of the ${construction.id} is not yet implemented`)
@@ -444,7 +458,7 @@ class Sector
   {
     // unlock available resources
     // add construction projects
-
+    this.setupConstructionProjects()
   }
 
   setupConstructionProjects()
@@ -455,6 +469,42 @@ class Sector
     {
       this.construction.push({
         id: 'mine',
+        icon: '?',
+        allocated: 0,
+        started: 0,
+        // Base duration
+        baseDuration: 480,
+        // duration based on allocated population
+        duration: 0,
+        // research progress
+        progress: 0,
+        // Remaining duration (base duration - progress)
+        remainingDuration: Infinity,
+      })
+    }
+
+    if (this.epoch >= 5 && this.buildings.factory === false)
+    {
+      this.construction.push({
+        id: 'factory',
+        icon: '?',
+        allocated: 0,
+        started: 0,
+        // Base duration
+        baseDuration: 480,
+        // duration based on allocated population
+        duration: 0,
+        // research progress
+        progress: 0,
+        // Remaining duration (base duration - progress)
+        remainingDuration: Infinity,
+      })
+    }
+
+    if (this.epoch >= 6 && this.buildings.laboratory === false)
+    {
+      this.construction.push({
+        id: 'laboratory',
         icon: '?',
         allocated: 0,
         started: 0,
@@ -663,7 +713,7 @@ class Sector
           }
           else
           {
-            change = Math.min(availablePopulation - 1, population)
+            change = Math.min(availablePopulation, population)
             this.availablePopulation = this.availablePopulation - change
             construction.allocated = construction.allocated + change
           }
@@ -739,8 +789,7 @@ class Sector
         this.research = {
           id: tech.id,
           name: tech.name,
-          // FIXME - remove "OR" later
-          icon: tech.researchIcon || tech.id,
+          icon: tech.researchIcon,
           allocated: 0,
           started: 0,
           // Base duration
@@ -782,14 +831,14 @@ class Sector
       // Allocate up to `assigned`
       for (let count = 0, done = false; count < assigned && done === false; count++)
       {
-        if (technology.productionRequired)
+        if (technology.requiredProduction)
         {
           /**
            * FIXME current there is `available` used as true / false to update the UI
            * and there is `produced` to indicate how many of the technology has been
            * made (factory not required)
            * but maybe `available` boolean is not required and confusing. The UI can use
-           * produced to show a number or if produced === 0 check productionRequired
+           * produced to show a number or if produced === 0 check requiredProduction
            * and display accordingly.
            */
 
@@ -871,7 +920,7 @@ class Sector
 
       for (let count = 0; count < quantity; count++)
       {
-        if (technology.productionRequired)
+        if (technology.requiredProduction)
         {
           technology.produced = technology.produced + 1
           this.availablePopulation = this.availablePopulation + technology.requiredPopulation
@@ -956,6 +1005,9 @@ class Sector
     if (tech)
     {
       this.production = {
+        id: tech.id,
+        name: tech.name,
+        icon: tech.productionIcon,
         allocated: 0,
         runs: 1,
         name: technology,

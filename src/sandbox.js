@@ -24,7 +24,7 @@ class SectorControl extends Phaser.GameObjects.Container
     const sceneZoom = this.scene.game.config.zoom
     this.setSize(165 / sceneZoom, 185 / sceneZoom)
 
-    this.root = new Root(scene, 0, -50)
+    this.root = new Root(scene, 0, -100)
     this.add(this.root)
 
     this.blueprintView = new Blueprints(scene, -120, 40)
@@ -42,22 +42,22 @@ class SectorControl extends Phaser.GameObjects.Container
     this.add(this.repairView)
 
     this.defenseView = new Defense(scene, 120, -40)
-    // this.add(this.offenseView)
+    // this.add(this.defenseView)
 
     this.offenseView = new Offense(scene, 120, -40)
     this.add(this.offenseView)
 
-    this.productionView = new Production(scene, 120, -40)
+    this.productionView = new Production(scene, 120, 30)
     this.productionView.on('technology:selected', technology => {
       this.scene.events.emit(UserEvents.SELECT_PRODUCTION, technology)
     })
-    // this.add(this.productionView)
+    this.add(this.productionView)
 
     this.miningView = new Mining(scene, 0, 30)
     this.add(this.miningView)
 
     this.constructionView = new Construction(scene, 120, 30)
-    this.add(this.constructionView)
+    // this.add(this.constructionView)
 
 
     // Game events

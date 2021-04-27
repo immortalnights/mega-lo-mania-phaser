@@ -50,7 +50,7 @@ export default class Research extends Phaser.GameObjects.Container
     this.technologies = new CategorizedTechnologies(this.scene, 0, 45, {
       iconClass: 'researchIcon',
       filter: (sector, technology) => {
-        return (technology.researched === false && sector.hasResourcesFor(technology))
+        return (technology.researched === false && sector.hasResourcesFor(technology) && (technology.requiresLaboratory === false || sector.buildings.laboratory !== false))
       }
     })
     this.technologies.on('technology:selected', technology => {
@@ -63,15 +63,14 @@ export default class Research extends Phaser.GameObjects.Container
   {
     this.setVisible(true)
 
-    // or through constructor?
-    // if (sector.buildings.laboratory !== false)
-    // {
-    //   this.header.setFrame('advanced_research_header')
-    // }
-    // else
-    // {
-    //   this.header.setFrame('research_header')
-    // }
+    if (sector.buildings.laboratory !== false)
+    {
+      this.header.setFrame('advanced_research_header')
+    }
+    else
+    {
+      this.header.setFrame('research_header')
+    }
 
     const task = sector['research']
 

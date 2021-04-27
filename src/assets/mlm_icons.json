@@ -155,7 +155,7 @@
       "frame": { "x": 0, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "advanced_research_icon",
+      "filename": "laboratory_icon",
       "frame": { "x": 16, "y": 32, "w": 16, "h": 16 }
     },
     {
@@ -195,19 +195,19 @@
       "frame": { "x": 160, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_advanced_1",
+      "filename": "production_repair_1",
       "frame": { "x": 176, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_advanced_2",
+      "filename": "production_repair_2",
       "frame": { "x": 192, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_advanced_3",
+      "filename": "production_repair_3",
       "frame": { "x": 208, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "repair_advanced_4",
+      "filename": "production_repair_4",
       "frame": { "x": 224, "y": 32, "w": 16, "h": 16 }
     },
     {
@@ -648,7 +648,93 @@
       "filename": "team_shield_blue_green_yellow",
       "frame": { "x": 224, "y": 189, "w": 11, "h": 14 }
     },
-    
+
+    {
+      "filename": "building_health_00",
+      "frame": { "x": 0, "y": 203, "w": 40, "h": 5 }
+    },
+    {
+      "filename": "building_health_01",
+      "frame": { "x": 48, "y": 203, "w": 38, "h": 5 }
+    },
+    {
+      "filename": "building_health_02",
+      "frame": { "x": 96, "y": 203, "w": 36, "h": 5 }
+    },
+    {
+      "filename": "building_health_03",
+      "frame": { "x": 144, "y": 203, "w": 34, "h": 5 }
+    },
+    {
+      "filename": "building_health_04",
+      "frame": { "x": 192, "y": 203, "w": 32, "h": 5 }
+    },
+    {
+      "filename": "building_health_05",
+      "frame": { "x": 0, "y": 208, "w": 30, "h": 5 }
+    },
+    {
+      "filename": "building_health_06",
+      "frame": { "x": 48, "y": 208, "w": 28, "h": 5 }
+    },
+    {
+      "filename": "building_health_07",
+      "frame": { "x": 96, "y": 208, "w": 26, "h": 5 }
+    },
+    {
+      "filename": "building_health_08",
+      "frame": { "x": 144, "y": 208, "w": 24, "h": 5 }
+    },
+    {
+      "filename": "building_health_09",
+      "frame": { "x": 192, "y": 208, "w": 22, "h": 5 }
+    },
+
+    {
+      "filename": "building_health_10",
+      "frame": { "x": 0, "y": 213, "w": 20, "h": 5 }
+    },
+    {
+      "filename": "building_health_11",
+      "frame": { "x": 48, "y": 213, "w": 18, "h": 5 }
+    },
+    {
+      "filename": "building_health_12",
+      "frame": { "x": 96, "y": 213, "w": 16, "h": 5 }
+    },
+    {
+      "filename": "building_health_13",
+      "frame": { "x": 144, "y": 213, "w": 14, "h": 5 }
+    },
+    {
+      "filename": "building_health_14",
+      "frame": { "x": 192, "y": 213, "w": 12, "h": 5 }
+    },
+    {
+      "filename": "building_health_15",
+      "frame": { "x": 0, "y": 218, "w": 10, "h": 5 }
+    },
+    {
+      "filename": "building_health_16",
+      "frame": { "x": 48, "y": 218, "w": 8, "h": 5 }
+    },
+    {
+      "filename": "building_health_17",
+      "frame": { "x": 96, "y": 218, "w": 6, "h": 5 }
+    },
+    {
+      "filename": "building_health_18",
+      "frame": { "x": 144, "y": 218, "w": 4, "h": 5 }
+    },
+    {
+      "filename": "building_health_19",
+      "frame": { "x": 192, "y": 218, "w": 2, "h": 5 }
+    },
+    {
+      "filename": "building_health_20",
+      "frame": { "x": 200, "y": 218, "w": 0, "h": 5 }
+    },
+
     {
       "filename": "game_speed_0",
       "frame": { "x": 274, "y": 204, "w": 16, "h": 18 }
@@ -757,43 +843,125 @@
     },
 
     {
-      "filename": "research_rock",
+      "filename": "offense_rock",
+      "frame": { "x": 0, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_sling",
+      "frame": { "x": 16, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_pike",
+      "frame": { "x": 32, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_longbow",
+      "frame": { "x": 48, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_catapult",
+      "frame": { "x": 64, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_cannon",
+      "frame": { "x": 80, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_biplane",
+      "frame": { "x": 96, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_jet",
+      "frame": { "x": 112, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_nuke",
+      "frame": { "x": 128, "y": 157, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "offense_flyingsaucer",
+      "frame": { "x": 144, "y": 157, "w": 16, "h": 16 }
+    },
+
+    {
+      "filename": "defense_stick",
+      "frame": { "x": 0, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_spear",
+      "frame": { "x": 16, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_bow",
+      "frame": { "x": 32, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_oil",
+      "frame": { "x": 48, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_crossbow",
+      "frame": { "x": 64, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_rifle",
+      "frame": { "x": 80, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_machinegun",
+      "frame": { "x": 96, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_rocketlauncher",
+      "frame": { "x": 112, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_antinuke",
+      "frame": { "x": 128, "y": 173, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "defense_laser",
+      "frame": { "x": 144, "y": 173, "w": 16, "h": 16 }
+    },
+
+    {
+      "filename": "rock",
       "frame": { "x": 0, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_sling",
+      "filename": "sling",
       "frame": { "x": 16, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_pike",
+      "filename": "pike",
       "frame": { "x": 32, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_longbow",
+      "filename": "longbow",
       "frame": { "x": 48, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_catapult",
+      "filename": "catapult",
       "frame": { "x": 64, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_cannon",
+      "filename": "cannon",
       "frame": { "x": 80, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_biplane",
+      "filename": "biplane",
       "frame": { "x": 96, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_jet",
+      "filename": "jet",
       "frame": { "x": 112, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_nuke",
+      "filename": "nuke",
       "frame": { "x": 128, "y": 237, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_flyingsaucer",
+      "filename": "flyingsaucer",
       "frame": { "x": 144, "y": 237, "w": 16, "h": 16 }
     },
     {
@@ -822,43 +990,43 @@
     },
 
     {
-      "filename": "research_stick",
+      "filename": "stick",
       "frame": { "x": 0, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_spear",
+      "filename": "spear",
       "frame": { "x": 16, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_bow",
+      "filename": "bow",
       "frame": { "x": 32, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_oil",
+      "filename": "oil",
       "frame": { "x": 48, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_crossbow",
+      "filename": "crossbow",
       "frame": { "x": 64, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_rifle",
+      "filename": "rifle",
       "frame": { "x": 80, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_machinegun",
+      "filename": "machinegun",
       "frame": { "x": 96, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_rocketlauncher",
+      "filename": "rocketlauncher",
       "frame": { "x": 112, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_antinuke",
+      "filename": "antinuke",
       "frame": { "x": 128, "y": 253, "w": 16, "h": 16 }
     },
     {
-      "filename": "research_laser",
+      "filename": "laser",
       "frame": { "x": 144, "y": 253, "w": 16, "h": 16 }
     },
     {

@@ -69,7 +69,7 @@ export default class Offense extends Phaser.GameObjects.Container
 
         icon.setData('technology', technology.id)
 
-        icon.setIcon(technology.primaryIcon)
+        icon.setIcon(`offense_${technology.id}`)
         icon.setValueFromTechnology(sector, technology)
         icon.setVisible(true)
 

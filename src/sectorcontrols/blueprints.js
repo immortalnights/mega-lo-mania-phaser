@@ -75,7 +75,7 @@ export default class Blueprints extends Phaser.GameObjects.Container
     }))
 
     this.technologies = new CategorizedTechnologies(this.scene, 0, 18, {
-      iconClass: 'primaryIcon',
+      iconClass: 'blueprintIcon',
       filter: (sector, technology) => {
         return (technology.researched === true)
       }

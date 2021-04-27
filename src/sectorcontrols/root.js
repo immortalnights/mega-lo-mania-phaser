@@ -34,7 +34,7 @@ export default class Root extends Phaser.GameObjects.Container
     this.offenseNav = new Button(this.scene, 32, -22, 'offense_icon', () => {
       this.parentContainer.emit('sectorcontrol:change_view', 'offense')
     })
-    this.offenseArrow = new Phaser.GameObjects.Image(this.scene, 18, -10, 'mlm_icons', 'arrow_up_right_0')
+    this.offenseArrow = new Phaser.GameObjects.Image(this.scene, 20, -14, 'mlm_icons', 'arrow_up_right_0')
 
     this.researchNavTask = new ValueControl(this.scene, -30, 0, 'research_icon', null)
     this.researchNavTask.setLink(true)
@@ -63,32 +63,32 @@ export default class Root extends Phaser.GameObjects.Container
 
     this.resources = []
 
-    icon = new ValueControl(this.scene, 32, 36, 'resource_rock', 0)
+    icon = new ValueControl(this.scene, 0, 66, 'resource_rock', 0) // bottom center
     icon.name = 'resource_1'
-    arrow = new Phaser.GameObjects.Image(this.scene, 22, 22, 'mlm_icons', 'arrow_right')
-    gatherArrow = new Phaser.GameObjects.Image(this.scene, 22, 22, 'mlm_icons', 'arrow_up_left_green')
-    this.resources.push({ icon, arrow, gatherArrow })
-
-    icon = new ValueControl(this.scene, 32, 72, 'resource_rock', 0)
-    icon.name = 'resource_2'
-    arrow = new Phaser.GameObjects.Image(this.scene, 22, 32, 'mlm_icons', 'arrow_down_right')
-    gatherArrow = new Phaser.GameObjects.Image(this.scene, 22, 32, 'mlm_icons', 'arrow_up_left_green_1')
-    this.resources.push({ icon, arrow, gatherArrow })
-
-    icon.name = 'resource_3'
-    icon = new ValueControl(this.scene, 0, 72, 'resource_rock', 0)
     arrow = new Phaser.GameObjects.Image(this.scene, 0, 50, 'mlm_icons', 'arrow_down')
     this.resources.push({ icon, arrow })
 
+    icon = new ValueControl(this.scene, 32, 36, 'resource_rock', 0) // top right
+    icon.name = 'resource_3'
+    arrow = new Phaser.GameObjects.Image(this.scene, 16, 32, 'mlm_icons', 'arrow_right')
+    gatherArrow = new Phaser.GameObjects.Image(this.scene, 16, 17, 'mlm_icons', 'arrow_up_left_green')
+    this.resources.push({ icon, arrow, gatherArrow })
+
+    icon = new ValueControl(this.scene, 32, 66, 'resource_rock', 0) // bottom right
+    icon.name = 'resource_2'
+    arrow = new Phaser.GameObjects.Image(this.scene, 14, 48, 'mlm_icons', 'arrow_down_right')
+    gatherArrow = new Phaser.GameObjects.Image(this.scene, 18, 38, 'mlm_icons', 'arrow_up_left_green_1')
+    this.resources.push({ icon, arrow, gatherArrow })
+
+    icon = new ValueControl(this.scene, -30, 66, 'resource_rock', 0) // bottom left
     icon.name = 'resource_4'
-    icon = new ValueControl(this.scene, -30, 72, 'resource_rock', 0)
-    arrow = new Phaser.GameObjects.Image(this.scene, -16, 50, 'mlm_icons', 'arrow_down_left_0')
+    arrow = new Phaser.GameObjects.Image(this.scene, -12, 48, 'mlm_icons', 'arrow_down_left_0')
     this.resources.push({ icon, arrow })
 
     this.resources.forEach(item => {
       item.icon.setVisible(false)
-      // icon.isLink(true)
-      // icon.on(UserEvents.VALUE_LINK_UP, () => {
+      // item.icon.isLink(true)
+      // item.icon.on(UserEvents.VALUE_LINK_UP, () => {
         
       // })
       item.arrow.setVisible(false)
@@ -97,18 +97,24 @@ export default class Root extends Phaser.GameObjects.Container
 
       if (item.gatherArrow)
       {
+        item.gatherArrow.setVisible(false)
         this.add(item.gatherArrow)
       }
     })
 
     this.buildings = {}
-    icon = new ValueControl(this.scene, -30, 30, 'construct_laboratory', 0)
-    arrow = new Phaser.GameObjects.Image(this.scene, 22, 22, 'mlm_icons', 'arrow_right')
+    icon = new ValueControl(this.scene, -30, 36, 'construct_laboratory', 0)
+    icon.on(UserEvents.VALUE_CHANGE, inc => {
+      this.scene.events.emit(UserEvents.CHANGE_BUILDERS, inc, 'laboratory')
+    })
+    arrow = new Phaser.GameObjects.Image(this.scene, -18, 14, 'mlm_icons', 'arrow_down_left_1')
     this.buildings.laboratory = { icon, arrow }
 
     icon = new ValueControl(this.scene, 32, 0, 'construct_factory', 0)
-    icon.name = 'construct_factory'
-    arrow = new Phaser.GameObjects.Image(this.scene, 22, 22, 'mlm_icons', 'arrow_right')
+    icon.on(UserEvents.VALUE_CHANGE, inc => {
+      this.scene.events.emit(UserEvents.CHANGE_BUILDERS, inc, 'factory')
+    })
+    arrow = new Phaser.GameObjects.Image(this.scene, 14, 0, 'mlm_icons', 'arrow_right')
     this.buildings.factory = { icon, arrow }
 
     icon = new ValueControl(this.scene, -30, 66, 'construct_mine', 0)
@@ -187,9 +193,9 @@ export default class Root extends Phaser.GameObjects.Container
           }
         }
 
-        if (val.produced === true)
+        if (val.requiresProduction === true)
         {
-          productionAvailable = true
+          productionAvailable = (sector.buildings.factory !== false)
           hasResourcesForProduction |= hasResourcesFor
         }
       }
@@ -221,6 +227,8 @@ export default class Root extends Phaser.GameObjects.Container
 
     if (researchAvailable)
     {
+      this.researchNavTask.setIcon(sector.buildings.laboratory === false ? 'research_icon' : 'laboratory_icon')
+
       if (sector.research)
       {
         this.researchNavTask.setValue(sector.research.allocated)
@@ -244,17 +252,24 @@ export default class Root extends Phaser.GameObjects.Container
     }
 
     // update resources
-    // let surfaceIndex
-    // let resourceIndex
-    // sector.resources.forEach(r => {
-    //   if (r.available)
-    //   {
-    //     if (r.type === 'surface')
-    //     {
+    let surfaceIndex = 1
+    let resourceIndex = 0
+    sector.resources.forEach(r => {
+      if (r.available)
+      {
+        if (r.type === 'surface')
+        {
+          this.resources[surfaceIndex].icon.setIcon(`resource_${r.id}`).setValue(r.owned).setVisible(true)
+          this.resources[surfaceIndex].gatherArrow.setVisible(true)
+          surfaceIndex++
+        }
+        else
+        {
 
-    //     }
-    //   }
-    // })
+          resourceIndex = Phaser.Math.Wrap(resourceIndex + 1, 0, 4)
+        }
+      }
+    })
 
     const constructionProjectsAvailable = sector.construction.map(item => item.id)
 
