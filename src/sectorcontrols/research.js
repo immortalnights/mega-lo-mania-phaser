@@ -1,12 +1,9 @@
 import Phaser from 'phaser'
 import Header from './header'
 import Clock from '../clock'
-import Task from '../task'
 import CategorizedTechnologies from './categorizedtechnologies'
 import ValueControl from './valuecontrol'
 import { UserEvents } from '../defines'
-
-
 
 
 export default class Research extends Phaser.GameObjects.Container

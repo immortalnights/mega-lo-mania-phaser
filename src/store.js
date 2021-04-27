@@ -172,6 +172,10 @@ class Sector
     {
       this.technologies['rock'].researched = true
     }
+    if (this.technologies['cannon'])
+    {
+      this.technologies['cannon'].researched = true
+    }
   }
 
   tick(tickDelta, tickCount)
@@ -389,6 +393,7 @@ class Sector
         if (this.production.allocated > 0)
         {
           this.production.remainingDuration -= 1
+          this.production.totalDuration = (this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration
 
           if (this.production.remainingDuration < 0)
           {
@@ -407,6 +412,7 @@ class Sector
             if (this.production.runs > 0)
             {
               this.production.remainingDuration = this.production.duration
+              this.production.totalDuration = (this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration
             }
             else
             {
@@ -627,38 +633,40 @@ class Sector
 
     const availablePopulation = this.availablePopulation - 1
 
+    const allocateOrDeallocate = task => {
+      if (population < 0)
+      {
+        change = Math.min(task.allocated, Math.abs(population))
+        task.allocated = task.allocated - change
+        this.availablePopulation = this.availablePopulation + change
+      }
+      else
+      {
+        change = Math.min(availablePopulation, population)
+        this.availablePopulation = this.availablePopulation - change
+        task.allocated = task.allocated + change
+      }
+
+      if (task.allocated > 0)
+      {
+        task.duration = Math.ceil(task.baseDuration / task.allocated)
+        task.remainingDuration = task.duration - task.progress
+      }
+      else
+      {
+        task.duration = task.baseDuration
+        task.remainingDuration = Infinity
+      }
+    }
+
     switch (task)
     {
       case 'research':
       {
         if (this.research)
         {
-          const research = this.research
-
-          if (population < 0)
-          {
-            change = Math.min(research.allocated, Math.abs(population))
-            research.allocated = research.allocated - change
-            this.availablePopulation = this.availablePopulation + change
-          }
-          else
-          {
-            change = Math.min(availablePopulation, population)
-            this.availablePopulation = this.availablePopulation - change
-            research.allocated = research.allocated + change
-          }
-
-          if (research.allocated > 0)
-          {
-            research.duration = Math.ceil(research.baseDuration / research.allocated)
-            research.remainingDuration = research.duration - research.progress
-          }
-          else
-          {
-            research.duration = research.baseDuration
-            research.remainingDuration = Infinity
-          }
-
+          allocateOrDeallocate(this.research)
+          this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
           this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
         }
         break
@@ -667,31 +675,19 @@ class Sector
       {
         if (this.production)
         {
-          /// copy research
-          console.log("FIXME")
-          // if (population < 0)
-          // {
-          //   change = Math.min(this.production.allocated, Math.abs(population))
-          //   this.production.allocated = this.production.allocated - change
-          //   this.availablePopulation = this.availablePopulation + change
-          // }
-          // else
-          // {
-          //   change = Math.min(availablePopulation - 1, population)
-          //   this.availablePopulation = this.availablePopulation - change
-          //   this.production.allocated = this.production.allocated + change
-          // }
+          allocateOrDeallocate(this.production)
 
-          this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
-        }
-        break
-      }
-      case 'production_runs':
-      {
-        if (this.production)
-        {
-          this.production.runs = this.production.runs + population
+          // recalculate runs
+          if (this.production.remainingDuration === Infinity)
+          {
+            this.production.totalDuration = Infinity
+          }
+          else
+          {
+            this.production.totalDuration = (this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration
+          }
 
+          this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
           this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
         }
         break
@@ -705,30 +701,7 @@ class Sector
         }
         else
         {
-          if (population < 0)
-          {
-            change = Math.min(construction.allocated, Math.abs(population))
-            construction.allocated = construction.allocated - change
-            this.availablePopulation = this.availablePopulation + change
-          }
-          else
-          {
-            change = Math.min(availablePopulation, population)
-            this.availablePopulation = this.availablePopulation - change
-            construction.allocated = construction.allocated + change
-          }
-
-          if (construction.allocated > 0)
-          {
-            construction.duration = Math.ceil(construction.baseDuration / construction.allocated)
-            construction.remainingDuration = construction.duration - construction.progress
-          }
-          else
-          {
-            construction.duration = construction.baseDuration
-            construction.remainingDuration = Infinity
-          }
-
+          allocateOrDeallocate(construction)
           this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
         }
         break
@@ -742,34 +715,33 @@ class Sector
         }
         else
         {
-          if (population < 0)
-          {
-            change = Math.min(resource.allocated, Math.abs(population))
-            resource.allocated = resource.allocated - change
-            this.availablePopulation = this.availablePopulation + change
-          }
-          else
-          {
-            change = Math.min(availablePopulation, population)
-            this.availablePopulation = this.availablePopulation - change
-            resource.allocated = resource.allocated + change
-          }
-
-          if (resource.allocated > 0)
-          {
-            resource.duration = Math.ceil(resource.baseDuration / resource.allocated)
-            resource.remainingDuration = resource.duration - resource.progress
-          }
-          else
-          {
-            resource.duration = resource.baseDuration
-            resource.remainingDuration = Infinity
-          }
-
+          allocateOrDeallocate(resource)
           this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
         }
         break
       }
+    }
+  }
+
+  changeProductionRuns(value)
+  {
+    if (this.production)
+    {
+      if (this.production === Infinity && value < 0)
+      {
+        this.production = 100 + value
+      }
+      else
+      {
+        this.production.runs = this.production.runs + value
+
+        if (this.production.runs > 100)
+        {
+          this.production.runs = Infinity
+        }
+      }
+
+      this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
     }
   }
 
@@ -807,6 +779,35 @@ class Sector
     }
   }
 
+  beginProduction(technology)
+  {
+    const tech = this.technologies[technology]
+    if (tech)
+    {
+      this.production = {
+        id: tech.id,
+        name: tech.name,
+        icon: tech.productionIcon,
+        allocated: 0,
+        runs: 1,
+        name: technology,
+        started: 0,
+        // Base duration
+        baseDuration: tech.researchDuration,
+        // duration based on allocated population
+        duration: 0,
+        // research progress
+        progress: 0,
+        // Remaining duration (base duration - progress)
+        remainingDuration: Infinity,
+        // Total duration for all runs
+        totalDuration: Infinity,
+      }
+
+      this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
+    }
+  }
+
   // from user event
   /**
    * FIXME - change to addUnitsToGroup so this can work with deployed/returned armies
@@ -831,14 +832,14 @@ class Sector
       // Allocate up to `assigned`
       for (let count = 0, done = false; count < assigned && done === false; count++)
       {
-        if (technology.requiredProduction)
+        if (technology.requiresProduction)
         {
           /**
            * FIXME current there is `available` used as true / false to update the UI
            * and there is `produced` to indicate how many of the technology has been
            * made (factory not required)
            * but maybe `available` boolean is not required and confusing. The UI can use
-           * produced to show a number or if produced === 0 check requiredProduction
+           * produced to show a number or if produced === 0 check requiresProduction
            * and display accordingly.
            */
 
@@ -920,7 +921,7 @@ class Sector
 
       for (let count = 0; count < quantity; count++)
       {
-        if (technology.requiredProduction)
+        if (technology.requiresProduction)
         {
           technology.produced = technology.produced + 1
           this.availablePopulation = this.availablePopulation + technology.requiredPopulation
@@ -997,27 +998,6 @@ class Sector
 
     this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
     this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
-  }
-
-  beginProduction(technology)
-  {
-    const tech = this.technologies[technology]
-    if (tech)
-    {
-      this.production = {
-        id: tech.id,
-        name: tech.name,
-        icon: tech.productionIcon,
-        allocated: 0,
-        runs: 1,
-        name: technology,
-        started: 0,
-        duration: tech.productionDuration,
-        remainingDuration: tech.productionDuration,
-      }
-
-      this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
-    }
   }
 }
 
@@ -1098,6 +1078,20 @@ export default class Store extends Phaser.Events.EventEmitter
   {
     const sector = this.sectors[index]
     sector.modifyPopulation('building', building, value)
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+  }
+
+  changeManufacturers(index, value)
+  {
+    const sector = this.sectors[index]
+    sector.modifyPopulation('production', undefined, value)
+    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+  }
+
+  changeProductionRuns(index, value)
+  {
+    const sector = this.sectors[index]
+    sector.changeProductionRuns(value)
     this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 

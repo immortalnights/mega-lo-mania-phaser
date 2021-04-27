@@ -81,6 +81,8 @@ export const UserEvents = {
   CHANGE_MINERS: 'user:change_miners',
   CHANGE_RESEARCHERS: 'user:change_researchers',
   CHANGE_BUILDERS: 'user:change_builders',
+  CHANGE_MANUFACTURERS: 'user:change_manufacturers',
+  CHANGE_PRODUCTION_RUNS: 'user:change_production_runs',
   ALLOCATE_POPULATION: 'user:allocate_population',
   DEALLOCATE_POPULATION: 'user:deallocate_population',
   SELECT_RESEARCH: 'user:select_research',

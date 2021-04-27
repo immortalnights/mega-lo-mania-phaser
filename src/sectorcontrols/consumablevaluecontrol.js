@@ -30,9 +30,9 @@ export default class ConsumableValueControl extends ValueControl
     const available = (sector.availablePopulation - 1) >= technology.requiredPopulation
 
     // If items exist; display a number, available if there is enough population
-    if (technology.produced > 0)
+    if (technology.requiresProduction || technology.produced > 0)
     {
-      this.setValue(technology.produced, available)
+      this.setValue(technology.produced, technology.produced > 0 && available)
     }
     else if (sector.hasResourcesFor(technology))
     {
