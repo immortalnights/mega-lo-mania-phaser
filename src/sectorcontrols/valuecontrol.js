@@ -45,10 +45,14 @@ export default class ValueControl extends Phaser.GameObjects.Container
     // this.addToUpdateList() // next?
     this.scene.add.existing(this)
 
+    // Can the user change the value
+    this.readOnly = false
     // Does clicking the icon have a different effect to clicking the text
     this.isLink = false
     // Don't allow click-hold and just emit one event for mouse down and up
     this.isToggle = false
+    // Minimum value before "disabled" style is applied
+    this.minimumValue = undefined
 
     this.icon = new Phaser.GameObjects.Image(this.scene, 0, -3, 'mlm_icons', icon)
     this.add(this.icon)
@@ -152,6 +156,19 @@ export default class ValueControl extends Phaser.GameObjects.Container
     this.lastChangeEvent = 0
   }
 
+  setReadOnly(b)
+  {
+    this.readOnly = b
+    this.value.setColor('#AAA')
+    return this
+  }
+
+  setMinimum(val)
+  {
+    this.minimumValue = val
+    return this
+  }
+
   /**
    * If the control is a link, clicking the icon will emit a different event
    */
@@ -170,6 +187,16 @@ export default class ValueControl extends Phaser.GameObjects.Container
   setValue(val)
   {
     this.setData('value', val)
+
+    if (this.readOnly === true || (this.minimumValue != null && val <= this.minimumValue))
+    {
+      this.value.setColor('#AAA')
+    }
+    else
+    {
+      this.value.setColor('#FFF')
+    }
+
     return this
   }
 

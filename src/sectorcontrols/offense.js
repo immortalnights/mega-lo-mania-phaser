@@ -18,6 +18,7 @@ export default class Offense extends Phaser.GameObjects.Container
     }))
 
     this.population = new ValueControl(this.scene, -25, 20, 'unarmed_population_icon', 0)
+    this.population.setMinimum(1)
     this.population.on(UserEvents.VALUE_CHANGE, amount => {
       this.scene.events.emit(UserEvents.ADD_TO_ARMY, amount, 'unarmed')
     })

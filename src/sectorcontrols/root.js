@@ -47,6 +47,7 @@ export default class Root extends Phaser.GameObjects.Container
     this.researchArrow = new Phaser.GameObjects.Image(this.scene, -16, 0, 'mlm_icons', 'arrow_left')
 
     this.population = new ValueControl(this.scene, 0, 0, 'population_epoch_1', 1)
+    this.population.setReadOnly(true)
     this.population.setDepth(1)
 
     this.productionNavTask = new Task(this.scene, 32, 0, 'factory_icon', 'production')
@@ -205,11 +206,16 @@ export default class Root extends Phaser.GameObjects.Container
       }
     }
 
-    // if (sector.epoch > 1 && sector.resources.some(res => {
-      // return res.available > 0
-    // }))
+    if (sector.epoch > 1 && sector.resources.some(res => {
+      return res.available > 0
+    }))
     {
       miningAvailable = true
+
+      if (sector.buildings.mine !== false)
+      {
+        this.miningNav.setFrame('mine_icon')
+      }
     }
 
 

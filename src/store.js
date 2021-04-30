@@ -392,25 +392,26 @@ class Sector
       {
         if (this.production.allocated > 0)
         {
-          this.production.remainingDuration -= 1
-          this.production.totalDuration = (this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration
+          // Check resources, cancel production if there are no resources
+          this.production.progress += 1
 
-          if (this.production.remainingDuration < 0)
+          this.production.remainingDuration = Math.max(this.production.duration - this.production.progress, 0)
+
+          if (this.production.remainingDuration <= 0)
           {
-            // Check resources
-
             resourcesChanged = true
 
             this.production.runs -= 1
 
             // Mark the technology as completed
-            this.technologies[this.production.name].available += 1
+            this.technologies[this.production.name].produced += 1
 
             // Sector alert (map / audio) (for an individual item)
             this.scene.events.emit(GameEvents.PRODUCTION_COMPLETED, this)
 
             if (this.production.runs > 0)
             {
+              this.production.progress = 0
               this.production.remainingDuration = this.production.duration
               this.production.totalDuration = (this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration
             }
@@ -425,6 +426,10 @@ class Sector
               // Reset the current production
               this.production = false
             }
+          }
+          else
+          {
+            this.production.totalDuration = (this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration
           }
 
           this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
@@ -650,7 +655,7 @@ class Sector
       if (task.allocated > 0)
       {
         task.duration = Math.ceil(task.baseDuration / task.allocated)
-        task.remainingDuration = task.duration - task.progress
+        task.remainingDuration = Math.max(task.duration - task.progress, 0)
       }
       else
       {
@@ -684,7 +689,7 @@ class Sector
           }
           else
           {
-            this.production.totalDuration = (this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration
+            this.production.totalDuration = Math.max((this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration, 0)
           }
 
           this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)

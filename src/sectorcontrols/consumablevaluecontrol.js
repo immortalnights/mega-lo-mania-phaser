@@ -21,7 +21,7 @@ export default class ConsumableValueControl extends ValueControl
   setValue(value, available)
   {
     super.setValue(value)
-    this.value.setColor(available ? '#ffff00' : '#444444')
+    this.value.setColor(available ? '#ffff00' : '#AAA')
   }
 
   setValueFromTechnology(sector, technology)

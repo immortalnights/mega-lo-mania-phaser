@@ -203,12 +203,12 @@ export default class Sandbox extends Phaser.Scene
 
     this.store.sectors[0].setup(4, ["rock", "slate", "solarium", "herbirite"])
     this.store.sectors[1].setup(7, ["parasite", "aquarium", "onion", "tedium"])
-    this.store.sectors[2].setup(3, [])
+    this.store.sectors[2].setup(1, ["rock", "slate"])
 
     // Claims
     this.store.sectors[0].claim(Teams.GREEN, 90)
     this.store.sectors[1].claim(Teams.RED, 20)
-    this.store.sectors[2].claim(Teams.BLUE, 10)
+    this.store.sectors[2].claim(Teams.BLUE, 40)
 
     const sectorControl = new SectorControl(this, width / 2, height / 2)
     this.add.existing(sectorControl)
