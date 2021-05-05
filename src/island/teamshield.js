@@ -1,6 +1,7 @@
-import Phaser, { Game } from 'phaser'
-import { GameEvents, UserEvents } from './defines'
-import TeamShieldConfig from './assets/teamshieldconfig.json'
+import Phaser from 'phaser'
+import { GameEvents, UserEvents } from '../defines'
+import TeamShieldConfig from '../data/teamshieldconfig.json'
+
 
 const findTeamShieldFrame = team => {
   let frame

@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import CategorizedTechnologies from './categorizedtechnologies'
 import Header from './header'
-import ValueControl from './valuecontrol'
+import ValueControl from '../../components/valuecontrol'
 
 
 class TechnologyRecipe extends Phaser.GameObjects.Container

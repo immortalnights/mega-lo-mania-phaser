@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
 import Header from './header'
-import ValueControl from './valuecontrol'
-import { UserEvents } from '../defines'
-import Clock from '../clock'
+import ValueControl from '../../components/valuecontrol'
+import { UserEvents } from '../../defines'
+import Clock from '../../components/clock'
 
 
 export default class Construction extends Phaser.GameObjects.Container

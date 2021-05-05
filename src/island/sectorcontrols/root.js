@@ -1,9 +1,9 @@
 import Phaser from 'phaser'
-import Button from '../button'
-import { UserEvents } from '../defines'
-import Task from '../task'
+import Button from '../../components/button'
+import { UserEvents } from '../../defines'
+import Task from '../../components/task'
 import SectorLabel from './sectorlabel'
-import ValueControl from './valuecontrol'
+import ValueControl from '../../components/valuecontrol'
 
 
 export default class Root extends Phaser.GameObjects.Container

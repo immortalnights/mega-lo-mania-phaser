@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { yearFromEpoch } from '../utilities'
+import { yearFromEpoch } from '../../utilities'
 
 
 /**

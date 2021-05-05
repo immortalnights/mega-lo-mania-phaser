@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+
 export default class Button extends Phaser.GameObjects.Sprite
 {
   constructor(scene, x, y, frame, onClick)

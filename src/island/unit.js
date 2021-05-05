@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { Teams, UnitTypes } from './defines.js'
+import { Teams, UnitTypes } from '../defines.js'
 
 const UNIT_WALK_VELOCITY = 20
 const UNIT_FLY_VELOCITY = 220

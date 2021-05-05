@@ -1,8 +1,4 @@
 import Phaser from 'phaser'
-import Header from './header'
-import Clock from '../clock'
-import Task from '../task'
-import Button from '../button'
 import { BuildingTypes, GameEvents } from '../defines'
 
 

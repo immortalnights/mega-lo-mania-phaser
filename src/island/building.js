@@ -1,5 +1,5 @@
 import Unit from './unit.js'
-import { Teams, DefenderUnitTypes, BuildingTypes, GameEvents, UserEvents } from './defines.js'
+import { Teams, DefenderUnitTypes, BuildingTypes, GameEvents, UserEvents } from '../defines.js'
 
 const SCALE = 2
 

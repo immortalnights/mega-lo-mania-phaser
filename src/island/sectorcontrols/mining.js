@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
 import Header from './header'
-import Task from '../task'
-import ValueControl from './valuecontrol'
-import { UserEvents } from '../defines'
+import Task from '../../components/task'
+import ValueControl from '../../components/valuecontrol'
+import { UserEvents } from '../../defines'
 
 
 export default class Mining extends Phaser.GameObjects.Container

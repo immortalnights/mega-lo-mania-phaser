@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
-import { UserEvents } from '../defines'
+import { UserEvents } from '../../defines'
 import Header from './header'
-import ConsumableValueControl from './consumablevaluecontrol'
+import ConsumableValueControl from '../../components/consumablevaluecontrol'
 
 
 export default class Repair extends Phaser.GameObjects.Container

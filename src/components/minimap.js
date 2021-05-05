@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
-import { getKeyForSector } from './utilities'
-import { Teams, BuildingTypes, GameEvents, UserEvents } from './defines.js'
+import { getKeyForSector } from '../utilities'
+import { Teams, BuildingTypes, GameEvents, UserEvents } from '../defines.js'
 
 
 const offsetValue = 5
@@ -29,8 +29,10 @@ export default class MiniMap extends Phaser.GameObjects.Container
       if (island.map[index])
       {
         const key = getKeyForSector(index, island.map)
+        console.log(index, key, index % 4, `r=${index % 4 !== 3}`, `l=${index % 4 !== 0}`)
 
         const sector = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_smallmap', `${island.style}_${key}`)
+        sector.setSize(16, 16)
 
         const position = this.getSectorXY(index)
         sector.setPosition(position.x, position.y)
@@ -45,6 +47,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
 
     const marker = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_icons', 'sector_selected_icon')
     marker.setData('sector', undefined)
+    marker.setVisible(false)
     this.add(marker)
 
     scene.events.on(GameEvents.SECTOR_VIEW, sector => {
@@ -71,6 +74,8 @@ export default class MiniMap extends Phaser.GameObjects.Container
         // TODO
       }
     })
+
+    this.setSize(4 * 16, 4 * 16)
   }
 
   /**
@@ -80,8 +85,8 @@ export default class MiniMap extends Phaser.GameObjects.Container
    */
   getSectorXY(index)
   {
-    let x = (index % 4) * 16
-    let y = Math.floor(index / 4) * 16
+    let x = -32 + ((index % 4) * 16)
+    let y = -32 + (Math.floor(index / 4) * 16)
 
     return { x, y }
   }

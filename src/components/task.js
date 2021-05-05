@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { GameEvents, UserEvents } from './defines'
+import { GameEvents, UserEvents } from '../defines'
 
 export default class Task extends Phaser.GameObjects.Container
 {

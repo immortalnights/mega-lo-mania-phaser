@@ -1,7 +1,21 @@
 
 export const getKeyForSector = (index, data) => {
   const at = id => data[id] || 0
-  return '' + at(index - 4) + at(index + 1) + at(index + 4) + at(index - 1)
+
+  let key = ''
+
+  // Always Top
+  key += at(index - 4)
+  
+  // Right
+  key += (index % 4 !== 3) ? at(index + 1) : 0
+
+  // Bottom
+  key += '' + at(index + 4)
+  // Left
+  key += (index % 4 !== 0) ? at(index - 1) : 0
+
+  return key
 }
 
 export const yearFromEpoch = epoch => {

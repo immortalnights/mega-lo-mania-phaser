@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+
 export default class Clock extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y, duration = Infinity)

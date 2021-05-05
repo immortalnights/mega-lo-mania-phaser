@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
-import Button from '../button'
+import Button from '../../components/button'
+
 
 export default class CategorizedTechnologies extends Phaser.GameObjects.Container
 {

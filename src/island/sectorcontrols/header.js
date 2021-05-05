@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+
 export default class Header extends Phaser.GameObjects.Image
 {
   constructor(scene, x, y, frame, onClick)

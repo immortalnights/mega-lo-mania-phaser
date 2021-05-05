@@ -1,16 +1,15 @@
 import Phaser from 'phaser'
 import Store from './store'
-import Root from './sectorcontrols/root'
-import Blueprints from './sectorcontrols/blueprints'
-import Repair from './sectorcontrols/repair'
-import Defense from './sectorcontrols/defense'
-import Offense from './sectorcontrols/offense'
-import Research from './sectorcontrols/research'
-import Production from './sectorcontrols/production'
-import Mining from './sectorcontrols/mining'
+import Root from './island/sectorcontrols/root'
+import Blueprints from './island/sectorcontrols/blueprints'
+import Repair from './island/sectorcontrols/repair'
+import Defense from './island/sectorcontrols/defense'
+import Offense from './island/sectorcontrols/offense'
+import Research from './island/sectorcontrols/research'
+import Production from './island/sectorcontrols/production'
+import Mining from './island/sectorcontrols/mining'
+import Construction from './island/sectorcontrols/construction'
 import { GameEvents, Teams, UserEvents } from "./defines"
-import SectorControls from './sectorcontrols'
-import Construction from './sectorcontrols/construction'
 
 
 class SectorControl extends Phaser.GameObjects.Container

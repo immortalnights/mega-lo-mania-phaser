@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
-import { UserEvents } from '../defines'
+import { UserEvents } from '../../defines'
 import Header from './header'
-import ValueControl from './valuecontrol'
-import ConsumableValueControl from './consumablevaluecontrol'
+import ValueControl from '../../components/valuecontrol'
+import ConsumableValueControl from '../../components/consumablevaluecontrol'
 
 
 export default class Defence extends Phaser.GameObjects.Container

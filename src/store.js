@@ -1,8 +1,8 @@
-import Phaser, { Game } from 'phaser'
-import { Teams, GameEvents, BuildingTypes, unitSet } from './defines.js'
-import Islands from './assets/islands.json'
-import Technologies from './assets/technologies.json'
-import Resources from './assets/resources.json'
+import Phaser from 'phaser'
+import { GameEvents, BuildingTypes, unitSet } from './defines.js'
+import Islands from './data/islands.json'
+import Technologies from './data/technologies.json'
+import Resources from './data/resources.json'
 import { getKeyForSector } from './utilities'
 
 const getDefaultDefendersForBuilding = (type) => {
@@ -318,7 +318,7 @@ class Sector
                   resourcesChanged = true
                 }
               }
-              break;
+              break
             }
             case 'surface':
             {
@@ -329,7 +329,7 @@ class Sector
                 resource.available = resource.available - mined
                 resourcesChanged = true
               }
-              break;
+              break
             }
             default:
             {
