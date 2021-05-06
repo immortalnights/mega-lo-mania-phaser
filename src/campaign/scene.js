@@ -1,6 +1,8 @@
 import Phaser from 'phaser'
 import MiniMap from '../components/minimap'
+import Portrait from '../components/portrait'
 import ValueControl from '../components/valuecontrol'
+import Word from '../components/word'
 
 
 export default class CampaignScene extends Phaser.Scene
@@ -28,17 +30,25 @@ export default class CampaignScene extends Phaser.Scene
     })
     this.add.existing(this.map)
 
-    this.playerPortrait = undefined
+    this.playerPortrait = new Portrait(this, 100, 52, 'red')
+    this.add.existing(this.playerPortrait)
     this.opponentPortraits = new Phaser.GameObjects.Container(this, 0, 0)
 
-    this.islandNameText = this.add.text(36, 100, "Wonka").setOrigin(0.5, 0.5)
-    const ofTheText = this.add.text(36, 112, "of the", { fontSize: 12 }).setOrigin(0.5, 0.5)
-    this.islandNameText = this.add.text(36, 124, `8th Epoch`).setOrigin(0.5, 0.5)
+    this.islandNameWord = new Word(this, 40, 110, "Wonka")
+    this.add.existing(this.islandNameWord)
+    const ofTheWord = this.add.existing(new Word(this, 40, 120, "of the"))
+    this.epochWord = new Word(this, 40, 136, `8TH EPOCH`)
+    this.add.existing(this.epochWord)
 
-    this.optionsText = this.add.text(36, 160, "Options").setOrigin(0.5, 0.5)
-    this.playText = this.add.text(36, 180, "Play Island").setOrigin(0.5, 0.5)
+    // const optionsWord = new Word(this, 40, 166, `OPTIONS`)
+    // optionsWord.setInteractive()
+    // this.add.existing(optionsWord)
 
-    this.population = new ValueControl(this, 36, 200, `population_epoch_${1}`, 100)
+    const playIslandWord = new Word(this, 40, 196, `PLAY ISLAND`)
+    playIslandWord.setInteractive()
+    this.add.existing(playIslandWord)
+
+    this.population = new ValueControl(this, 40, 226, `population_epoch_${1}`, 100)
 
     this.debugText = this.add.text(0, height - 12, '', { fontSize: 10 })
   }
