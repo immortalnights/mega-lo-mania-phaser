@@ -18,6 +18,7 @@ export default class LoaderScene extends Phaser.Scene
   {
     this.load.json('mlm_icons_data', './mlm_icons.json')
     this.load.json('mlm_units_data', './mlm_units.json')
+    this.load.json('islands', '../data/islands.json')
 
     this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
     this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
@@ -27,10 +28,17 @@ export default class LoaderScene extends Phaser.Scene
     // this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
     this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')
     this.load.image('paletteswap-template', '/link-palette.png')
+
+    this.load.image('sunrise', './mlm_sunrise.png')
   }
 
   create()
   {
+    // Set default game data
+    this.game.registry.set('team', 'red')
+    this.game.registry.set('level', 1)
+    this.game.registry.set('completedIslands', [])
+
     animationFactory.createUnitAnimations(this)
     animationFactory.createSpawnAnimation(this)
     animationFactory.createFlagAnimations(this)

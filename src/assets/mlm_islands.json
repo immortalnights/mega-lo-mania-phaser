@@ -1,5 +1,119 @@
 {
   "frames": [
+    {
+      "filename": "Aloha",
+      "frame": { "x": 0, "y": 0, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Etcetra",
+      "frame": { "x": 0, "y": 17, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Gazza",
+      "frame": { "x": 0, "y": 33, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Junta",
+      "frame": { "x": 0, "y": 50, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Mascara",
+      "frame": { "x": 0, "y": 67, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Pyjama",
+      "frame": { "x": 0, "y": 84, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Sinatra",
+      "frame": { "x": 0, "y": 101, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Vespa",
+      "frame": { "x": 0, "y": 118, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Yoga",
+      "frame": { "x": 0, "y": 135, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Megalomania",
+      "frame": { "x": 0, "y": 152, "w": 48, "h": 16 }
+    },
+
+    {
+      "filename": "Bazooka",
+      "frame": { "x": 48, "y": 0, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Dracula",
+      "frame": { "x": 48, "y": 17, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Hernia",
+      "frame": { "x": 48, "y": 33, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Karma",
+      "frame": { "x": 48, "y": 60, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Nausea",
+      "frame": { "x": 48, "y": 67, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Quota",
+      "frame": { "x": 48, "y": 84, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Tapioca",
+      "frame": { "x": 48, "y": 101, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Wonca",
+      "frame": { "x": 48, "y": 118, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Zappa",
+      "frame": { "x": 48, "y": 135, "w": 48, "h": 16 }
+    },
+
+    {
+      "filename": "Cilla",
+      "frame": { "x": 96, "y": 0, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Formica",
+      "frame": { "x": 96, "y": 17, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Ibiza",
+      "frame": { "x": 96, "y": 33, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Lada",
+      "frame": { "x": 96, "y": 50, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Ocarina",
+      "frame": { "x": 96, "y": 67, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Rumbaba",
+      "frame": { "x": 96, "y": 84, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Utopia",
+      "frame": { "x": 96, "y": 101, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Xtra",
+      "frame": { "x": 96, "y": 118, "w": 48, "h": 16 }
+    },
+    {
+      "filename": "Ohm",
+      "frame": { "x": 96, "y": 135, "w": 48, "h": 16 }
+    }
   ],
   "meta": {
     "app": "",

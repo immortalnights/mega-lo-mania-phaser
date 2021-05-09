@@ -29,7 +29,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
       if (island.map[index])
       {
         const key = getKeyForSector(index, island.map)
-        console.log(index, key, index % 4, `r=${index % 4 !== 3}`, `l=${index % 4 !== 0}`)
+        // console.debug(index, key, index % 4, `r=${index % 4 !== 3}`, `l=${index % 4 !== 0}`)
 
         const sector = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_smallmap', `${island.style}_${key}`)
         sector.setSize(16, 16)
