@@ -14,44 +14,42 @@ const armyIconOffset = {
 
 export default class MiniMap extends Phaser.GameObjects.Container
 {
-  constructor(scene, x, y, island)
+  constructor(scene, x, y)
   {
     super(scene, x, y)
 
-    // this.sectors = new Phaser.GameObjects.Group(scene)
-    this.name = island.name
-
-    this.icons = new Phaser.GameObjects.Group(scene)
-
-    // Build the map
+    //! Sector images
+    this.sectors = new Phaser.GameObjects.Group(scene)
     for (let index = 0; index < 16; index++)
     {
-      if (island.map[index])
-      {
-        const key = getKeyForSector(index, island.map)
-        // console.debug(index, key, index % 4, `r=${index % 4 !== 3}`, `l=${index % 4 !== 0}`)
+      const sector = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_smallmap', ``)
 
-        const sector = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_smallmap', `${island.style}_${key}`)
-        sector.setSize(16, 16)
+      const position = this.getSectorXY(index)
+      sector.setPosition(position.x, position.y)
+      sector.setInteractive()
+      sector.on('pointerup', pointer => {
+        this.scene.events.emit(UserEvents.SECTOR_MAP_SELECT, pointer, index)
+      })
 
-        const position = this.getSectorXY(index)
-        sector.setPosition(position.x, position.y)
-        sector.setInteractive()
-        sector.on('pointerup', pointer => {
-          this.scene.events.emit(UserEvents.SECTOR_MAP_SELECT, pointer, index)
-        })
-        // this.sectors.add(sector, true)
-        this.add(sector)
-      }
+      this.sectors.add(sector)
+      this.add(sector)
     }
 
+    //! Castle and Army icons on sectors
+    this.icons = new Phaser.GameObjects.Group(scene)
+
+    //! Sector marker
     const marker = new Phaser.GameObjects.Image(scene, 0, 0, 'mlm_icons', 'sector_selected_icon')
     marker.setData('sector', undefined)
     marker.setVisible(false)
     this.add(marker)
 
-    scene.events.on(GameEvents.SECTOR_VIEW, sector => {
-      if (island.map[sector])
+    //! Event sector marker
+    // TODO
+
+    scene.events.on(GameEvents.SECTOR_VIEW, index => {
+      const sector = this.sectors.getChildren()[index]
+      if (sector.visible === true)
       {
         const position = this.getSectorXY(sector)
         marker.setPosition(position.x, position.y - 1)
@@ -76,6 +74,25 @@ export default class MiniMap extends Phaser.GameObjects.Container
     })
 
     this.setSize(4 * 16, 4 * 16)
+  }
+
+  setIsland(style, map)
+  {
+    this.icons.clear(true, true)
+    this.sectors.setVisible(false)
+
+    for (let index = 0; index < 16; index++)
+    {
+      if (map[index])
+      {
+        const key = getKeyForSector(index, map)
+        // console.debug(index, key, index % 4, `r=${index % 4 !== 3}`, `l=${index % 4 !== 0}`)
+
+        const sector = this.sectors.getChildren()[index]
+        sector.setFrame(`${style}_${key}`)
+        sector.setVisible(true)
+      }
+    }
   }
 
   /**

@@ -24,6 +24,7 @@ export default class LoaderScene extends Phaser.Scene
     this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
     this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')
     this.load.atlas('mlm_smallmap', './mlm_smallmap.png', './mlm_smallmap.json')
+    this.load.atlas('mlm_islands', './mlm_islands.png', './mlm_islands.json')
     this.load.image('mlm_slab', './mlm_slabs.png')
     // this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
     this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')

@@ -4,6 +4,7 @@ import MiniMap from '../components/minimap'
 import Portrait from '../components/portrait'
 import ValueControl from '../components/valuecontrol'
 import Word from '../components/word'
+import { UserEvents } from '../defines'
 // import islands from '../data/isands.json'
 
 class OpponentPortraitContainer extends Phaser.GameObjects.Container
@@ -53,7 +54,7 @@ export default class CampaignScene extends Phaser.Scene
       const available = [ ...opponents ]
       for (let count = 1; count < island.players; count++)
       {
-        const index = Phaser.Math.RND.between(0, available.length)
+        const index = Phaser.Math.RND.between(0, available.length - 1)
         island.opponents.push(available[index])
         available.splice(index, 1)
       }
@@ -61,17 +62,17 @@ export default class CampaignScene extends Phaser.Scene
 
     this.add.image(width / 2, height / 2, 'sunrise')
 
-    const islandLocations = [
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
-      { x: 0, y: 0 }
+    const islandPositions = [
+      { x: 200, y: 155 },
+      { x: 250, y: 200 },
+      { x: 325, y: 150 }
     ]
     const xOffset = 105
     const yOffset = [ 140, 150, 166, 190, 220, 250 ]
 
-    this.selectedIsland = islands[0]
+    this.selectedIsland = undefined
 
-    this.map = new MiniMap(this, 110, 90, [])
+    this.map = new MiniMap(this, 110, 90)
     this.add.existing(this.map)
 
     this.playerPortrait = new Portrait(this, 165, 80, playerTeam)
@@ -99,7 +100,33 @@ export default class CampaignScene extends Phaser.Scene
 
     this.population = new ValueControl(this, 100, yOffset[5], ``, 100)
 
+    this.islands = this.add.group()
+    islands.forEach((island, index) => {
+      const pos = islandPositions[index]
+      const image = this.add.image(pos.x, pos.y, 'mlm_islands', island.name)
+      this.islands.add(image)
+
+      if (completedIslands.includes(island.name))
+      {
+        const flag = this.add.image(pos.x, pos.y, 'mlm_icons', `flag_${playerTeam}`)
+        this.islands.add(flag)
+      }
+      else
+      {
+        // Only interactive if not complete
+        image.setInteractive()
+        image.on(Phaser.Input.Events.POINTER_DOWN, () => {
+          this.onSelectIsland(island)
+        })
+      }
+    })
+
     this.onSelectIsland(islands[0])
+
+    // Bind to events
+    this.events.on(UserEvents.SECTOR_MAP_SELECT, (pointer, index) => {
+      console.log(`Select sector ${index}`)
+    })
 
     this.debugText = this.add.text(0, height - 12, '', { fontSize: 10 })
   }
@@ -108,7 +135,7 @@ export default class CampaignScene extends Phaser.Scene
   {
     this.selectedIsland = island
 
-    // this.map.setIsland(island)
+    this.map.setIsland(island.style, island.map)
 
     this.opponentPortraits.removeAll()
     island.opponents.forEach(t => {
@@ -116,7 +143,7 @@ export default class CampaignScene extends Phaser.Scene
     })
 
     this.islandNameWord.setWord(island.name)
-    this.epochWord.setWord(`${ordinal(island.epoch)} EPOCH 1234567890`)
+    this.epochWord.setWord(`${ordinal(island.epoch)} EPOCH`)
     this.population.setIcon(`population_epoch_${island.epoch}`)
   }
 
