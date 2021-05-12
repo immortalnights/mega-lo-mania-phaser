@@ -88,3 +88,21 @@ export const yearFromEpoch = epoch => {
 
   return [ year, notation ]
 }
+
+export const allocateOrDeallocate = (available, allocated, change = 1, reserved = 0) => {
+  let realChange = 0
+  if (change < 0)
+  {
+    realChange = Math.min(allocated, Math.abs(change))
+    allocated = allocated - realChange
+    available = available + realChange
+  }
+  else
+  {
+    realChange = Math.min(available - reserved, change)
+    available = available - realChange
+    allocated = allocated + realChange
+  }
+
+  return [ available, allocated ]
+}

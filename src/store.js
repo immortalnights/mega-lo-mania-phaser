@@ -638,6 +638,8 @@ class Sector
 
     const availablePopulation = this.availablePopulation - 1
 
+
+    // using `this` is not ideal. perhaps pass "availablePopulation" in and return modified value
     const allocateOrDeallocate = task => {
       if (population < 0)
       {
