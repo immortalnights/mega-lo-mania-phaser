@@ -54,7 +54,7 @@ export default class ValueControl extends Phaser.GameObjects.Container
     // Minimum value before "disabled" style is applied
     this.minimumValue = undefined
 
-    this.icon = new Phaser.GameObjects.Image(this.scene, 0, -3, 'mlm_icons', icon)
+    this.icon = new Phaser.GameObjects.Image(this.scene, 1, -3, 'mlm_icons', icon)
     this.add(this.icon)
 
     this.value = new Phaser.GameObjects.Text(this.scene, 0, 8, '?', { fontSize: 10 })
