@@ -38,6 +38,7 @@ export default class LoaderScene extends Phaser.Scene
     // Set default game data
     this.game.registry.set('team', 'red')
     this.game.registry.set('level', 1)
+    this.game.registry.set('population', 100)
     this.game.registry.set('completedIslands', [])
 
     animationFactory.createUnitAnimations(this)

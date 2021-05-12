@@ -13,7 +13,7 @@ const config = {
   type: Phaser.WEBGL,
   width: 450, // 320,
   height: 300, // 200,
-  zoom: 2,
+  zoom: 3,
   scene: [
     () => {
       return new Loader({ nextScene: 'campaign' })

@@ -5,6 +5,7 @@ import Portrait from '../components/portrait'
 import ValueControl from '../components/valuecontrol'
 import Word from '../components/word'
 import { UserEvents } from '../defines'
+import { allocateOrDeallocate } from '../utilities'
 // import islands from '../data/isands.json'
 
 class OpponentPortraitContainer extends Phaser.GameObjects.Container
@@ -29,6 +30,22 @@ export default class CampaignScene extends Phaser.Scene
       ...config,
       key: 'campaign',
     })
+
+  }
+
+  init(options)
+  {
+    console.log("init")
+
+    // const team = this.game.registry.get('team'),
+    // const level = this.game.registry.get('level')
+
+    // this.data.set({
+    //   team,
+    //   island: undefined,
+    //   available: this.game.registry.get('population'),
+    //   allocated: undefined,
+    // })
   }
 
   preload()
@@ -41,9 +58,14 @@ export default class CampaignScene extends Phaser.Scene
 
     const playerTeam = this.game.registry.get('team')
     const level = this.game.registry.get('level')
+    let availablePopulation = this.game.registry.get('population')
+    let allocatedPopulation = 0
     const completedIslands = this.game.registry.get('completedIslands') 
     const islands = this.cache.json.get('islands').filter(i => {
       return i.epoch === level
+    })
+    const remainingIslands = islands.filter(i => {
+      return completedIslands.includes(i) === false
     })
 
     // Assign opponents to each island so that they remain static if the player changes the selected island
@@ -68,7 +90,7 @@ export default class CampaignScene extends Phaser.Scene
       { x: 325, y: 150 }
     ]
     const xOffset = 105
-    const yOffset = [ 140, 150, 166, 190, 220, 250 ]
+    const yOffset = [ 140, 150, 166, 205, 215, 250 ]
 
     this.selectedIsland = undefined
 
@@ -81,22 +103,44 @@ export default class CampaignScene extends Phaser.Scene
     this.opponentPortraits = new OpponentPortraitContainer(this, 360, 80)
     this.add.existing(this.opponentPortraits)
 
-    this.islandNameWord = new Word(this, xOffset, yOffset[0], "")
+    this.islandNameWord = new Word(this, xOffset, yOffset[0], "noname")
     this.add.existing(this.islandNameWord)
-    const ofTheWord = this.add.existing(new Word(this, xOffset, yOffset[1], "of the"))
-    this.epochWord = new Word(this, xOffset, yOffset[2], `? EPOCH`)
+    this.add.existing(new Word(this, xOffset, yOffset[1], "of the"))
+    this.epochWord = new Word(this, xOffset, yOffset[2], `x EPOCH`)
     this.add.existing(this.epochWord)
+
+    this.defaultControls = this.add.group()
 
     // const optionsWord = new Word(this, xOffset, yOffset[3], `OPTIONS`)
     // optionsWord.setInteractive()
     // this.add.existing(optionsWord)
+    // this.defaultControls.add(optionsWord)
 
     const playIslandWord = new Word(this, xOffset, yOffset[4], `PLAY ISLAND`)
     playIslandWord.setInteractive()
     playIslandWord.on('pointerdown', () => {
-
+      this.defaultControls.setVisible(false)
+      this.beginPlayControls.setVisible(true)
     })
     this.add.existing(playIslandWord)
+    this.defaultControls.add(playIslandWord)
+
+    this.beginPlayControls = this.add.group()
+    this.beginPlayControls.add(this.add.image(100, yOffset[3] - 20, 'mlm_icons', 'arrow_up'))
+    this.allocatedPopulation = this.add.existing(new ValueControl(this, 100, yOffset[3], 'castle_icon', 0))
+    this.allocatedPopulation.on(UserEvents.VALUE_CHANGE, val => {
+      // ValueControl.getAvailable(val, availablePopulation allocatedPopulation)
+      [ availablePopulation, allocatedPopulation ] = allocateOrDeallocate(availablePopulation, allocatedPopulation, val, remainingIslands.length - 1)
+
+      // const move = val > 0 ? Math.min(availablePopulation, val) : Math.min(allocatedPopulation, Math.abs(val))
+      // availablePopulation -= move
+      // allocatedPopulation += move
+      this.allocatedPopulation.setValue(allocatedPopulation)
+      this.population.setValue(availablePopulation)
+    })
+    this.beginPlayControls.add(this.allocatedPopulation)
+    this.beginPlayControls.add(this.add.image(100, yOffset[3] + 22, 'mlm_icons', 'arrow_up'))
+    this.beginPlayControls.setVisible(false)
 
     this.population = new ValueControl(this, 100, yOffset[5], ``, 100)
 
