@@ -4,9 +4,16 @@ import MiniMap from '../components/minimap'
 import Portrait from '../components/portrait'
 import ValueControl from '../components/valuecontrol'
 import Word from '../components/word'
-import { UserEvents } from '../defines'
+import { BuildingTypes, UserEvents } from '../defines'
 import { allocateOrDeallocate } from '../utilities'
 // import islands from '../data/isands.json'
+
+const SceneStates = {
+  PLAYER_SELECT_ISLAND: 'player_select_island',
+  PLAYER_SELECT_SECTOR_AND_POP: 'player_select_sector_and_pop',
+  AI_SECTOR_SELECTION: 'ai_sector_selection',
+  ISLAND_START_COUNTDOWN: 'island_start_countdown'
+}
 
 class OpponentPortraitContainer extends Phaser.GameObjects.Container
 {
@@ -37,15 +44,18 @@ export default class CampaignScene extends Phaser.Scene
   {
     console.log("init")
 
-    // const team = this.game.registry.get('team'),
-    // const level = this.game.registry.get('level')
+    const team = this.game.registry.get('team')
+    const level = this.game.registry.get('level')
 
-    // this.data.set({
-    //   team,
-    //   island: undefined,
-    //   available: this.game.registry.get('population'),
-    //   allocated: undefined,
-    // })
+    this.data.set({
+      team,
+      level,
+      island: undefined,
+      available: this.game.registry.get('population'),
+      allocated: 0,
+    })
+
+    this.state = SceneStates.PLAYER_SELECT_ISLAND
   }
 
   preload()
@@ -58,8 +68,6 @@ export default class CampaignScene extends Phaser.Scene
 
     const playerTeam = this.game.registry.get('team')
     const level = this.game.registry.get('level')
-    let availablePopulation = this.game.registry.get('population')
-    let allocatedPopulation = 0
     const completedIslands = this.game.registry.get('completedIslands') 
     const islands = this.cache.json.get('islands').filter(i => {
       return i.epoch === level
@@ -67,6 +75,8 @@ export default class CampaignScene extends Phaser.Scene
     const remainingIslands = islands.filter(i => {
       return completedIslands.includes(i) === false
     })
+
+    this.data.set({ remainingIslands })
 
     // Assign opponents to each island so that they remain static if the player changes the selected island
     const opponents = ['red', 'green', 'blue', 'yellow'].filter(t => t !== playerTeam)
@@ -118,31 +128,27 @@ export default class CampaignScene extends Phaser.Scene
 
     const playIslandWord = new Word(this, xOffset, yOffset[4], `PLAY ISLAND`)
     playIslandWord.setInteractive()
-    playIslandWord.on('pointerdown', () => {
-      this.defaultControls.setVisible(false)
-      this.beginPlayControls.setVisible(true)
-    })
+    playIslandWord.on('pointerdown', this.onPlayIsland, this)
     this.add.existing(playIslandWord)
     this.defaultControls.add(playIslandWord)
 
     this.beginPlayControls = this.add.group()
     this.beginPlayControls.add(this.add.image(100, yOffset[3] - 20, 'mlm_icons', 'arrow_up'))
     this.allocatedPopulation = this.add.existing(new ValueControl(this, 100, yOffset[3], 'castle_icon', 0))
-    this.allocatedPopulation.on(UserEvents.VALUE_CHANGE, val => {
-      // ValueControl.getAvailable(val, availablePopulation allocatedPopulation)
-      [ availablePopulation, allocatedPopulation ] = allocateOrDeallocate(availablePopulation, allocatedPopulation, val, remainingIslands.length - 1)
-
-      // const move = val > 0 ? Math.min(availablePopulation, val) : Math.min(allocatedPopulation, Math.abs(val))
-      // availablePopulation -= move
-      // allocatedPopulation += move
-      this.allocatedPopulation.setValue(allocatedPopulation)
-      this.population.setValue(availablePopulation)
-    })
+    this.allocatedPopulation.on(UserEvents.VALUE_CHANGE, this.onChangeAllocatedPopulation, this)
     this.beginPlayControls.add(this.allocatedPopulation)
     this.beginPlayControls.add(this.add.image(100, yOffset[3] + 22, 'mlm_icons', 'arrow_up'))
     this.beginPlayControls.setVisible(false)
 
     this.population = new ValueControl(this, 100, yOffset[5], ``, 100)
+
+    // Data-binding
+    this.events.on(Phaser.Data.Events.CHANGE_DATA_KEY + 'available', (obj, val, prev) => {
+      this.population.setValue(val)
+    })
+    this.events.on(Phaser.Data.Events.CHANGE_DATA_KEY + 'allocated', (obj, val, prev) => {
+      this.allocatedPopulation.setValue(val)
+    })
 
     this.islands = this.add.group()
     islands.forEach((island, index) => {
@@ -168,27 +174,104 @@ export default class CampaignScene extends Phaser.Scene
     this.onSelectIsland(islands[0])
 
     // Bind to events
-    this.events.on(UserEvents.SECTOR_MAP_SELECT, (pointer, index) => {
-      console.log(`Select sector ${index}`)
-    })
+    this.events.on(UserEvents.SECTOR_MAP_SELECT, this.onSelectSector, this)
 
     this.debugText = this.add.text(0, height - 12, '', { fontSize: 10 })
   }
 
+  canChangeIsland()
+  {
+    return [ SceneStates.PLAYER_SELECT_ISLAND, SceneStates.PLAYER_SELECT_SECTOR_AND_POP ].includes(this.state)
+  }
+
   onSelectIsland(island)
   {
-    this.selectedIsland = island
+    if (this.canChangeIsland() === false)
+    {
+      console.warn(`Cannot cancel island at this point`)
+    }
+    else
+    {
+      this.onCancelPlayIsland()
+  
+      this.selectedIsland = island
+  
+      this.map.setIsland(island.style, island.map)
+  
+      this.opponentPortraits.removeAll()
+      island.opponents.forEach(t => {
+        this.opponentPortraits.addPortrait(t)
+      })
+  
+      this.islandNameWord.setWord(island.name)
+      this.epochWord.setWord(`${ordinal(island.epoch)} EPOCH`)
+      this.population.setIcon(`population_epoch_${island.epoch}`)
+    }
+  }
 
-    this.map.setIsland(island.style, island.map)
+  onPlayIsland()
+  {
+    this.state = SceneStates.PLAYER_SELECT_SECTOR_AND_POP
+    this.defaultControls.setVisible(false)
+    this.beginPlayControls.setVisible(true)
+  }
 
-    this.opponentPortraits.removeAll()
-    island.opponents.forEach(t => {
-      this.opponentPortraits.addPortrait(t)
-    })
+  onChangeAllocatedPopulation(val)
+  {
+    // Semi-colon is required, else it doesn't destructuring the return array correctly
+    let [ available, allocated, remainingIslands ] = this.data.get([ 'available', 'allocated', 'remainingIslands' ]);
 
-    this.islandNameWord.setWord(island.name)
-    this.epochWord.setWord(`${ordinal(island.epoch)} EPOCH`)
-    this.population.setIcon(`population_epoch_${island.epoch}`)
+    // ValueControl.getAvailable(val, availablePopulation allocatedPopulation)
+    [ available, allocated ] = allocateOrDeallocate(available, allocated, val, remainingIslands.length - 1)
+
+    this.data.set({ available, allocated })
+
+    // this.allocatedPopulation.setValue(allocated)
+    // this.population.setValue(available)
+  }
+
+  onSelectSector(pointer, index)
+  {
+    const [ allocated, team ] = this.data.get([ 'allocated', 'team' ])
+
+    if (allocated > 0)
+    {
+      console.log(`Selected sector ${index}`)
+      // Save the real allocated value, this is used to "enable" the cheat whereby
+      // the player can deallocate the population before starting the sector.
+      // "realAllocated" is used to determine the start population and "available"
+      // determines how many is in the pool. Thus, "allocated" and "available" can be changed after the
+      // sector is selected.
+      this.data.set('realAllocated', allocated)
+      this.map.onAddBuilding(index, BuildingTypes.CASTLE, team)
+      this.state = SceneStates.AI_SECTOR_SELECTION
+      this.time.delayedCall(1000, this.onPlaceAICallback, [], this)
+    }
+    else
+    {
+      console.warn(`Must have allocated population before selecting a sector`)
+    }
+  }
+
+  onPlaceAICallback()
+  {
+    // If there are AI players without a sector, find an empty at random sector and place an AI there
+    // If there are still AI players without a sector, wait a few seconds and run this function again
+    // Else, start the island play count down (2s?) before switching to the game scene.
+    // this.time.delayedCall(1000, this.onPlaceAICallback, [], this)
+  }
+
+  onCancelPlayIsland()
+  {
+    let [ available, allocated ] = this.data.get([ 'available', 'allocated' ])
+
+    available = available + allocated
+    allocated = 0
+
+    this.data.set({ available, allocated })
+
+    this.defaultControls.setVisible(true)
+    this.beginPlayControls.setVisible(false)
   }
 
   update(time, delta)

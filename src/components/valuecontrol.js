@@ -90,7 +90,7 @@ export default class ValueControl extends Phaser.GameObjects.Container
     })
     this.on(Phaser.Input.Events.GAMEOBJECT_POINTER_WHEEL, (pointer, deltaX, deltaY, deltaZ, event) => {
       // console.log("ValueControl click wheel container", deltaX, deltaY, deltaZ)
-      this.emit(UserEvents.VALUE_CHANGE, Math.floor(deltaY / 100))
+      this.emit(UserEvents.VALUE_CHANGE, -Math.floor(deltaY / 100))
     })
   }
 
