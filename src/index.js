@@ -4,6 +4,7 @@ import Introduction from './introduction/scene'
 import Menu from './menu/scene'
 import CharacterSelect from './characterselect/scene'
 import Campaign from './campaign/scene'
+import Island from './island/scene'
 import PauseMenu from './pausemenu/scene'
 import Credits from './credits/scene'
 import Sandbox from './sandbox'
@@ -22,6 +23,7 @@ const config = {
     Menu,
     CharacterSelect,
     Campaign,
+    Island,
     PauseMenu,
     Credits,
     Sandbox,

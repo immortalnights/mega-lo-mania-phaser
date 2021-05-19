@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import MiniMap from '../components/minimap.js'
 import { DefaultKeys, PlayerStates, GameEvents, Teams, UserEvents } from '../defines.js'
 import { getKeyForSector } from '../utilities'
-import Sector from '../sector'
+import Sector from './sector'
 import Store from '../store'
 import PlayerTeamShields from './teamshield'
 import SectorControls from './sectorcontrols/'
@@ -15,7 +15,7 @@ export default class IslandScene extends Phaser.Scene
   {
     super({
       ...config,
-      key: 'game',
+      key: 'island',
       physics: {
         default: 'arcade',
         arcade: {
@@ -27,19 +27,13 @@ export default class IslandScene extends Phaser.Scene
     window.GAME_SCENE = this
   }
 
+  init(options)
+  {
+    console.log("Island.init", options)
+  }
+
   preload()
   {
-    this.load.json('mlm_icons_data', './mlm_icons.json')
-    this.load.json('mlm_units_data', './mlm_units.json')
-
-    this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
-    this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
-    this.load.atlas('mlm_buildings', './mlm_buildings.png', './mlm_buildings.json')
-    this.load.atlas('mlm_smallmap', './mlm_smallmap.png', './mlm_smallmap.json')
-    this.load.image('mlm_slab', './mlm_slabs.png')
-    // this.load.atlas('mlm_features', './mlm_features_count.png', './mlm_features.json')
-    this.load.atlas('mlm_features', './mlm_features.png', './mlm_features.json')
-    this.load.image('paletteswap-template', '/link-palette.png')
   }
 
   create()

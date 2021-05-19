@@ -1,7 +1,7 @@
 import Phaser, { GameObjects } from 'phaser'
 import Building from './building'
-import { GameEvents, UserEvents } from './defines'
-import sectorConfig from './assets/sectorconfig.json'
+import { GameEvents, UserEvents } from '../defines'
+import sectorConfig from '../data/sectorconfig.json'
 import Unit from './unit'
 
 
@@ -53,8 +53,6 @@ class Units extends Phaser.Physics.Arcade.Group
   {
     const units = this.data.get('units')
     const team = this.data.get('team')
-
-    
   }
 
   combine(army, spawn = true)

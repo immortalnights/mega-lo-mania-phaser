@@ -15,6 +15,62 @@ const SceneStates = {
   ISLAND_START_COUNTDOWN: 'island_start_countdown'
 }
 
+class IslandSetup
+{
+  constructor(island, playerTeam)
+  {
+    this.island = island
+
+    this.sectors = []
+    // Setup sectors
+    island.map.forEach((val, key) => {
+      if (val)
+      {
+        this.sectors.push({
+          index: key,
+          team: null,
+          population: undefined
+        })
+      }
+    })
+
+    this.opponentsToPlace = [ ...this.island.opponents ]
+  }
+
+  getNextOpponent()
+  {
+    return this.opponentsToPlace.pop()
+  }
+
+  findEmptySector()
+  {
+    return Phaser.Math.RND.pick(this.sectors.filter(s => s.team === null))
+  }
+
+  findTeamSector(team)
+  {
+    const sector = this.sectors.find(s => s.team === team)
+    return { ...sector }
+  }
+
+  isSectorEmpty(index)
+  {
+    const sector = this.sectors.find(s => s.index === index)
+    return sector.team === null
+  }
+
+  setPlayerStart(team, index, population)
+  {
+    const sector = this.sectors.find(s => s.index === index)
+
+    if (sector)
+    {
+      sector.team = team
+      sector.population = population
+    }
+  }
+}
+
 class OpponentPortraitContainer extends Phaser.GameObjects.Container
 {
   constructor(scene, x, y)
@@ -193,25 +249,31 @@ export default class CampaignScene extends Phaser.Scene
     else
     {
       this.onCancelPlayIsland()
-  
+
       this.selectedIsland = island
-  
+
       this.map.setIsland(island.style, island.map)
-  
+
       this.opponentPortraits.removeAll()
       island.opponents.forEach(t => {
         this.opponentPortraits.addPortrait(t)
       })
-  
+
       this.islandNameWord.setWord(island.name)
       this.epochWord.setWord(`${ordinal(island.epoch)} EPOCH`)
       this.population.setIcon(`population_epoch_${island.epoch}`)
     }
   }
 
-  onPlayIsland()
+  onPlayIsland(pointer)
   {
     this.state = SceneStates.PLAYER_SELECT_SECTOR_AND_POP
+
+    const playerTeam = this.data.get('team')
+
+    // reset the island setup data
+    this.islandSetup = new IslandSetup(this.selectedIsland)
+
     this.defaultControls.setVisible(false)
     this.beginPlayControls.setVisible(true)
   }
@@ -234,22 +296,28 @@ export default class CampaignScene extends Phaser.Scene
   {
     const [ allocated, team ] = this.data.get([ 'allocated', 'team' ])
 
-    if (allocated > 0)
+    // TODO allow the player to change their sector?
+
+    if (this.state !== SceneStates.PLAYER_SELECT_SECTOR_AND_POP)
+    {
+      console.warn(`Incorrect state to select sector`)
+    }
+    else if (allocated <= 0)
+    {
+      console.warn(`Must have allocated population before selecting a sector`)
+    }
+    else
     {
       console.log(`Selected sector ${index}`)
       // Save the real allocated value, this is used to "enable" the cheat whereby
       // the player can deallocate the population before starting the sector.
-      // "realAllocated" is used to determine the start population and "available"
+      // Value in islandSetup is used to determine the start population and "available"
       // determines how many is in the pool. Thus, "allocated" and "available" can be changed after the
       // sector is selected.
-      this.data.set('realAllocated', allocated)
+      this.islandSetup.setPlayerStart(team, index, allocated)
       this.map.onAddBuilding(index, BuildingTypes.CASTLE, team)
       this.state = SceneStates.AI_SECTOR_SELECTION
       this.time.delayedCall(1000, this.onPlaceAICallback, [], this)
-    }
-    else
-    {
-      console.warn(`Must have allocated population before selecting a sector`)
     }
   }
 
@@ -258,7 +326,35 @@ export default class CampaignScene extends Phaser.Scene
     // If there are AI players without a sector, find an empty at random sector and place an AI there
     // If there are still AI players without a sector, wait a few seconds and run this function again
     // Else, start the island play count down (2s?) before switching to the game scene.
-    // this.time.delayedCall(1000, this.onPlaceAICallback, [], this)
+
+    const nextOpponent = this.islandSetup.getNextOpponent()
+
+    if (nextOpponent)
+    {
+      const sector = this.islandSetup.findEmptySector()
+      console.log(`Placing opponent '${nextOpponent}' on sector ${sector.index}`)
+      this.islandSetup.setPlayerStart(nextOpponent, sector.index, 30)
+      this.map.onAddBuilding(sector.index, BuildingTypes.CASTLE, nextOpponent)
+      this.time.delayedCall(1000, this.onPlaceAICallback, [], this)
+    }
+    else
+    {
+      console.log(`All opponents have been placed! Starting game...`)
+      this.onStartIsland()
+    }
+  }
+
+  onStartIsland()
+  {
+    const [ team, allocated ] = this.data.get([ 'team', 'allocated' ])
+
+    // Record player allocated population which will be deducted from the players
+    // available population if they win the island.
+    const sector = this.islandSetup.findTeamSector(team)
+    sector.allocated = allocated
+
+    this.scene.stop()
+    this.scene.start('island', this.islandSetup)
   }
 
   onCancelPlayIsland()

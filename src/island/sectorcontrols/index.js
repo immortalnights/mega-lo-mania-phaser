@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { BuildingTypes, GameEvents } from '../defines'
+import { BuildingTypes, GameEvents } from '../../defines'
 
 
 // merge with Sector (data)!
