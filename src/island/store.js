@@ -1,9 +1,9 @@
 import Phaser from 'phaser'
-import { GameEvents, BuildingTypes, unitSet } from './defines.js'
-import Islands from './data/islands.json'
-import Technologies from './data/technologies.json'
-import Resources from './data/resources.json'
-import { getKeyForSector } from './utilities'
+import { GameEvents, BuildingTypes, unitSet } from '../defines.js'
+import Islands from '../data/islands.json'
+import Technologies from '../data/technologies.json'
+import Resources from '../data/resources.json'
+import { getKeyForSector } from '../utilities'
 
 const getDefaultDefendersForBuilding = (type) => {
   let defenderCount = 0
@@ -1008,16 +1008,15 @@ class Sector
   }
 }
 
-export default class Store extends Phaser.Events.EventEmitter
+export default class Store
 {
   constructor(scene)
   {
-    super()
-
     this.scene = scene
 
-    this.players = []
-    this.sectors = {}
+    this.players = undefined
+    this.island = undefined
+    this.sectors = undefined
 
     this.tickTimer = 0
     this.tickCount = 0

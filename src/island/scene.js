@@ -1,9 +1,9 @@
 import Phaser from 'phaser'
 import MiniMap from '../components/minimap.js'
-import { DefaultKeys, PlayerStates, GameEvents, Teams, UserEvents } from '../defines.js'
+import { DefaultKeys, PlayerStates, GameEvents, Teams, UserEvents, BuildingTypes } from '../defines.js'
 import { getKeyForSector } from '../utilities'
 import Sector from './sector'
-import Store from '../store'
+import Store from './store'
 import PlayerTeamShields from './teamshield'
 import SectorControls from './sectorcontrols/'
 import clone from 'lodash.clonedeep'
@@ -30,6 +30,20 @@ export default class IslandScene extends Phaser.Scene
   init(options)
   {
     console.log("Island.init", options)
+    this.store = new Store(this)
+
+    // IslandSetup has whole island data and it should be used!
+    this.store.setIsland(options.island.name)
+    this.store.players = []
+    this.store.setPlayers(options.sectors.map(s => s.team))
+
+    // Get from init data!
+    this.localPlayer = Teams.RED
+
+
+    options.sectors.forEach(s => {
+      this.store.buildBuilding(s.index, BuildingTypes.CASTLE, s.team)
+    })
   }
 
   preload()
@@ -65,10 +79,6 @@ export default class IslandScene extends Phaser.Scene
       team: Teams.RED,
     })
 
-    this.store = new Store(this)
-    this.store.setIsland("Quota")
-    this.store.setPlayers(Object.values(Teams))
-
     // Create the minimap
     this.add.existing(new MiniMap(this, 12, 40, this.store.island))
 
@@ -95,43 +105,12 @@ export default class IslandScene extends Phaser.Scene
     this.events.on(UserEvents.ALLOCATE_POPULATION, this.onAllocatePopulation, this)
     this.events.on(UserEvents.DEALLOCATE_POPULATION, this.onDeallocatePopulation, this)
 
-    // Trigger the selection of first sector of the island
-    // FIXME!
-
-    // Place player and AI in random locations; select the player sector
-    const indexes = []
-    this.store.island.map.forEach((value, index) => {
-      if (value)
-      {
-        indexes.push(index)
-      }
-    })
-
-    this.localPlayer = Teams.RED
-    const players = Object.values(Teams)
-    const castles = {}
-
-    players.forEach(t => {
-      // random player castle
-      let position = Phaser.Math.RND.pick(indexes)
-      castles[t] = position
-      this.store.buildBuilding(position, 'castle', t)
-      indexes.splice(indexes.findIndex(v => v === position), 1)
-    })
-
     // Select the sector, always do this last
     setTimeout(() => {
-      this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, castles[Teams.RED])
+      // this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, castles[Teams.RED])
     })
 
-    setTimeout(() => {
-      this.store.deployArmy(1, {
-        stone: 10
-      })
-    }, 500)
-
     this.add.existing(new SectorControls(this, 0, 110))
-
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
       switch (unitType)

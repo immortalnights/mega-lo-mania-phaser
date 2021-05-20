@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import Store from './store'
+import Store from './island/store'
 import Root from './island/sectorcontrols/root'
 import Blueprints from './island/sectorcontrols/blueprints'
 import Repair from './island/sectorcontrols/repair'

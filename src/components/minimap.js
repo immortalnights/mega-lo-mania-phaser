@@ -14,7 +14,7 @@ const armyIconOffset = {
 
 export default class MiniMap extends Phaser.GameObjects.Container
 {
-  constructor(scene, x, y)
+  constructor(scene, x, y, island = undefined)
   {
     super(scene, x, y)
 
@@ -43,6 +43,12 @@ export default class MiniMap extends Phaser.GameObjects.Container
     marker.setData('sector', undefined)
     marker.setVisible(false)
     this.add(marker)
+
+    // Apply initial map if provided
+    if (island)
+    {
+      this.setIsland(island.style, island.map)
+    }
 
     //! Event sector marker
     // TODO
