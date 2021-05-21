@@ -3,7 +3,7 @@ import MiniMap from '../components/minimap.js'
 import { DefaultKeys, PlayerStates, GameEvents, Teams, UserEvents, BuildingTypes } from '../defines.js'
 import { getKeyForSector } from '../utilities'
 import Sector from './sector'
-import Store from './store'
+import Store from './data/store'
 import PlayerTeamShields from './teamshield'
 import SectorControls from './sectorcontrols/'
 import clone from 'lodash.clonedeep'
@@ -30,16 +30,14 @@ export default class IslandScene extends Phaser.Scene
   init(options)
   {
     console.log("Island.init", options)
+    this.island = options.island
     this.store = new Store(this)
 
     // IslandSetup has whole island data and it should be used!
-    this.store.setIsland(options.island.name)
-    this.store.players = []
-    this.store.setPlayers(options.sectors.map(s => s.team))
+    this.store.setup(options.island, options.sectors)
 
     // Get from init data!
-    this.localPlayer = Teams.RED
-
+    this.data.set('team', Teams.RED)
 
     options.sectors.forEach(s => {
       this.store.buildBuilding(s.index, BuildingTypes.CASTLE, s.team)
@@ -53,7 +51,6 @@ export default class IslandScene extends Phaser.Scene
   create()
   {
     const { width, height } = this.sys.game.canvas
-
 
     this.state = PlayerStates.DEFAULT
     this.activeArmySector = undefined
@@ -80,12 +77,12 @@ export default class IslandScene extends Phaser.Scene
     })
 
     // Create the minimap
-    this.add.existing(new MiniMap(this, 12, 40, this.store.island))
+    this.add.existing(new MiniMap(this, 40, 40, this.island))
 
     this.add.existing(new PlayerTeamShields(this, 90, 48, this.store.players.map(p => p.team)))
 
     // Create the Sector view
-    this.add.existing(new Sector(this, 250, 120, { style: this.store.island.style, epoch: 1 }))
+    this.add.existing(new Sector(this, 250, 120, { style: this.island.style, epoch: 1 }))
 
     const units = this.physics.add.group()
     this.projectiles = this.physics.add.group()
@@ -107,7 +104,12 @@ export default class IslandScene extends Phaser.Scene
 
     // Select the sector, always do this last
     setTimeout(() => {
-      // this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, castles[Teams.RED])
+      // Find the first local player sector (for loading, selected sector should be saved)
+      const localPlayerSector = Object.values(this.store.sectors).find(s => {
+        return s.id = this.data.get('team')
+      })
+
+      this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, localPlayerSector.index)
     })
 
     this.add.existing(new SectorControls(this, 0, 110))
@@ -214,18 +216,20 @@ export default class IslandScene extends Phaser.Scene
   onRequestAlliance(otherTeam)
   {
     // TODO player cannot ally with everyone at the same time.
-    if (this.localPlayer !== otherTeam && this.store.isAllied(this.localPlayer, otherTeam) === false)
+    const localPlayer = this.data.get('team')
+    if (localPlayer !== otherTeam && this.store.isAllied(localPlayer, otherTeam) === false)
     {
       // Check if the other player actually wants to be allied
-      this.store.makeAlliance(this.localPlayer, otherTeam)
+      this.store.makeAlliance(localPlayer, otherTeam)
     }
   }
 
   onBreakAlliances()
   {
-    if (this.store.isAllied(this.localPlayer) === true)
+    const localPlayer = this.data.get('team')
+    if (this.store.isAllied(localPlayer) === true)
     {
-      this.store.breakAlliances(this.localPlayer)
+      this.store.breakAlliances(localPlayer)
     }
   }
 
