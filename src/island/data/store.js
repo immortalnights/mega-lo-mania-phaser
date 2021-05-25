@@ -35,8 +35,11 @@ const getDefaultDefendersForBuilding = (type) => {
 
 export default class Store
 {
-  constructor(scene)
+  constructor(scene, initData)
   {
+    this.state = 'setup'
+    // Queues events during setup or load until the scene is ready
+    this.queue = []
     this.scene = scene
 
     this.island = undefined
@@ -46,13 +49,100 @@ export default class Store
     this.tickTimer = 0
     this.tickCount = 0
     this.tickSpeed = 1000 // 1s Normal speed
+
+    this.setup(initData)
   }
 
-  setup(island, players)
+  emit(name, ...args)
   {
-    console.log(island, players)
+    if (this.state === 'setup')
+    {
+      this.queue.push([ name, args ])
+    }
+    else
+    {
+      this.scene.scene.emit(name, ...args)
+    }
+  }
 
-    this.island = island.name
+  start()
+  {
+    console.debug(`Starting with ${this.queue.length} queued events`)
+    while (this.queue.length > 0)
+    {
+      const item = this.queue.pop()
+      this.scene.events.emit(item[0], ...item[1])
+    }
+
+    this.state = 'running'
+  }
+
+  setup(initData)
+  {
+    console.assert(initData, `Missing store init data`)
+
+    if (initData.slot)
+    {
+      // Load
+    }
+    else if (initData.setup)
+    {
+      const { island, players, sectors, localPlayerTeam } = initData.setup
+  
+      this.island = island
+      this.sectors = {}
+      this.players = []
+
+      this.localPlayerTeam = localPlayerTeam
+      // FIXME
+      this.scene.data.set('team', localPlayerTeam)
+
+      // Initialize sectors
+      island.map.forEach((value, index) => {
+        if (value)
+        {
+          const key = getKeyForSector(index, island.map)
+          this.sectors[index] = new Sector(this, index, key, island.epoch)
+          this.sectors[index]
+        }
+      })
+
+      sectors.forEach(s => {
+        this.players.push({ team: s.team, allies: [] })
+
+        const sector = this.sectors[s.index]
+        sector.claim(s.team, s.population)
+      })
+    }
+  }
+
+  loadGame(slot)
+  {
+    if (slot === undefined)
+    {
+      slot = this.saveGameSlot
+    }
+
+    try
+    {
+      const data = window.localStorage.getItem(`mlm_savegame_${slot}`)
+      if (data != null)
+      {
+        console.debug(`Loaded game data from sot ${slot}`)
+        this.loadGameData(JSON.parse(data))
+      }
+    }
+    catch (error)
+    {
+      console.error(`Failed to load game from slot '${slot}'`)
+    }
+  }
+
+  loadGameData(data)
+  {
+    // this.island = data.island
+
+    this.island = data.island.name
     this.sectors = {}
     this.players = []
 
@@ -61,12 +151,41 @@ export default class Store
       if (value)
       {
         const key = getKeyForSector(index, island.map)
-        this.sectors[index] = new Sector(this.scene, index, key, island.epoch)
+        this.sectors[index] = new Sector(this, index, key, island.epoch)
         this.sectors[index]
       }
     })
 
-    
+    // Get from init data!
+    this.data.set('team', Teams.RED)
+
+    data.sectors.forEach(s => {
+      this.buildBuilding(s.index, BuildingTypes.CASTLE, s.team)
+    })
+  }
+
+  saveGame(slot)
+  {
+    try
+    {
+      const data = this.saveGameData()
+      window.localStorage.setItem(`mlm_savegame_${slot}`, JSON.stringify(data))
+      console.debug(`Saved game data to slow ${slot}`)
+    }
+    catch (error)
+    {
+      console.error(`Failed to load game from slot '${slot}'`)
+    }
+  }
+
+  saveGameData()
+  {
+    const data = {
+      island: this.island,
+      players: this.players,
+      sectors: this.sectors
+    }
+    return data
   }
 
   tick(time, delta)
@@ -110,49 +229,49 @@ export default class Store
   {
     const sector = this.sectors[index]
     sector.modifyPopulation('mining', resource, value)
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+    this.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   changeResearchers(index, value)
   {
     const sector = this.sectors[index]
     sector.modifyPopulation('research', undefined, value)
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+    this.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   changeBuilders(index, value, building)
   {
     const sector = this.sectors[index]
     sector.modifyPopulation('building', building, value)
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+    this.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   changeManufacturers(index, value)
   {
     const sector = this.sectors[index]
     sector.modifyPopulation('production', undefined, value)
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+    this.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   changeProductionRuns(index, value)
   {
     const sector = this.sectors[index]
     sector.changeProductionRuns(value)
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+    this.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   allocatePopulation(index, task, detail, population = 1)
   {
     const sector = this.sectors[index]
     sector.modifyPopulation(task, detail, population)
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+    this.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   deallocatePopulation(index, task, detail, population = 1)
   {
     const sector = this.sectors[index]
     sector.modifyPopulation(task, detail, -population)
-    this.scene.events.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
+    this.emit(GameEvents.POPULATION_ALLOCATION_CHANGED, sector)
   }
 
   addToArmy(index, quantity, type)
@@ -225,7 +344,7 @@ export default class Store
       }
     })
 
-    this.scene.events.emit(GameEvents.TEAMS_CHANGED, teams, localPlayerAllied)
+    this.emit(GameEvents.TEAMS_CHANGED, teams, localPlayerAllied)
   }
 
   makeAlliance(a, b)
@@ -266,7 +385,7 @@ export default class Store
       defenders: getDefaultDefendersForBuilding(type)
     }
 
-    this.scene.events.emit(GameEvents.SECTOR_ADD_BUILDING, sector, type, team)
+    this.emit(GameEvents.SECTOR_ADD_BUILDING, sector, type, team)
   }
 
   destroyBuilding(sector, type)
@@ -276,7 +395,7 @@ export default class Store
 
     sec.buildings[type] = false
 
-    this.scene.events.emit(GameEvents.SECTOR_REMOVE_BUILDING, sector, type)
+    this.emit(GameEvents.SECTOR_REMOVE_BUILDING, sector, type)
   }
 
   hasDefender(sector, building, position)
@@ -293,7 +412,7 @@ export default class Store
     const b = sec.buildings[building]
 
     b.defenders[position] = type
-    this.scene.events.emit(GameEvents.BUILDING_ADD_DEFENDER, sector, building, position, type)
+    this.emit(GameEvents.BUILDING_ADD_DEFENDER, sector, building, position, type)
   }
 
   removeDefender(sector, building, position)
@@ -304,7 +423,7 @@ export default class Store
     const b = sec.buildings[building]
     b.defenders[position] = undefined
 
-    this.scene.events.emit(GameEvents.BUILDING_REMOVE_DEFENDER, sector, building, position)
+    this.emit(GameEvents.BUILDING_REMOVE_DEFENDER, sector, building, position)
   }
 
   hasArmy(sectorIndex, team)
@@ -353,7 +472,7 @@ export default class Store
 
       if (sectorIndex === destinationIndex)
       {
-        this.scene.events.emit(GameEvents.SECTOR_ADD_ARMY, sectorIndex, ownerTeam, army)
+        this.emit(GameEvents.SECTOR_ADD_ARMY, sectorIndex, ownerTeam, army)
       }
       else
       {
@@ -402,8 +521,8 @@ export default class Store
         // Merge armies
         this.combineArmies(destinationArmy, sourceArmy)
 
-        this.scene.events.emit(GameEvents.SECTOR_REMOVE_ARMY, sectorIndex, team, sourceArmy)
-        this.scene.events.emit(GameEvents.SECTOR_ADD_ARMY, destinationIndex, team, destinationArmy)
+        this.emit(GameEvents.SECTOR_REMOVE_ARMY, sectorIndex, team, sourceArmy)
+        this.emit(GameEvents.SECTOR_ADD_ARMY, destinationIndex, team, destinationArmy)
       }
     }
   }

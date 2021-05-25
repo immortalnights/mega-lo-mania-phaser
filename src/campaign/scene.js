@@ -4,7 +4,7 @@ import MiniMap from '../components/minimap'
 import Portrait from '../components/portrait'
 import ValueControl from '../components/valuecontrol'
 import Word from '../components/word'
-import { BuildingTypes, UserEvents } from '../defines'
+import { BuildingTypes, Teams, UserEvents } from '../defines'
 import { allocateOrDeallocate } from '../utilities'
 // import islands from '../data/isands.json'
 
@@ -20,6 +20,7 @@ class IslandSetup
   constructor(island, playerTeam)
   {
     this.island = island
+    this.localPlayerTeam = playerTeam
 
     this.sectors = []
     // Setup sectors
@@ -272,7 +273,7 @@ export default class CampaignScene extends Phaser.Scene
     const playerTeam = this.data.get('team')
 
     // reset the island setup data
-    this.islandSetup = new IslandSetup(this.selectedIsland)
+    this.islandSetup = new IslandSetup(this.selectedIsland, Teams.RED)
 
     this.defaultControls.setVisible(false)
     this.beginPlayControls.setVisible(true)

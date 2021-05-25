@@ -30,18 +30,7 @@ export default class IslandScene extends Phaser.Scene
   init(options)
   {
     console.log("Island.init", options)
-    this.island = options.island
-    this.store = new Store(this)
-
-    // IslandSetup has whole island data and it should be used!
-    this.store.setup(options.island, options.sectors)
-
-    // Get from init data!
-    this.data.set('team', Teams.RED)
-
-    options.sectors.forEach(s => {
-      this.store.buildBuilding(s.index, BuildingTypes.CASTLE, s.team)
-    })
+    this.store = new Store(this, options)
   }
 
   preload()
@@ -77,12 +66,12 @@ export default class IslandScene extends Phaser.Scene
     })
 
     // Create the minimap
-    this.add.existing(new MiniMap(this, 40, 40, this.island))
+    this.add.existing(new MiniMap(this, 40, 40, this.store.island))
 
     this.add.existing(new PlayerTeamShields(this, 90, 48, this.store.players.map(p => p.team)))
 
     // Create the Sector view
-    this.add.existing(new Sector(this, 250, 120, { style: this.island.style, epoch: 1 }))
+    this.add.existing(new Sector(this, 250, 120, { style: this.store.island.style, epoch: 1 }))
 
     const units = this.physics.add.group()
     this.projectiles = this.physics.add.group()
@@ -104,12 +93,16 @@ export default class IslandScene extends Phaser.Scene
 
     // Select the sector, always do this last
     setTimeout(() => {
+      // Setup after the scene has been initialized so that the store events
+      // can update the GameObjects as required
+      this.store.start()
+
       // Find the first local player sector (for loading, selected sector should be saved)
       const localPlayerSector = Object.values(this.store.sectors).find(s => {
-        return s.id = this.data.get('team')
+        return s.owner = this.data.get('team')
       })
 
-      this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, localPlayerSector.index)
+      this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, localPlayerSector.id)
     })
 
     this.add.existing(new SectorControls(this, 0, 110))
@@ -185,6 +178,7 @@ export default class IslandScene extends Phaser.Scene
     })
 
     this.bindings = this.input.keyboard.addKeys(DefaultKeys)
+
   }
 
   update()

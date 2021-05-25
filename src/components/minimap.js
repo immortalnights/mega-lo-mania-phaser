@@ -84,6 +84,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
 
   setIsland(style, map)
   {
+    console.debug(`Set island ${style}`)
     this.icons.clear(true, true)
     this.sectors.setVisible(false)
 
@@ -165,6 +166,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
 
   onAddBuilding(sector, building, team)
   {
+    console.debug(`Add building ${building} to ${sector}`)
     if (building === BuildingTypes.CASTLE)
     {
       const position = this.getSectorXY(sector)
@@ -183,6 +185,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
 
   onRemoveBuilding(sector, building, team)
   {
+    console.debug(`Remove building ${building} from ${sector}`)
     if (building === BuildingTypes.CASTLE)
     {
       const icon = this.icons.getChildren().find(child => {

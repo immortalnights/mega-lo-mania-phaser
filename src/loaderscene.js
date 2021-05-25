@@ -12,6 +12,7 @@ export default class LoaderScene extends Phaser.Scene
     })
 
     this.nextScene = config.nextScene
+    this.nextSceneData = config.nextSceneData
   }
 
   preload()
@@ -45,6 +46,6 @@ export default class LoaderScene extends Phaser.Scene
     animationFactory.createFlagAnimations(this)
     animationFactory.createProjectileAnimations(this)
 
-    this.scene.start(this.nextScene);
+    this.scene.start(this.nextScene, this.nextSceneData);
   }
 }

@@ -1,13 +1,14 @@
 import Technologies from '/src/data/technologies.json'
 import Resources from '/src/data/resources.json'
+import { BuildingTypes, GameEvents } from '../../defines'
 
 
 export default class Sector
 {
-  constructor(scene, index, key)
+  constructor(eventProxy, index, key)
   {
     this.name = "Island" // island name
-    this.scene = scene
+    this.eventProxy = eventProxy
     this.id = index,
     this.key = key
     this.epoch = 1
@@ -136,6 +137,8 @@ export default class Sector
     this.startPopulation = population
     this.availablePopulation = population
 
+    this.eventProxy.emit(GameEvents.SECTOR_ADD_BUILDING, this.id, BuildingTypes.CASTLE, team)
+
     // TESTING
     if (this.technologies['rock'])
     {
@@ -233,7 +236,7 @@ export default class Sector
               }
             }
 
-            this.scene.events.emit(GameEvents.BUILDING_CONSTRUCTED, this, construction.id)
+            this.eventProxy.emit(GameEvents.BUILDING_CONSTRUCTED, this, construction.id)
 
             // Remove the construction project
             this.construction.splice(index, 1)
@@ -313,7 +316,7 @@ export default class Sector
             this.availablePopulation = this.availablePopulation + resource.allocated
 
             resourcesChanged = true
-            this.scene.events.emit(GameEvents.RESOURCE_DEPLETED, this, resource)
+            this.eventProxy.emit(GameEvents.RESOURCE_DEPLETED, this, resource)
           }
         }
       })
@@ -339,11 +342,11 @@ export default class Sector
             {
               this.epoch = this.epoch + 1
               this.onAdvancedTechnologyLevel()
-              this.scene.events.emit(GameEvents.ADVANCED_TECH_LEVEL, this)
+              this.eventProxy.emit(GameEvents.ADVANCED_TECH_LEVEL, this)
             }
 
             // Sector alert (map / audio)
-            this.scene.events.emit(GameEvents.RESEARCH_COMPLETED, this)
+            this.eventProxy.emit(GameEvents.RESEARCH_COMPLETED, this)
 
             // Deallocate the population
             this.availablePopulation = this.availablePopulation + this.research.allocated
@@ -352,7 +355,7 @@ export default class Sector
             this.research = null
           }
 
-          this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
+          this.eventProxy.emit(GameEvents.RESEARCH_CHANGED, this)
         }
       }
 
@@ -376,7 +379,7 @@ export default class Sector
             this.technologies[this.production.name].produced += 1
 
             // Sector alert (map / audio) (for an individual item)
-            this.scene.events.emit(GameEvents.PRODUCTION_COMPLETED, this)
+            this.eventProxy.emit(GameEvents.PRODUCTION_COMPLETED, this)
 
             if (this.production.runs > 0)
             {
@@ -387,7 +390,7 @@ export default class Sector
             else
             {
               // Sector alert (map / audio) (for the entire run)
-              this.scene.events.emit(GameEvents.PRODUCTION_RUN_COMPLETED, this)
+              this.eventProxy.emit(GameEvents.PRODUCTION_RUN_COMPLETED, this)
   
               // Deallocate the population
               this.availablePopulation = this.availablePopulation + this.production.allocated
@@ -401,13 +404,13 @@ export default class Sector
             this.production.totalDuration = (this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration
           }
 
-          this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
+          this.eventProxy.emit(GameEvents.PRODUCTION_CHANGED, this)
         }
       }
 
       if (resourcesChanged)
       {
-        this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
+        this.eventProxy.emit(GameEvents.RESOURCES_CHANGED, this)
       }
 
       // Update the states of any researched technologies
@@ -430,7 +433,7 @@ export default class Sector
 
       // The population of a sector always changes
       // though may change by < 1
-      this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
+      this.eventProxy.emit(GameEvents.POPULATION_CHANGED, this)
     }
   }
 
@@ -642,8 +645,8 @@ export default class Sector
         if (this.research)
         {
           allocateOrDeallocate(this.research)
-          this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
-          this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
+          this.eventProxy.emit(GameEvents.POPULATION_CHANGED, this)
+          this.eventProxy.emit(GameEvents.RESEARCH_CHANGED, this)
         }
         break
       }
@@ -663,8 +666,8 @@ export default class Sector
             this.production.totalDuration = Math.max((this.production.duration * (this.production.runs - 1)) + this.production.remainingDuration, 0)
           }
 
-          this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
-          this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
+          this.eventProxy.emit(GameEvents.POPULATION_CHANGED, this)
+          this.eventProxy.emit(GameEvents.PRODUCTION_CHANGED, this)
         }
         break
       }
@@ -678,7 +681,7 @@ export default class Sector
         else
         {
           allocateOrDeallocate(construction)
-          this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
+          this.eventProxy.emit(GameEvents.POPULATION_CHANGED, this)
         }
         break
       }
@@ -692,7 +695,7 @@ export default class Sector
         else
         {
           allocateOrDeallocate(resource)
-          this.scene.events.emit(GameEvents.POPULATION_CHANGED, this)
+          this.eventProxy.emit(GameEvents.POPULATION_CHANGED, this)
         }
         break
       }
@@ -717,7 +720,7 @@ export default class Sector
         }
       }
 
-      this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
+      this.eventProxy.emit(GameEvents.PRODUCTION_CHANGED, this)
     }
   }
 
@@ -750,7 +753,7 @@ export default class Sector
           remainingDuration: Infinity,
         }
   
-        this.scene.events.emit(GameEvents.RESEARCH_CHANGED, this)
+        this.eventProxy.emit(GameEvents.RESEARCH_CHANGED, this)
       }
     }
   }
@@ -780,7 +783,7 @@ export default class Sector
         totalDuration: Infinity,
       }
 
-      this.scene.events.emit(GameEvents.PRODUCTION_CHANGED, this)
+      this.eventProxy.emit(GameEvents.PRODUCTION_CHANGED, this)
     }
   }
 
@@ -862,8 +865,8 @@ export default class Sector
       }
     }
 
-    this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
-    this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
+    this.eventProxy.emit(GameEvents.ARMY_CHANGED, this)
+    this.eventProxy.emit(GameEvents.RESOURCES_CHANGED, this)
   }
 
   // from user event
@@ -877,8 +880,8 @@ export default class Sector
       group.quantity = group.quantity - amount
     }
 
-    this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
-    this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
+    this.eventProxy.emit(GameEvents.ARMY_CHANGED, this)
+    this.eventProxy.emit(GameEvents.RESOURCES_CHANGED, this)
   }
 
   _removeUnitsFromArmy(type, quantity)
@@ -961,7 +964,7 @@ export default class Sector
     group.quantity = group.quantity + transfer
     this.availablePopulation = this.availablePopulation - transfer
 
-    this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
+    this.eventProxy.emit(GameEvents.ARMY_CHANGED, this)
   }
 
   disbandPendingArmy()
@@ -972,7 +975,7 @@ export default class Sector
 
     this.pendingArmy = []
 
-    this.scene.events.emit(GameEvents.ARMY_CHANGED, this)
-    this.scene.events.emit(GameEvents.RESOURCES_CHANGED, this)
+    this.eventProxy.emit(GameEvents.ARMY_CHANGED, this)
+    this.eventProxy.emit(GameEvents.RESOURCES_CHANGED, this)
   }
 }

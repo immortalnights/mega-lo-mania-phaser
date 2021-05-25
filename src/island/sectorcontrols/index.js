@@ -1,5 +1,14 @@
 import Phaser from 'phaser'
 import { BuildingTypes, GameEvents } from '../../defines'
+import Blueprints from './blueprints'
+import Defence from './defense'
+import Mining from './mining'
+import Offense from './offense'
+import Production from './production'
+import Repair from './repair'
+import Research from './research'
+import Root from './root'
+
 
 
 // merge with Sector (data)!
@@ -79,7 +88,7 @@ export default class SectorControls extends Phaser.GameObjects.Container
       })
     }
 
-    sector = new SectorManager(sector)
+    // sector = new SectorManager(sector)
     this.on('sectorcontrol:change_view', this.onChangeView)
 
     const root = new Root(this.scene, 0, 20)
@@ -97,7 +106,7 @@ export default class SectorControls extends Phaser.GameObjects.Container
     const offense = new Offense(this.scene, 0, 0)
     this.add(offense)
 
-    const research = new Research(this.scene, 0, 0)
+    const research = new Research(this.scene, 0, 0, { header: '' })
     this.add(research)
 
     const production = new Production(this.scene, 0, 0)
@@ -119,10 +128,10 @@ export default class SectorControls extends Phaser.GameObjects.Container
 
     this.views.setVisible(false)
 
-    const castle = sector.hasBuilding(BuildingTypes.CASTLE)
+    const castle = sector.buildings[BuildingTypes.CASTLE]
     if (castle /* && castle.team === localPlayer.team*/)
     {
-      this.onChangeView('root')
+      this.onChangeView('root', sector)
     }
     else if (sector.armies.length > 0 && hasOwnArmy(sector.armies) /* && localPlayer.isNotInAlliance*/)
     {
