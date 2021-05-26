@@ -195,7 +195,7 @@ export default class Sandbox extends Phaser.Scene
 
     // this.add.image(width / 2, height / 2, 'template').setScale(0.5, 0.5).setAlpha(0.25)
 
-    this.store = new Store(this)
+    this.store = new Store(this, {})
     this.store.addSector(0, '', 1)
     this.store.addSector(1, '', 1)
     this.store.addSector(2, '', 1)

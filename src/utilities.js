@@ -27,61 +27,61 @@ export const yearFromEpoch = epoch => {
     case 1:
     {
       year = 9500
-      notation = 'BC'
+      notation = 'bc'
       break
     }
     case 2:
     {
       year = 3000
-      notation = 'BC'
+      notation = 'bc'
       break
     }
     case 3:
     {
       year = 100
-      notation = 'BC'
+      notation = 'bc'
       break
     }
     case 4:
     {
       year = 900
-      notation = 'AD'
+      notation = 'ad'
       break
     }
     case 5:
     {
       year = 1400
-      notation = 'AD'
+      notation = 'ad'
       break
     }
     case 6:
     {
       year = 1850
-      notation = 'AD'
+      notation = 'ad'
       break
     }
     case 7:
     {
       year = 1915
-      notation = 'AD'
+      notation = 'ad'
       break
     }
     case 8:
     {
       year = 1945
-      notation = 'AD'
+      notation = 'ad'
       break
     }
     case 9:
     {
       year = 1980
-      notation = 'AD'
+      notation = 'ad'
       break
     }
     case 10:
     {
       year = 2001
-      notation = 'AD'
+      notation = 'ad'
       break
     }
   }

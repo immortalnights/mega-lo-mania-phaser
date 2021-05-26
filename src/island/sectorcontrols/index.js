@@ -61,6 +61,8 @@ export default class SectorControls extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
+    this.activeView = undefined
+
     // this.add.existing(new Clock(this, 50, 200, 4))
     // this.add.existing(new Button(scene, 20, 120, 'blueprint_icon', ''))
     // this.add.existing(new Button(scene, 40, 120, 'repair_icon', ''))
@@ -144,6 +146,12 @@ export default class SectorControls extends Phaser.GameObjects.Container
     }
   }
 
+  refresh()
+  {
+    const sector = this.scene.getActiveSector()
+    this.activeView.refresh(sector)
+  }
+
   onChangeView(name, ...rest)
   {
     this.views.setVisible(false)
@@ -152,10 +160,12 @@ export default class SectorControls extends Phaser.GameObjects.Container
     if (view == null)
     {
       console.warn(`Unknown view name ${name}`)
+      this.activeView = this.views.getChildren().find(view => view.name === 'root')
     }
     else
     {
-      view.display(...rest)
+      this.activeView = view
+      this.refresh()
     }
   }
 

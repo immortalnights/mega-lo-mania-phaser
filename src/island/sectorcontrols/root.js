@@ -14,7 +14,7 @@ export default class Root extends Phaser.GameObjects.Container
 
     this.name = 'root'
 
-    this.sectorLabel = new SectorLabel(this.scene, 0, -30)
+    this.sectorLabel = new SectorLabel(this.scene, 0, -40)
     this.add(this.sectorLabel)
 
     this.blueprintNav = new Button(this.scene, -30, -22, 'blueprint_icon', () => {
@@ -217,7 +217,6 @@ export default class Root extends Phaser.GameObjects.Container
         this.miningNav.setFrame('mine_icon')
       }
     }
-
 
     this.blueprintNav.setVisible(blueprintsAvailable)
     this.repairNav.setVisible(repairAvailable)

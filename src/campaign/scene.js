@@ -3,7 +3,7 @@ import ordinal from 'ordinal'
 import MiniMap from '../components/minimap'
 import Portrait from '../components/portrait'
 import ValueControl from '../components/valuecontrol'
-import Word from '../components/word'
+import BlockText from '../components/blocktext'
 import { BuildingTypes, Teams, UserEvents } from '../defines'
 import { allocateOrDeallocate } from '../utilities'
 // import islands from '../data/isands.json'
@@ -170,20 +170,20 @@ export default class CampaignScene extends Phaser.Scene
     this.opponentPortraits = new OpponentPortraitContainer(this, 360, 80)
     this.add.existing(this.opponentPortraits)
 
-    this.islandNameWord = new Word(this, xOffset, yOffset[0], "noname")
+    this.islandNameWord = new BlockText(this, xOffset, yOffset[0], "noname")
     this.add.existing(this.islandNameWord)
-    this.add.existing(new Word(this, xOffset, yOffset[1], "of the"))
-    this.epochWord = new Word(this, xOffset, yOffset[2], `x EPOCH`)
+    this.add.existing(new BlockText(this, xOffset, yOffset[1], "of the"))
+    this.epochWord = new BlockText(this, xOffset, yOffset[2], `x EPOCH`)
     this.add.existing(this.epochWord)
 
     this.defaultControls = this.add.group()
 
-    // const optionsWord = new Word(this, xOffset, yOffset[3], `OPTIONS`)
+    // const optionsWord = new BlockText(this, xOffset, yOffset[3], `OPTIONS`)
     // optionsWord.setInteractive()
     // this.add.existing(optionsWord)
     // this.defaultControls.add(optionsWord)
 
-    const playIslandWord = new Word(this, xOffset, yOffset[4], `PLAY ISLAND`)
+    const playIslandWord = new BlockText(this, xOffset, yOffset[4], `PLAY ISLAND`)
     playIslandWord.setInteractive()
     playIslandWord.on('pointerdown', this.onPlayIsland, this)
     this.add.existing(playIslandWord)
@@ -260,8 +260,8 @@ export default class CampaignScene extends Phaser.Scene
         this.opponentPortraits.addPortrait(t)
       })
 
-      this.islandNameWord.setWord(island.name)
-      this.epochWord.setWord(`${ordinal(island.epoch)} EPOCH`)
+      this.islandNameWord.setText(island.name)
+      this.epochWord.setText(`${ordinal(island.epoch)} EPOCH`)
       this.population.setIcon(`population_epoch_${island.epoch}`)
     }
   }

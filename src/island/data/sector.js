@@ -5,17 +5,17 @@ import { BuildingTypes, GameEvents } from '../../defines'
 
 export default class Sector
 {
-  constructor(eventProxy, index, key)
+  constructor(eventProxy, index, key, islandName)
   {
-    this.name = "Island" // island name
+    this.name = islandName
     this.eventProxy = eventProxy
     this.id = index,
     this.key = key
-    this.epoch = 1
-    this.maxEpoch = 1
-    this.owner = undefined
+    this.epoch = 1 // Set during 'setup'
+    this.maxEpoch = 1 // Set during 'setup'
+    this.owner = undefined // Set during 'claim'
     this.technologyLevel = 0
-    this.startPopulation = 0
+    this.startPopulation = 0 // Set during 'claim'
     this.availablePopulation = 0
     this.spawnedPopulation = 0
     this.deployedPopulation = 0

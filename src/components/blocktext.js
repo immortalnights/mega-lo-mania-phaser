@@ -1,19 +1,19 @@
 import Phaser from 'phaser'
 
-export default class Word extends Phaser.GameObjects.Container
+export default class BlockText extends Phaser.GameObjects.Container
 {
-  constructor(scene, x, y, word)
+  constructor(scene, x, y, text)
   {
     super(scene, x, y)
 
     this.once(Phaser.Data.Events.SET_DATA, (obj, key, data) => {
-      if (key === 'word')
+      if (key === 'text')
       {
-        this.onWordChange(obj, data, undefined)
+        this.onTextChange(obj, data, undefined)
       }
     })
-    this.on(`${Phaser.Data.Events.CHANGE_DATA_KEY}word`, this.onWordChange)
-    this.setData({ word })
+    this.on(`${Phaser.Data.Events.CHANGE_DATA_KEY}text`, this.onTextChange)
+    this.setData({ text })
 
     const setTint = (item, tint) => {
       item.setTint(tint)
@@ -27,30 +27,30 @@ export default class Word extends Phaser.GameObjects.Container
     })
   }
 
-  getWordLength()
+  getTextLength()
   {
-    return this.getData('word').length * 6
+    return this.getData('text').length * 6
   }
 
   setInteractive()
   {
-    this.setSize(1 + this.getWordLength(), 16)
+    this.setSize(1 + this.getTextLength(), 16)
     super.setInteractive()
   }
 
-  setWord(word)
+  setText(text)
   {
-    this.setData({ word })
+    this.setData({ text })
   }
 
-  onWordChange(self, word, prev)
+  onTextChange(self, text, prev)
   {
     this.removeAll(true)
 
-    let xOffset = -((-6 + this.getWordLength()) / 2)
-    for (let i = 0; i < word.length; i++)
+    let xOffset = -((-6 + this.getTextLength()) / 2)
+    for (let i = 0; i < text.length; i++)
     {
-      const letter = word[i]
+      const letter = text[i]
       if (letter !== " ")
       {
         let yOffset = 0
@@ -66,7 +66,7 @@ export default class Word extends Phaser.GameObjects.Container
       xOffset += 6
     }
 
-    // const length = 1 + (this.getWordLength() / 2)
+    // const length = 1 + (this.getTextLength() / 2)
     // const gfx = new Phaser.GameObjects.Graphics(this.scene, { x: 0, y: 0 })
     // gfx.fillStyle(0xFF0000, 1)
     // // gfx.fillRect(-1, -1, 3, 3)

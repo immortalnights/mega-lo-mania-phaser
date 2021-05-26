@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import BlockText from '../../components/blocktext'
 import { yearFromEpoch } from '../../utilities'
 
 
@@ -52,21 +53,9 @@ export default class SectorLabel extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
-    this.name = new Phaser.GameObjects.Text(scene, -41, 0, '?', {
-      fontFamily: 'Lucida Console',
-      fontSize: 12,
-    })
-    this.name.setOrigin(0, 1)
-    this.date = new Phaser.GameObjects.Text(scene, 0, 0, '?', {
-      fontFamily: 'Lucida Console',
-      fontSize: 12,
-    })
-    this.date.setOrigin(0, 1)
-    this.notation = new Phaser.GameObjects.Text(scene, 40, 0, '?', {
-      fontFamily: 'Lucida Console',
-      fontSize: 8,
-    })
-    this.notation.setOrigin(1, 1)
+    this.name = new BlockText(scene, -20, 0, 'A')
+    this.date = new BlockText(scene, 20, 0, 'A')
+    this.notation = new BlockText(scene, 40, 0, 'A')
 
     this.add([ this.name, this.date, this.notation ])
   }

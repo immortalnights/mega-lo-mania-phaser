@@ -42,22 +42,8 @@ export default class IslandScene extends Phaser.Scene
     const { width, height } = this.sys.game.canvas
 
     this.state = PlayerStates.DEFAULT
+    this.activeSector = undefined
     this.activeArmySector = undefined
-
-    Object.defineProperties(this, {
-      sector: {
-        get()
-        {
-          return this.data.get('sector')
-        },
-        set(value)
-        {
-          return this.data.set('sector', value)
-        }
-      },
-    })
-
-    this.sector = undefined
 
     // game data could be scene.data or scene.game.registry?
     this.data.set({
@@ -102,10 +88,10 @@ export default class IslandScene extends Phaser.Scene
         return s.owner = this.data.get('team')
       })
 
-      this.events.emit(UserEvents.SECTOR_MAP_SELECT, {}, localPlayerSector.id)
+      this.onMapSectorSelected({}, localPlayerSector.id)
     })
 
-    this.add.existing(new SectorControls(this, 0, 110))
+    this.add.existing(new SectorControls(this, 50, 110))
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
       switch (unitType)
@@ -129,56 +115,16 @@ export default class IslandScene extends Phaser.Scene
       }
     })
 
-    const teamNames = Object.values(Teams)
     this.input.keyboard.on('keydown', event => {
-      let team = this.data.get('team')
-
-      let teamIndex = -1
-      if (event.key === 'Home')
-      {
-        teamIndex = teamNames.findIndex(n => n === team)
-        teamIndex++
-      }
-      else if (event.key === 'End')
-      {
-        teamIndex = teamNames.findIndex(n => n === team)
-        teamIndex--
-      }
-
-      teamIndex = Phaser.Math.Wrap(teamIndex, 0, 4)
-      team = teamNames[teamIndex]
-      this.data.set('team', team)
-
-      if (event.key === 'z')
-      {
-        this.store.buildBuilding(this.sector, 'castle', team)
-      }
-      else if (event.key === 'x')
-      {
-        this.store.destroyBuilding(this.sector, 'castle')
-      }
-
-      if (event.key === 'c')
-      {
-        this.events.emit('game:sector:add_army', this.sector, team)
-      }
-      else if (event.key === 'v')
-      {
-        this.events.emit('game:sector:remove_army', this.sector, team)
-      }
-
-      if (event.key === 'b')
-      {
-        this.events.emit('game:sector:start_claim', this.sector, team)
-      }
-      else if (event.key === 'n')
-      {
-        this.events.emit('game:sector:stop_claim', this.sector, team)
-      }
+      // TODO keyboard shortcuts
     })
 
     this.bindings = this.input.keyboard.addKeys(DefaultKeys)
+  }
 
+  getActiveSector()
+  {
+    return this.activeSector
   }
 
   update()
@@ -204,7 +150,7 @@ export default class IslandScene extends Phaser.Scene
       })
     }
 
-    this.debugText.setText(`Sector ${this.sector}, Team ${this.data.get('team')}`)
+    this.debugText.setText(`Sector ${this.activeSector?.id}, Team ${this.data.get('team')}`)
   }
 
   onRequestAlliance(otherTeam)
@@ -229,7 +175,7 @@ export default class IslandScene extends Phaser.Scene
 
   onMapSectorSelected(pointer, index)
   {
-    console.debug(UserEvents.SECTOR_MAP_SELECT, pointer.button, index)
+    console.debug(`onMapSectorSelected`, UserEvents.SECTOR_MAP_SELECT, pointer.button, index)
 
     const team = this.data.get('team')
 
@@ -258,16 +204,16 @@ export default class IslandScene extends Phaser.Scene
         }
         case PlayerStates.DEFAULT:
         {
-          if (this.sector !== index)
+          if (this.activeSector !== index)
           {
             this.projectiles.clear(true, true)
 
-            this.sector = index
-
             const key = getKeyForSector(index, this.store.island.map)
-            const sec = this.store.sectors[this.sector]
-            this.events.emit(GameEvents.SECTOR_VIEW, index, key, sec.buildings, sec.armies)
-            this.events.emit(GameEvents.ACTIVATE_SECTOR, clone(sec))
+            this.activeSector = this.store.sectors[index]
+
+            // Update the sector view
+            this.events.emit(GameEvents.SECTOR_VIEW, index, key, this.activeSector.buildings, this.activeSector.armies)
+            // this.events.emit(GameEvents.ACTIVATE_SECTOR, clone(sec))
           }
           break
         }
@@ -286,7 +232,7 @@ export default class IslandScene extends Phaser.Scene
       // if (this.state === PlayerStates.DEPLOY_ARMY)
       {
         // Deploy army
-        this.store.deployArmy(this.sector, {
+        this.store.deployArmy(this.activeSector, {
           rock: 10
         })
 
@@ -295,11 +241,11 @@ export default class IslandScene extends Phaser.Scene
     }
     else if (pointer.button === 2) // Right
     {
-      if (this.store.hasArmy(this.sector, team))
+      if (this.store.hasArmy(this.activeSector, team))
       {
         this.state = PlayerStates.MOVE_ARMY
-        this.activeArmySector = this.sector
-        this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, this.sector, team)
+        this.activeArmySector = this.activeSector
+        this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, this.activeSector, team)
       }
     }
   }
@@ -351,11 +297,11 @@ export default class IslandScene extends Phaser.Scene
 
   onAllocatePopulation(task)
   {
-    this.store.allocatePopulation(this.sector, task)
+    this.store.allocatePopulation(this.activeSector, task)
   }
 
   onDeallocatePopulation(task)
   {
-    this.store.deallocatePopulation(this.sector, task)
+    this.store.deallocatePopulation(this.activeSector, task)
   }
 }

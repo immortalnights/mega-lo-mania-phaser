@@ -81,6 +81,9 @@ export default class Store
   {
     console.assert(initData, `Missing store init data`)
 
+    this.sectors = {}
+    this.players = []
+
     if (initData.slot)
     {
       // Load
@@ -90,8 +93,6 @@ export default class Store
       const { island, players, sectors, localPlayerTeam } = initData.setup
   
       this.island = island
-      this.sectors = {}
-      this.players = []
 
       this.localPlayerTeam = localPlayerTeam
       // FIXME
@@ -102,8 +103,9 @@ export default class Store
         if (value)
         {
           const key = getKeyForSector(index, island.map)
-          this.sectors[index] = new Sector(this, index, key, island.epoch)
-          this.sectors[index]
+          const resources = island.resources[index]
+
+          this.addSector(index, key).setup(island.epoch, resources)
         }
       })
 
@@ -114,6 +116,13 @@ export default class Store
         sector.claim(s.team, s.population)
       })
     }
+  }
+
+  // Allows Sandbox to create sectors
+  addSector(index, key)
+  {
+    this.sectors[index] = new Sector(this, index, key, this.island.name)
+    return this.sectors[index]
   }
 
   loadGame(slot)
