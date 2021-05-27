@@ -88,7 +88,7 @@ export default class Sector
       if (technology.technologyLevel >= epoch && technology.technologyLevel < epoch + 4)
       {
         // find a matching recipe, perfect if possible
-        let bestRecipe = null
+        let bestRecipe = undefined
         // Required until all technologies have recipes.
         if (technology.recipes)
         {
@@ -104,7 +104,8 @@ export default class Sector
             }
           })
         }
-        
+
+        console.debug(`Technology ${technology.id} available for sector ${this.id}`, bestRecipe)
         this.technologies[technology.id] = {
           ...technology,
           recipe: bestRecipe,
@@ -140,14 +141,16 @@ export default class Sector
     this.eventProxy.emit(GameEvents.SECTOR_ADD_BUILDING, this.id, BuildingTypes.CASTLE, team)
 
     // TESTING
-    if (this.technologies['rock'])
-    {
-      this.technologies['rock'].researched = true
-    }
-    if (this.technologies['cannon'])
-    {
-      this.technologies['cannon'].researched = true
-    }
+    // if (this.technologies['rock'])
+    // {
+    //   this.technologies['rock'].researched = true
+    //   console.log("`rock` has been researched")
+    // }
+    // if (this.technologies['cannon'])
+    // {
+    //   this.technologies['cannon'].researched = true
+    //   console.log("`cannon` has been researched")
+    // }
   }
 
   tick(tickDelta, tickCount)
@@ -522,10 +525,11 @@ export default class Sector
   hasResourcesFor(technology)
   {
     let available = false
-    if (technology.recipe === null)
+    if (technology.recipe == null)
     {
       // FIXME - temp while recipes are missing
       available = true
+      console.debug(`Have no recipes for ${technology.name}`)
     }
     else if (technology != null)
     {
@@ -546,6 +550,7 @@ export default class Sector
 
         return ok
       })
+      console.debug(`Have resources for ${technology.name}: ${available}`)
     }
 
     return available

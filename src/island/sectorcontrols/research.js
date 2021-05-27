@@ -8,12 +8,14 @@ import { UserEvents } from '../../defines'
 
 export default class Research extends Phaser.GameObjects.Container
 {
-  constructor(scene, x, y, config)
+  constructor(scene, x, y)
   {
     super(scene, x, y)
 
-    this.header = new Header(this.scene, 0, 0, config.header, () => {
-      this.parentContainer.emit('sectorcontrol:change_view', 'root')
+    this.name = 'research'
+
+    this.header = new Header(this.scene, 0, 0, 'research_header', () => {
+      this.scene.events.emit(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, 'root')
     })
     this.add(this.header)
 

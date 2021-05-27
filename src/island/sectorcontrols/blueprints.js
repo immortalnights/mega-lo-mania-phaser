@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import CategorizedTechnologies from './categorizedtechnologies'
 import Header from './header'
 import ValueControl from '../../components/valuecontrol'
+import { UserEvents } from '../../defines'
 
 
 class TechnologyRecipe extends Phaser.GameObjects.Container
@@ -66,7 +67,7 @@ export default class Blueprints extends Phaser.GameObjects.Container
     this.add(new Header(this.scene, 0, 0, 'blueprint_header', () => {
       if (this.state === 'inventory')
       {
-        this.parentContainer.emit('sectorcontrol:change_view', 'root')
+        this.scene.events.emit(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, 'root')
       }
       else
       {

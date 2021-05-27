@@ -14,7 +14,7 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
 
     // Categories
     this.add(this.scene.add.image(-25, 0, 'mlm_icons', 'category_repair'))
-    this.add(this.scene.add.image(0, 0, 'mlm_icons', 'category_defence'))
+    this.add(this.scene.add.image(0, 0, 'mlm_icons', 'category_defense'))
     this.add(this.scene.add.image(25, 0, 'mlm_icons', 'category_offense'))
 
     // Technologies
@@ -46,7 +46,7 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
     this.technologies.setVisible(false)
 
     let repair = 0
-    let defence = 0
+    let defense = 0
     let offense = 0
     for (const [ key, val ] of Object.entries(sector.technologies))
     {
@@ -58,10 +58,10 @@ export default class CategorizedTechnologies extends Phaser.GameObjects.Containe
           icon = this.technologies.getChildren()[repair]
           repair++
         }
-        else if (val.category === 'defence')
+        else if (val.category === 'defense')
         {
-          icon = this.technologies.getChildren()[4 + defence]
-          defence++
+          icon = this.technologies.getChildren()[4 + defense]
+          defense++
         }
         else if (val.category === 'offense')
         {

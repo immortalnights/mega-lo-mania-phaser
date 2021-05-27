@@ -65,7 +65,7 @@
       "frame": { "x": 240, "y": 0, "w": 16, "h": 16 }
     },
     {
-      "filename": "defence_icon",
+      "filename": "defense_icon",
       "frame": { "x": 256, "y": 0, "w": 16, "h": 16 }
     },
     {
@@ -240,7 +240,7 @@
       "frame": { "x": 160, "y": 48, "w": 32, "h": 16 }
     },
     {
-      "filename": "defence_header",
+      "filename": "defense_header",
       "frame": { "x": 192, "y": 48, "w": 32, "h": 16 }
     },
     {
@@ -1059,7 +1059,7 @@
       "frame": { "x": 272, "y": 315, "w": 16, "h": 15 }
     },
     {
-      "filename": "category_defence",
+      "filename": "category_defense",
       "frame": { "x": 288, "y": 315, "w": 15, "h": 15 }
     },
     {

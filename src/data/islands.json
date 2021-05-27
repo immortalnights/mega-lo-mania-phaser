@@ -13,6 +13,10 @@
     "resources": {
       "6": [ "herbirite", "rock", "slate", "solarium" ],
       "10": [ "bethlium", "moonlite", "parasite", "wood" ]
+    },
+    "FIXME_resourceQuantities": {
+      "6": [],
+      "10": [74, 75, 100, 50]
     }
   },
   {

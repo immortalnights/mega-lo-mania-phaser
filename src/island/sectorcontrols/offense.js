@@ -14,7 +14,7 @@ export default class Offense extends Phaser.GameObjects.Container
     this.name = 'offense'
 
     this.add(new Header(this.scene, 0, 0, 'offense_header', () => {
-      this.parentContainer.emit('sectorcontrol:change_view', 'root')
+      this.scene.events.emit(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, 'root')
     }))
 
     this.population = new ValueControl(this.scene, -25, 20, 'unarmed_population_icon', 0)

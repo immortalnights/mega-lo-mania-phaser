@@ -72,6 +72,8 @@ export const UserEvents = {
   VALUE_TOGGLE_DOWN: 'value_toggle_down',
   VALUE_TOGGLE_UP: 'value_toggle_up',
 
+  SECTOR_CONTROLS_VIEW_CHANGE: 'user:sector_controls:view_change',
+
   SECTOR_MAP_SELECT: 'user:map:sector:select',
   SECTOR_SELECT: 'user:sector:select',
   BUILDING_SELECT: 'user:sector:building:select',

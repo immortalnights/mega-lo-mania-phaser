@@ -66,6 +66,9 @@ export default class IslandScene extends Phaser.Scene
     // debug text
     this.debugText = this.add.text(0, 0, ``);
 
+    this.events.on(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, name => {
+      this.sectorControls.switch(name, this.activeSector)
+    })
     this.events.on(UserEvents.SECTOR_SELECT, this.onSectorSelected, this)
     // Listen to the sector selection event (emitted by the minimap)
     // TODO should this be emitted on the map to which the Scene listens?
@@ -85,13 +88,14 @@ export default class IslandScene extends Phaser.Scene
 
       // Find the first local player sector (for loading, selected sector should be saved)
       const localPlayerSector = Object.values(this.store.sectors).find(s => {
-        return s.owner = this.data.get('team')
+        return s.owner === this.data.get('team')
       })
 
       this.onMapSectorSelected({}, localPlayerSector.id)
     })
 
-    this.add.existing(new SectorControls(this, 50, 110))
+    this.sectorControls = new SectorControls(this, 50, 120)
+    this.add.existing(this.sectorControls)
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
       switch (unitType)
@@ -214,13 +218,22 @@ export default class IslandScene extends Phaser.Scene
             // Update the sector view
             this.events.emit(GameEvents.SECTOR_VIEW, index, key, this.activeSector.buildings, this.activeSector.armies)
             // this.events.emit(GameEvents.ACTIVATE_SECTOR, clone(sec))
+            
+            // Update the sector controls
+            this.sectorControls.display(this.activeSector)
           }
           break
         }
       }
+      
     }
+
   }
 
+  /**
+   * Handle click on the Sector Game Object
+   * @param {*} pointer 
+   */
   onSectorSelected(pointer)
   {
     console.debug(UserEvents.BUILDING_SELECT, pointer.button)
@@ -250,6 +263,10 @@ export default class IslandScene extends Phaser.Scene
     }
   }
 
+  /**
+   * Handle click on the Sector buildings
+   * @param {*} building 
+   */
   onBuildingSelected(building)
   {
     console.debug(UserEvents.BUILDING_SELECT, building)
@@ -275,6 +292,11 @@ export default class IslandScene extends Phaser.Scene
     }
   }
 
+  /**
+   * Handle click on a building defender position
+   * @param {*} building 
+   * @param {*} position 
+   */
   onBuildingPositionSelected(building, position)
   {
     console.debug(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, building, position)

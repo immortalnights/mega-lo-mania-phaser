@@ -46,6 +46,12 @@
         "resources": {
           "rock": 1
         }
+      },
+      {
+        "perfect": false,
+        "resources": {
+          "wood": 1
+        }
       }
     ]
   },
@@ -66,6 +72,13 @@
           "rock": 0.5,
           "slate": 1
         }
+      },
+      {
+        "perfect": true,
+        "resources": {
+          "moonlite": 1,
+          "bethlium": 0.5
+        }
       }
     ]
   },
@@ -85,6 +98,13 @@
         "resources": {
           "slate": 1.5,
           "solarium": 0.5
+        }
+      },
+      {
+        "perfect": false,
+        "resources": {
+          "moonlite": 1,
+          "bethlium": 1
         }
       }
     ]
@@ -177,7 +197,7 @@
   {
     "id": "stick",
     "name": "stick",
-    "category": "defence",
+    "category": "defense",
     "blueprintIcon": "stick",
     "researchIcon": "stick",
     "requiredPopulation": 1,
@@ -190,13 +210,19 @@
         "resources": {
           "slate": 1.5
         }
+      },
+      {
+        "perfect": true,
+        "resources": {
+          "wood": 1.5
+        }
       }
     ]
   },
   {
     "id": "spear",
     "name": "spear",
-    "category": "defence",
+    "category": "defense",
     "blueprintIcon": "spear",
     "researchIcon": "spear",
     "requiredPopulation": 1,
@@ -210,13 +236,19 @@
           "rock": 0.5,
           "slate": 1
         }
+      },
+      {
+        "perfect": true,
+        "resources": {
+          "wood": 1.5
+        }
       }
     ]
   },
   {
    "id": "bow",
    "name": "bow",
-   "category": "defence",
+   "category": "defense",
    "blueprintIcon": "bow",
    "researchIcon": "bow",
    "requiredPopulation": 1,
@@ -230,13 +262,20 @@
          "rock": 1,
          "slate": 0.5
        }
+     },
+     {
+       "perfect": false,
+       "resources": {
+         "wood": 1,
+         "moonlite": 0.5
+       }
      }
    ]
   },
   {
     "id": "oil",
     "name": "oil",
-    "category": "defence",
+    "category": "defense",
     "blueprintIcon": "oil",
     "researchIcon": "oil",
     "requiredPopulation": 1,
@@ -249,13 +288,20 @@
         "resources": {
           "solarium": 3
         }
+      },
+      {
+        "perfect": false,
+        "resources": {
+          "wood": 1,
+          "bethlium": 2
+        }
       }
     ]
   },
   {
     "id": "crossbow",
     "name": "crossbow",
-    "category": "defence",
+    "category": "defense",
     "blueprintIcon": "crossbow",
     "researchIcon": "production_crossbow",
     "productionIcon": "production_crossbow",
@@ -269,7 +315,7 @@
   {
    "id": "rifle",
    "name": "rifle",
-   "category": "defence",
+   "category": "defense",
    "blueprintIcon": "rifle",
    "researchIcon": "production_rifle",
    "productionIcon": "production_rifle",
@@ -283,7 +329,7 @@
   {
    "id": "machinegun",
    "name": "machinegun",
-   "category": "defence",
+   "category": "defense",
    "blueprintIcon": "machinegun",
    "researchIcon": "production_machinegun",
    "productionIcon": "production_machinegun",
@@ -297,7 +343,7 @@
   {
     "id": "rocketlauncher",
     "name": "rocketlauncher",
-    "category": "defence",
+    "category": "defense",
     "blueprintIcon": "rocketlauncher",
     "researchIcon": "production_rocketlauncher",
     "productionIcon": "production_rocketlauncher",
@@ -311,7 +357,7 @@
   {
     "id": "antinuke",
     "name": "antinuke",
-    "category": "defence",
+    "category": "defense",
     "blueprintIcon": "antinuke",
     "researchIcon": "production_antinuke",
     "productionIcon": "production_antinuke",
@@ -325,7 +371,7 @@
   {
     "id": "laser",
     "name": "laser",
-    "category": "defence",
+    "category": "defense",
     "blueprintIcon": "laser",
     "researchIcon": "production_laser",
     "productionIcon": "production_laser",
@@ -353,6 +399,12 @@
         "resources": {
           "rock": 2
         }
+      },
+      {
+        "perfect": true,
+        "resources": {
+          "wood": 3
+        }
       }
     ]
   },
@@ -371,6 +423,12 @@
         "perfect": false,
         "resources": {
           "rock": 3
+        }
+      },
+      {
+        "perfect": false,
+        "resources": {
+          "wood": 3
         }
       }
     ]
@@ -392,6 +450,13 @@
          "rock": 0.5,
          "slate": 2.5
        }
+     },
+     {
+       "perfect": false,
+       "resources": {
+         "moonlite": 3,
+         "bethlium": 0.5
+       }
      }
    ]
   },
@@ -411,6 +476,13 @@
         "resources": {
           "rock": 2,
           "herbirite": 2
+        }
+      },
+      {
+        "perfect": false,
+        "resources": {
+          "wood": 2.5,
+          "parasite": 0.5
         }
       }
     ]

@@ -14,7 +14,7 @@ export default class Mining extends Phaser.GameObjects.Container
     this.name = 'mining'
 
     this.header = new Header(this.scene, 0, 0, 'gather_header', () => {
-      this.parentContainer.emit('sectorcontrol:change_view', 'root')
+      this.scene.events.emit(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, 'root')
     })
 
     this.add(this.header)

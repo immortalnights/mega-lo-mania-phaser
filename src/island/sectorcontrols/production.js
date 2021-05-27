@@ -12,8 +12,10 @@ export default class Production extends Phaser.GameObjects.Container
   {
     super(scene, x, y)
 
+    this.name = 'production'
+
     this.add(new Header(this.scene, 0, 0, 'production_header', () => {
-      this.parentContainer.emit('sectorcontrol:change_view', 'root')
+      this.scene.events.emit(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, 'root')
     }))
 
     this.inactiveLabel = new Phaser.GameObjects.Text(this.scene, 26, 23, '-')

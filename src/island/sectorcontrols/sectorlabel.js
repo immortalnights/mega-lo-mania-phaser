@@ -64,9 +64,9 @@ export default class SectorLabel extends Phaser.GameObjects.Container
   {
     const [ year, notation ] = yearFromEpoch(sector.epoch)
 
-    this.name.setText(sector.name)
+    this.name.setText(sector.name) // FIXME use islandName?
 
-    if (sector.id === 'megalomania')
+    if (sector.name === 'megalomania')
     {
       this.date.setText('')
       this.notation.setText('')

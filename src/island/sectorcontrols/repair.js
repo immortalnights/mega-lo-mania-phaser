@@ -13,7 +13,7 @@ export default class Repair extends Phaser.GameObjects.Container
     this.name = 'repair'
 
     this.add(new Header(this.scene, 0, 0, 'repair_header', () => {
-      this.parentContainer.emit('sectorcontrol:change_view', 'root')
+      this.scene.events.emit(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, 'root')
     }))
 
     this.shields = []
