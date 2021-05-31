@@ -17,7 +17,37 @@ const config = {
   zoom: 3,
   scene: [
     () => {
-      return new Loader({ nextScene: 'campaign' })
+      const initData = {
+        setup: {
+          island: {
+            name: "Aloha",
+            epoch: 1,
+            players: 2,
+            style: "mud",
+            map: [0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0],
+            resources: {
+              "6": ["herbirite","rock","slate","solarium"],
+              "10": ["bethlium","moonlite","parasite","wood"]
+            },
+            opponents : ["green"]
+          },
+          localPlayerTeam: 'red',
+          sectors: [
+            {
+              index: 6,
+              team: "green",
+              population: 30
+            },
+            {
+              index: 10,
+              team: "red",
+              population: 10
+            }
+          ]
+        }
+      }
+
+      return new Loader({ nextScene: 'island', nextSceneData: initData })
     },
     Introduction,
     Menu,
