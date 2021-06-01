@@ -83,6 +83,11 @@ export default class Repair extends Phaser.GameObjects.Container
     })
   }
 
+  refresh(sector)
+  {
+    this.display(sector)
+  }
+
   display(sector)
   {
     this.setVisible(true)

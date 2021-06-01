@@ -68,6 +68,11 @@ export default class Production extends Phaser.GameObjects.Container
     this.add(this.technologies)
   }
 
+  refresh(sector)
+  {
+    this.display(sector)
+  }
+
   display(sector)
   {
     this.setVisible(true)

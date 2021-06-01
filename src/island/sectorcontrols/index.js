@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { BuildingTypes } from '../../defines'
+import { BuildingTypes, UserEvents } from '../../defines'
 import SectorLabel from './sectorlabel'
 import Blueprints from './blueprints'
 import Defense from './defense'
@@ -19,7 +19,6 @@ export default class SectorControls extends Phaser.GameObjects.Container
 
     this.activeView = undefined
 
-
     const root = new Root(this.scene, 0, 0)
     this.add(root)
 
@@ -36,6 +35,9 @@ export default class SectorControls extends Phaser.GameObjects.Container
     this.add(offense)
 
     const research = new Research(this.scene, 0, -40)
+    research.on('technology:selected', technology => {
+      this.scene.events.emit(UserEvents.SELECT_RESEARCH, technology)
+    })
     this.add(research)
 
     const production = new Production(this.scene, 0, -40)
@@ -60,6 +62,11 @@ export default class SectorControls extends Phaser.GameObjects.Container
     // 
     this.sectorLabel = new SectorLabel(this.scene, 0, -40)
     this.add(this.sectorLabel)
+  }
+
+  refresh(sector)
+  {
+    this.activeView?.refresh(sector)
   }
 
   /**
@@ -90,13 +97,14 @@ export default class SectorControls extends Phaser.GameObjects.Container
     {
       // Hide the current view
       this.activeView?.setVisible(false)
+      this.activeView = null
 
       // Display the sector label
       this.sectorLabel.setVisible(true)
 
       if (sector.armies.length > 0 && hasOwnArmy(sector.armies) && localPlayer.inAlliance === false)
       {
-        console.log("claim!")
+        console.log("Claim!")
       }
       else
       {

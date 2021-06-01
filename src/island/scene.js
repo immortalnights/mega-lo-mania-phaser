@@ -43,7 +43,7 @@ export default class IslandScene extends Phaser.Scene
 
     this.state = PlayerStates.DEFAULT
     this.activeSector = undefined
-    this.activeArmySector = undefined
+    this.activeArmySectorIndex = undefined
 
     // game data could be scene.data or scene.game.registry?
     this.data.set({
@@ -54,7 +54,10 @@ export default class IslandScene extends Phaser.Scene
     // Create the minimap
     this.add.existing(new MiniMap(this, 40, 40, this.store.island))
 
-    this.add.existing(new PlayerTeamShields(this, 90, 48, this.store.players.map(p => p.team)))
+    this.add.existing(new PlayerTeamShields(this, 90, 28, this.store.players.map(p => p.team)))
+
+    this.sectorControls = new SectorControls(this, 50, 120)
+    this.add.existing(this.sectorControls)
 
     // Create the Sector view
     this.add.existing(new Sector(this, 250, 120, { style: this.store.island.style, epoch: 1 }))
@@ -64,7 +67,7 @@ export default class IslandScene extends Phaser.Scene
     this.units = units
 
     // debug text
-    this.debugText = this.add.text(0, 0, ``);
+    this.debugText = this.add.text(0, height - 12, ``, { fontSize: 12 });
 
     this.events.on(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, name => {
       this.sectorControls.switch(name, this.activeSector)
@@ -77,8 +80,78 @@ export default class IslandScene extends Phaser.Scene
     this.events.on(UserEvents.BUILDING_SELECT_DEFENDER_POSITION, this.onBuildingPositionSelected, this)
     this.events.on(UserEvents.REQUEST_ALLIANCE, this.onRequestAlliance, this)
     this.events.on(UserEvents.BREAK_ALLIANCES, this.onBreakAlliances, this)
-    this.events.on(UserEvents.ALLOCATE_POPULATION, this.onAllocatePopulation, this)
-    this.events.on(UserEvents.DEALLOCATE_POPULATION, this.onDeallocatePopulation, this)
+
+    this.events.on(UserEvents.SELECT_RESEARCH, technology => {
+      this.activeSector.beginResearch(technology)
+    });
+    this.events.on(UserEvents.SELECT_PRODUCTION, technology => {
+      this.activeSector.beginProduction(technology)
+    });
+
+    this.events.on(UserEvents.CHANGE_MINERS, (...args) => {
+      this.store.changeMiners(this.activeSector.id, ...args)
+    })
+    this.events.on(UserEvents.CHANGE_RESEARCHERS, (...args) => {
+      this.store.changeResearchers(this.activeSector.id, ...args)
+    })
+    this.events.on(UserEvents.CHANGE_BUILDERS, (...args) => {
+      this.store.changeBuilders(this.activeSector.id, ...args)
+    })
+    this.events.on(UserEvents.CHANGE_MANUFACTURERS, (...args) => {
+      this.store.changeManufacturers(this.activeSector.id, ...args)
+    })
+    this.events.on(UserEvents.CHANGE_PRODUCTION_RUNS, (...args) => {
+      this.store.changeProductionRuns(this.activeSector.id, ...args)
+    })
+
+    this.events.on(UserEvents.ADD_TO_ARMY, (...args) => {
+      this.state = PlayerStates.DEPLOY_ARMY
+      this.store.addToArmy(this.activeSector.id, ...args)
+    })
+    this.events.on(UserEvents.DISCARD_ARMY_IN_HAND, (...args) => {
+      this.state = PlayerStates.DEFAULT
+      this.store.discardPendingArmy(this.activeSector.id, ...args)
+    })
+
+    // Game update events
+    const updateSectorControls = sector => {
+      if (this.activeSector.id === sector.id)
+      {
+        this.sectorControls.refresh(this.activeSector)
+      }
+    }
+
+    this.events.on(GameEvents.RESOURCES_CHANGED, updateSectorControls)
+    this.events.on(GameEvents.POPULATION_CHANGED, updateSectorControls)
+    this.events.on(GameEvents.ARMY_CHANGED, updateSectorControls)
+    this.events.on(GameEvents.RESEARCH_CHANGED, updateSectorControls)
+    this.events.on(GameEvents.PRODUCTION_CHANGED, updateSectorControls)
+
+    // Alerts
+    this.events.on(GameEvents.ADVANCED_TECH_LEVEL, sector => {
+      console.log(`Sector ${sector.id} has advanced a technology level ${sector.epoch}`)
+    })
+    this.events.on(GameEvents.RESOURCE_DEPLETED, (sector, resource) => {
+      // TODO Check the sector owner is the current player team
+      console.log(`Resource ${resource.name} has depleted in sector ${sector.id}`)
+    })
+    this.events.on(GameEvents.RESEARCH_COMPLETED, sector => {
+      // TODO Check the sector owner is the current player team
+      console.log(`Research of ${sector.research.name} completed in sector ${sector.id}`)
+    })
+    this.events.on(GameEvents.BUILDING_CONSTRUCTED, (sector, building) => {
+      // TODO Check the sector owner is the current player team
+      console.log(`Construction of ${building} completed in sector ${sector.id}`)
+    })
+    this.events.on(GameEvents.PRODUCTION_COMPLETED, sector => {
+      // TODO Check the sector owner is the current player team
+      console.log(`Production of ${sector.production.name} completed in sector ${sector.id}`)
+    })
+    this.events.on(GameEvents.PRODUCTION_RUN_COMPLETED, sector => {
+      // TODO Check the sector owner is the current player team
+      console.log(`Production run of ${sector.production.name} completed in sector ${sector.id}`)
+    })
+
 
     // Select the sector, always do this last
     setTimeout(() => {
@@ -93,9 +166,6 @@ export default class IslandScene extends Phaser.Scene
 
       this.onMapSectorSelected({}, localPlayerSector.id)
     })
-
-    this.sectorControls = new SectorControls(this, 50, 120)
-    this.add.existing(this.sectorControls)
 
     this.events.on('projectile:spawn', (obj, position, velocity, unitType) => {
       switch (unitType)
@@ -131,30 +201,11 @@ export default class IslandScene extends Phaser.Scene
     return this.activeSector
   }
 
-  update()
+  update(time, delta)
   {
-    let newType = ''
-    if (this.bindings.one.isDown)
-    {
-      newType = 'rock'
-    }
-    else if (this.bindings.two.isDown)
-    {
-      newType = 'sling'
-    }
-    else if (this.bindings.three.isDown)
-    {
-      newType = 'spear'
-    }
-
-    if (newType)
-    {
-      this.units.getChildren().forEach(u => {
-        u.setType(newType)
-      })
-    }
-
     this.debugText.setText(`Sector ${this.activeSector?.id}, Team ${this.data.get('team')}`)
+
+    this.store.tick(time, delta)
   }
 
   onRequestAlliance(otherTeam)
@@ -179,7 +230,7 @@ export default class IslandScene extends Phaser.Scene
 
   onMapSectorSelected(pointer, index)
   {
-    console.debug(`onMapSectorSelected`, UserEvents.SECTOR_MAP_SELECT, pointer.button, index)
+    console.debug(`onMapSectorSelected button=${pointer.button}, sector=${index}, state=${this.state}`)
 
     const team = this.data.get('team')
 
@@ -188,7 +239,7 @@ export default class IslandScene extends Phaser.Scene
       if (this.store.hasArmy(index, team))
       {
         this.state = PlayerStates.MOVE_ARMY
-        this.activeArmySector = index
+        this.activeArmySectorIndex = index
         this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, index, team)
       }
     }
@@ -198,17 +249,19 @@ export default class IslandScene extends Phaser.Scene
       {
         case PlayerStates.DEPLOY_ARMY:
         {
+          this.store.deployArmy(this.activeSector.id, {}, index)
+          this.state = PlayerStates.DEFAULT
           break
         }
         case PlayerStates.MOVE_ARMY:
         {
-          this.store.moveArmy(this.activeArmySector, index, team)
+          this.store.moveArmy(this.activeArmySectorIndex, index, team)
           this.state = PlayerStates.DEFAULT
           break
         }
         case PlayerStates.DEFAULT:
         {
-          if (this.activeSector !== index)
+          if (this.activeSector == null || this.activeSector.id !== index)
           {
             this.projectiles.clear(true, true)
 
@@ -225,9 +278,7 @@ export default class IslandScene extends Phaser.Scene
           break
         }
       }
-      
     }
-
   }
 
   /**
@@ -236,28 +287,25 @@ export default class IslandScene extends Phaser.Scene
    */
   onSectorSelected(pointer)
   {
-    console.debug(UserEvents.BUILDING_SELECT, pointer.button)
+    console.debug(`onSectorSelected; button=${pointer.button}`)
 
     const team = this.data.get('team')
 
     if (pointer.button === 0) // Left
     {
-      // if (this.state === PlayerStates.DEPLOY_ARMY)
+      if (this.state === PlayerStates.DEPLOY_ARMY)
       {
         // Deploy army
-        this.store.deployArmy(this.activeSector, {
-          rock: 10
-        })
-
+        this.store.deployArmy(this.activeSector.id, {})
         this.state = PlayerStates.DEFAULT
       }
     }
     else if (pointer.button === 2) // Right
     {
-      if (this.store.hasArmy(this.activeSector, team))
+      if (this.store.hasArmy(this.activeSector.id, team))
       {
         this.state = PlayerStates.MOVE_ARMY
-        this.activeArmySector = this.activeSector
+        this.activeArmySectorIndex = this.activeSector.id
         this.events.emit(GameEvents.SECTOR_ACTIVATE_ARMY, this.activeSector, team)
       }
     }
@@ -269,7 +317,7 @@ export default class IslandScene extends Phaser.Scene
    */
   onBuildingSelected(building)
   {
-    console.debug(UserEvents.BUILDING_SELECT, building)
+    console.debug(`onBuildingSelected; button=${pointer.button}, building=${building}`)
 
     // Check the player is in placement mode
     // Check if the sector has the required population
@@ -315,15 +363,5 @@ export default class IslandScene extends Phaser.Scene
     {
       this.store.addDefender(this.sector, building, position, 'stick')
     }
-  }
-
-  onAllocatePopulation(task)
-  {
-    this.store.allocatePopulation(this.activeSector, task)
-  }
-
-  onDeallocatePopulation(task)
-  {
-    this.store.deallocatePopulation(this.activeSector, task)
   }
 }

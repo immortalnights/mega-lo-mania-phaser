@@ -14,6 +14,7 @@ export default class Offense extends Phaser.GameObjects.Container
     this.name = 'offense'
 
     this.add(new Header(this.scene, 0, 0, 'offense_header', () => {
+      this.scene.events.emit(UserEvents.DISCARD_ARMY_IN_HAND)
       this.scene.events.emit(UserEvents.SECTOR_CONTROLS_VIEW_CHANGE, 'root')
     }))
 
@@ -53,6 +54,11 @@ export default class Offense extends Phaser.GameObjects.Container
       this.scene.events.emit(UserEvents.DISCARD_ARMY_IN_HAND)
     })
     this.add(this.armyInHand)
+  }
+
+  refresh(sector)
+  {
+    this.display(sector)
   }
 
   display(sector)

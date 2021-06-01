@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 import Button from '../../components/button'
 import { UserEvents } from '../../defines'
-import Task from '../../components/task'
 import ValueControl from '../../components/valuecontrol'
 
 
@@ -50,7 +49,14 @@ export default class Root extends Phaser.GameObjects.Container
     this.population.setReadOnly(true)
     this.population.setDepth(1)
 
-    this.productionNavTask = new Task(this.scene, 32, 0, 'factory_icon', 'production')
+    this.productionNavTask = new ValueControl(this.scene, 32, 0, 'factory_icon')
+    this.productionNavTask.setLink(true)
+    this.productionNavTask.on(UserEvents.VALUE_LINK_UP, () => {
+      onChangeView('production')
+    })
+    this.productionNavTask.on(UserEvents.VALUE_CHANGE, value => {
+      this.scene.events.emit(UserEvents.CHANGE_MANUFACTURERS, value)
+    })
     this.productionArrow = new Phaser.GameObjects.Image(this.scene, 15, 0, 'mlm_icons', 'arrow_right')
 
     this.miningNav = new Button(this.scene, 0, 36, 'mine_spade_icon', () => {
@@ -148,6 +154,11 @@ export default class Root extends Phaser.GameObjects.Container
       this.miningNav,
       this.miningArrow,
     ])
+  }
+
+  refresh(sector)
+  {
+    this.display(sector)
   }
 
   display(sector)

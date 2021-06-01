@@ -61,7 +61,7 @@ export default class Store
     }
     else
     {
-      this.scene.scene.emit(name, ...args)
+      this.scene.events.emit(name, ...args)
     }
   }
 
@@ -447,13 +447,14 @@ export default class Store
    * @param {Object} units Army units and quantity
    * @param {Integer} destination Destination sector (optional)
    */
-  deployArmy(sectorIndex, units, destinationIndex=undefined)
+  deployArmy(sectorIndex, units={}, destinationIndex=undefined)
   {
     //
     const sector = this.sectors[sectorIndex]
-    const castle = sector.buildings['castle']
+    const castle = sector.buildings[BuildingTypes.CASTLE]
 
     if (destinationIndex == null) { destinationIndex = sectorIndex }
+    if (Object.keys(units).length === 0) { units = sector.pendingArmy }
     const destination = this.sectors[destinationIndex]
 
     if (castle == null)
@@ -478,6 +479,7 @@ export default class Store
       }
 
       this.combineArmies(army, units)
+      sector.disbandPendingArmy(true)
 
       if (sectorIndex === destinationIndex)
       {

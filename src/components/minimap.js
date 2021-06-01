@@ -57,9 +57,10 @@ export default class MiniMap extends Phaser.GameObjects.Container
       const sector = this.sectors.getChildren()[index]
       if (sector.visible === true)
       {
-        const position = this.getSectorXY(sector)
-        marker.setPosition(position.x, position.y - 1)
+        // const position = this.getSectorXY(sector)
+        marker.setPosition(sector.x, sector.y - 1)
         marker.setData('sector', sector)
+        marker.setVisible(true)
       }
     })
 
@@ -98,6 +99,7 @@ export default class MiniMap extends Phaser.GameObjects.Container
         const sector = this.sectors.getChildren()[index]
         sector.setFrame(`${style}_${key}`)
         sector.setVisible(true)
+        console.debug(`${index} x=${sector.x}, y=${sector.y}`)
       }
     }
   }

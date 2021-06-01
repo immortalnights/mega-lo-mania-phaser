@@ -255,12 +255,6 @@ export default class Sandbox extends Phaser.Scene
     this.events.on(UserEvents.CHANGE_PRODUCTION_RUNS, (...args) => {
       this.store.changeProductionRuns(this.activeSector, ...args)
     })
-    this.events.on(UserEvents.ALLOCATE_POPULATION, (...args) => {
-      this.store.allocatePopulation(this.activeSector, ...args)
-    })
-    this.events.on(UserEvents.DEALLOCATE_POPULATION, (...args) => {
-      this.store.deallocatePopulation(this.activeSector, ...args)
-    })
 
     this.events.on(UserEvents.ADD_TO_ARMY, (...args) => {
       this.store.addToArmy(this.activeSector, ...args)

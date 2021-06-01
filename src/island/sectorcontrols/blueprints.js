@@ -91,6 +91,11 @@ export default class Blueprints extends Phaser.GameObjects.Container
     this.add(this.recipe)
   }
 
+  refresh(sector)
+  {
+    this.display(sector)
+  }
+
   displayTechnologyInventory()
   {
     this.technologies.setVisible(true)

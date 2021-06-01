@@ -105,7 +105,7 @@ export default class Sector
           })
         }
 
-        console.debug(`Technology ${technology.id} available for sector ${this.id}`, bestRecipe)
+        // console.debug(`Technology ${technology.id} available for sector ${this.id}`, bestRecipe)
         this.technologies[technology.id] = {
           ...technology,
           recipe: bestRecipe,
@@ -550,7 +550,7 @@ export default class Sector
 
         return ok
       })
-      console.debug(`Have resources for ${technology.name}: ${available}`)
+      // console.debug(`Have resources for ${technology.name}: ${available}`)
     }
 
     return available
@@ -972,11 +972,14 @@ export default class Sector
     this.eventProxy.emit(GameEvents.ARMY_CHANGED, this)
   }
 
-  disbandPendingArmy()
+  disbandPendingArmy(deployed = false)
   {
-    this.pendingArmy.forEach(group => {
-      this._removeUnitsFromArmy(group.type, group.quantity)
-    })
+    if (deployed === false)
+    {
+      this.pendingArmy.forEach(group => {
+        this._removeUnitsFromArmy(group.type, group.quantity)
+      })
+    }
 
     this.pendingArmy = []
 

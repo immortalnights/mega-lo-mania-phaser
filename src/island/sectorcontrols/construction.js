@@ -51,6 +51,11 @@ export default class Construction extends Phaser.GameObjects.Container
     });
   }
 
+  refresh(sector)
+  {
+    this.display(sector)
+  }
+
   display(sector)
   {
     this.setVisible(true)

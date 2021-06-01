@@ -96,4 +96,9 @@ export default class Research extends Phaser.GameObjects.Container
 
     this.technologies.display(sector)
   }
+
+  refresh(sector)
+  {
+    this.display(sector)
+  }
 }
