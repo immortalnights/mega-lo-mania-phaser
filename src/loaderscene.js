@@ -17,9 +17,12 @@ export default class LoaderScene extends Phaser.Scene
 
   preload()
   {
+    this.load.json('islands', '../data/islands.json')
+    this.load.json('technologies', '../data/technologies.json')
+    this.load.json('resources', '../data/resources.json')
+
     this.load.json('mlm_icons_data', './mlm_icons.json')
     this.load.json('mlm_units_data', './mlm_units.json')
-    this.load.json('islands', '../data/islands.json')
 
     this.load.atlas('mlm_icons', './mlm_icons.png', './mlm_icons.json')
     this.load.atlas('mlm_units', './mlm_units.png', './mlm_units.json')
@@ -31,6 +34,7 @@ export default class LoaderScene extends Phaser.Scene
     this.load.image('paletteswap-template', '/link-palette.png')
 
     this.load.image('sunrise', './mlm_sunrise.png')
+
   }
 
   create()
