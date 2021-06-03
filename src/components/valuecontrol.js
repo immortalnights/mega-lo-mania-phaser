@@ -118,11 +118,23 @@ export default class ValueControl extends Phaser.GameObjects.Container
 
   onPointerDown(pointer, localX, localY, event)
   {
-    // console.log("ValueControl click down cont")
+    console.log("ValueControl click down cont", pointer.button)
 
     if (this.isLink && localY < 16)
     {
       this.emit(UserEvents.VALUE_LINK_DOWN)
+    }
+    else if (pointer.button === 1)
+    {
+      this.emit(UserEvents.VALUE_RESET)
+    }
+    else if (pointer.button === 4)
+    {
+      this.emit(UserEvents.VALUE_MAX)
+    }
+    else if (pointer.button === 3)
+    {
+      this.emit(UserEvents.VALUE_MIN)
     }
     else
     {
