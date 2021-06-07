@@ -1,15 +1,16 @@
 import Phaser from 'phaser'
+import Unit from './island/unit'
 import ValueControl from './components/valuecontrol'
 import { Teams, UserEvents } from './defines'
 
 // Render no more then this amount of sprites
 const ARMY_SPRITE_LIMIT = 250
 
-class Army extends Phaser.GameObjects.Group
+class Army extends Phaser.Physics.Arcade.Group
 {
-  constructor(scene, zone)
+  constructor(scene, zone, team)
   {
-    super(scene, undefined, {})
+    super(scene.physics.world, scene, undefined, {})
 
     if (zone == null)
     {
@@ -17,6 +18,7 @@ class Army extends Phaser.GameObjects.Group
     }
 
     this.zone = zone
+    this.team = team
 
     this.data = new Phaser.Data.DataManager(this)
   }
@@ -87,6 +89,7 @@ class Army extends Phaser.GameObjects.Group
     this.data.each((obj, key, val, ...rest) => {
       this.data.set(key, 0)
     })
+
     // remove all sprites
     super.clear(true, true)
   }
@@ -126,12 +129,13 @@ class Army extends Phaser.GameObjects.Group
 
     const currentSprites = {}
     this.getChildren().forEach(child => {
-      if (currentSprites[child.name] == null)
+      const type = child.unitType
+      if (currentSprites[type] == null)
       {
-        currentSprites[child.name] = 0
+        currentSprites[type] = 0
       }
 
-      currentSprites[child.name] += 1
+      currentSprites[type] += 1
     })
     console.log("Current Sprites", currentSprites)
 
@@ -143,7 +147,10 @@ class Army extends Phaser.GameObjects.Group
       if (diff > 0)
       {
         // add some sprites
-        this.add(new Phaser.GameObjects.Sprite(this.scene, 150, 150, 'mlm_units', `${key}_down_00`), true)
+        for (let i = 0; i < diff; i++)
+        {
+          this.add(new Unit(this.scene, 150, 150, { type: key, team: this.team, spawn: true }), true)
+        }
       }
       else if (diff < 0)
       {
@@ -238,7 +245,7 @@ export default class Arena extends Phaser.Scene
     const textXOffset = (width / 2) - 125
     Object.values(Teams).forEach((team, index) => {
       // Create deployed army
-      this.armies[team] = new Army(this, zone)
+      this.armies[team] = new Army(this, zone, team)
       this.armies[team].name = `${team}Army`
 
       const color = COLORS[team]

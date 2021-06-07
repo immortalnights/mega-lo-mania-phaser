@@ -129,79 +129,364 @@
       "frame": { "x": 240, "y": 32, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_down_00",
+      "filename": "pike_down_00",
       "frame": { "x": 0, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_down_01",
+      "filename": "pike_down_01",
       "frame": { "x": 16, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_down_02",
+      "filename": "pike_down_02",
       "frame": { "x": 32, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_down_03",
+      "filename": "pike_down_03",
       "frame": { "x": 48, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_up_00",
+      "filename": "pike_up_00",
       "frame": { "x": 65, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_up_01",
+      "filename": "pike_up_01",
       "frame": { "x": 80, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_up_02",
+      "filename": "pike_up_02",
       "frame": { "x": 96, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_up_03",
+      "filename": "pike_up_03",
       "frame": { "x": 112, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_right_00",
+      "filename": "pike_right_00",
       "frame": { "x": 128, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_right_01",
+      "filename": "pike_right_01",
       "frame": { "x": 144, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_right_02",
+      "filename": "pike_right_02",
       "frame": { "x": 160, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_right_03",
+      "filename": "pike_right_03",
       "frame": { "x": 176, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_left_00",
+      "filename": "pike_left_00",
       "frame": { "x": 192, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_left_01",
+      "filename": "pike_left_01",
       "frame": { "x": 208, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_left_02",
+      "filename": "pike_left_02",
       "frame": { "x": 224, "y": 64, "w": 16, "h": 16 }
     },
     {
-      "filename": "spear_left_03",
+      "filename": "pike_left_03",
       "frame": { "x": 240, "y": 64, "w": 16, "h": 16 }
     },
+    {
+      "filename": "longbow_down_00",
+      "frame": { "x": 0, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_down_01",
+      "frame": { "x": 16, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_down_02",
+      "frame": { "x": 32, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_up_00",
+      "frame": { "x": 65, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_up_01",
+      "frame": { "x": 80, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_up_02",
+      "frame": { "x": 96, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_right_00",
+      "frame": { "x": 128, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_right_01",
+      "frame": { "x": 144, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_right_02",
+      "frame": { "x": 160, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_left_00",
+      "frame": { "x": 192, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_left_01",
+      "frame": { "x": 208, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_left_02",
+      "frame": { "x": 224, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_down_attacked_00",
+      "frame": { "x": 48, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_up_attacked_00",
+      "frame": { "x": 112, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_right_attacked_00",
+      "frame": { "x": 176, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "longbow_left_attacked_00",
+      "frame": { "x": 240, "y": 96, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_down_00",
+      "frame": { "x": 0, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_down_01",
+      "frame": { "x": 16, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_down_02",
+      "frame": { "x": 32, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_up_00",
+      "frame": { "x": 65, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_up_01",
+      "frame": { "x": 80, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_up_02",
+      "frame": { "x": 96, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_right_00",
+      "frame": { "x": 128, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_right_01",
+      "frame": { "x": 144, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_right_02",
+      "frame": { "x": 160, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_left_00",
+      "frame": { "x": 192, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_left_01",
+      "frame": { "x": 208, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_left_02",
+      "frame": { "x": 224, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_down_attacked_00",
+      "frame": { "x": 48, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_up_attacked_00",
+      "frame": { "x": 112, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_right_attacked_00",
+      "frame": { "x": 176, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "catapult_left_attacked_00",
+      "frame": { "x": 240, "y": 128, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_down_00",
+      "frame": { "x": 0, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_down_01",
+      "frame": { "x": 16, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_down_02",
+      "frame": { "x": 32, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_up_00",
+      "frame": { "x": 65, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_up_01",
+      "frame": { "x": 80, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_up_02",
+      "frame": { "x": 96, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_right_00",
+      "frame": { "x": 128, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_right_01",
+      "frame": { "x": 144, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_right_02",
+      "frame": { "x": 160, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_left_00",
+      "frame": { "x": 192, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_left_01",
+      "frame": { "x": 208, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_left_02",
+      "frame": { "x": 224, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_down_attacked_00",
+      "frame": { "x": 48, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_up_attacked_00",
+      "frame": { "x": 112, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_right_attacked_00",
+      "frame": { "x": 176, "y": 160, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "cannon_left_attacked_00",
+      "frame": { "x": 240, "y": 160, "w": 16, "h": 16 }
+    },
 
     {
-      "filename": "biplane_red",
+      "filename": "red_biplane",
       "frame": { "x": 0, "y": 192, "w": 32, "h": 32 }
     },
+    {
+      "filename": "green_biplane",
+      "frame": { "x": 32, "y": 192, "w": 32, "h": 32 }
+    },
+    {
+      "filename": "yellow_biplane",
+      "frame": { "x": 64, "y": 192, "w": 32, "h": 32 }
+    },
+    {
+      "filename": "blue_biplane",
+      "frame": { "x": 96, "y": 192, "w": 32, "h": 32 }
+    },
 
     {
-      "filename": "jet_red",
+      "filename": "red_jet",
       "frame": { "x": 0, "y": 232, "w": 32, "h": 24 }
     },
+    {
+      "filename": "green_jet",
+      "frame": { "x": 32, "y": 232, "w": 32, "h": 24 }
+    },
+    {
+      "filename": "yellow_jet",
+      "frame": { "x": 64, "y": 232, "w": 32, "h": 24 }
+    },
+    {
+      "filename": "blue_jet",
+      "frame": { "x": 96, "y": 232, "w": 32, "h": 24 }
+    },
+
+    {
+      "filename": "red_nuke_up",
+      "frame": { "x": 0, "y": 256, "w": 14, "h": 26 }
+    },
+    {
+      "filename": "red_nuke_down",
+      "frame": { "x": 16, "y": 256, "w": 22, "h": 26 }
+    },
+    {
+      "filename": "green_nuke_up",
+      "frame": { "x": 48, "y": 256, "w": 14, "h": 26 }
+    },
+    {
+      "filename": "green_nuke_down",
+      "frame": { "x": 64, "y": 256, "w": 22, "h": 26 }
+    },
+    {
+      "filename": "yellow_nuke_up",
+      "frame": { "x": 96, "y": 256, "w": 14, "h": 26 }
+    },
+    {
+      "filename": "yellow_nuke_down",
+      "frame": { "x": 112, "y": 256, "w": 22, "h": 26 }
+    },
+    {
+      "filename": "blue_nuke_up",
+      "frame": { "x": 144, "y": 256, "w": 14, "h": 26 }
+    },
+    {
+      "filename": "blue_nuke_down",
+      "frame": { "x": 160, "y": 256, "w": 22, "h": 26 }
+    },
+
+    {
+      "filename": "flyingsaucer_00",
+      "frame": { "x": 0, "y": 288, "w": 32, "h": 21 }
+    },
+    {
+      "filename": "flyingsaucer_01",
+      "frame": { "x": 32, "y": 288, "w": 32, "h": 21 }
+    },
+    {
+      "filename": "flyingsaucer_03",
+      "frame": { "x": 64, "y": 288, "w": 32, "h": 21 }
+    },
+    {
+      "filename": "flyingsaucer_attacked_00",
+      "frame": { "x": 96, "y": 288, "w": 32, "h": 21 }
+    },
+
+    {
+      "filename": "red_lazer_down_01",
+      "frame": { "x": 0, "y": 320, "w": 16, "h": 14 }
+    },
+    {
+      "filename": "green_lazer_down_01",
+      "frame": { "x": 0, "y": 320, "w": 16, "h": 14 }
+    },
+    {
+      "filename": "yellow_lazer_down_01",
+      "frame": { "x": 0, "y": 320, "w": 16, "h": 14 }
+    },
+    {
+      "filename": "blue_lazer_down_01",
+      "frame": { "x": 0, "y": 368, "w": 16, "h": 14 }
+    },
+
+    
 
     {
       "filename": "stick_down_00",
@@ -209,7 +494,7 @@
     },
     {
       "filename": "stick_up_00",
-      "frame": { "x": 1, "y": 16, "w": 16, "h": 16 }
+      "frame": { "x": 16, "y": 16, "w": 16, "h": 16 }
     },
     {
       "filename": "stick_right_00",
@@ -219,23 +504,282 @@
       "filename": "stick_left_00",
       "frame": { "x": 48, "y": 16, "w": 16, "h": 16 }
     },
+    {
+      "filename": "stick_down_attacked_00",
+      "frame": { "x": 64, "y": 16, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "stick_up_attacked_00",
+      "frame": { "x": 80, "y": 16, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "stick_right_attacked_00",
+      "frame": { "x": 96, "y": 16, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "stick_left_attacked_00",
+      "frame": { "x": 112, "y": 16, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "spear_down_00",
+      "frame": { "x": 0, "y": 48, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "spear_up_00",
+      "frame": { "x": 16, "y": 48, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "spear_right_00",
+      "frame": { "x": 32, "y": 48, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "spear_left_00",
+      "frame": { "x": 48, "y": 48, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "spear_down_attacked_00",
+      "frame": { "x": 64, "y": 48, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "spear_up_attacked_00",
+      "frame": { "x": 80, "y": 48, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "spear_right_attacked_00",
+      "frame": { "x": 96, "y": 48, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "spear_left_attacked_00",
+      "frame": { "x": 112, "y": 48, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "bow_down_00",
+      "frame": { "x": 0, "y": 80, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "bow_up_00",
+      "frame": { "x": 16, "y": 80, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "bow_right_00",
+      "frame": { "x": 32, "y": 80, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "bow_left_00",
+      "frame": { "x": 48, "y": 80, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "bow_down_attacked_00",
+      "frame": { "x": 64, "y": 80, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "bow_up_attacked_00",
+      "frame": { "x": 80, "y": 80, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "bow_right_attacked_00",
+      "frame": { "x": 96, "y": 80, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "bow_left_attacked_00",
+      "frame": { "x": 112, "y": 80, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "oil_down_00",
+      "frame": { "x": 0, "y": 112, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "oil_up_00",
+      "frame": { "x": 16, "y": 112, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "oil_right_00",
+      "frame": { "x": 32, "y": 112, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "oil_left_00",
+      "frame": { "x": 48, "y": 112, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "oil_down_attacked_00",
+      "frame": { "x": 64, "y": 112, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "oil_up_attacked_00",
+      "frame": { "x": 80, "y": 112, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "oil_right_attacked_00",
+      "frame": { "x": 96, "y": 112, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "oil_left_attacked_00",
+      "frame": { "x": 112, "y": 112, "w": 16, "h": 16 }
+    },
+
+    
+    {
+      "filename": "crossbow_down_00",
+      "frame": { "x": 0, "y": 144, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "crossbow_up_00",
+      "frame": { "x": 16, "y": 144, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "crossbow_right_00",
+      "frame": { "x": 32, "y": 144, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "crossbow_left_00",
+      "frame": { "x": 48, "y": 144, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "crossbow_down_attacked_00",
+      "frame": { "x": 64, "y": 144, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "crossbow_up_attacked_00",
+      "frame": { "x": 80, "y": 144, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "crossbow_right_attacked_00",
+      "frame": { "x": 96, "y": 144, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "crossbow_left_attacked_00",
+      "frame": { "x": 112, "y": 144, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rifle_down_00",
+      "frame": { "x": 0, "y": 176, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rifle_up_00",
+      "frame": { "x": 16, "y": 176, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rifle_right_00",
+      "frame": { "x": 32, "y": 176, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rifle_left_00",
+      "frame": { "x": 48, "y": 176, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rifle_down_attacked_00",
+      "frame": { "x": 64, "y": 176, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rifle_up_attacked_00",
+      "frame": { "x": 80, "y": 176, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rifle_right_attacked_00",
+      "frame": { "x": 96, "y": 176, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rifle_left_attacked_00",
+      "frame": { "x": 112, "y": 176, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "machinegun_down_00",
+      "frame": { "x": 128, "y": 192, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "machinegun_up_00",
+      "frame": { "x": 144, "y": 192, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "machinegun_right_00",
+      "frame": { "x": 160, "y": 192, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "machinegun_left_00",
+      "frame": { "x": 176, "y": 192, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "machinegun_down_attacked_00",
+      "frame": { "x": 192, "y": 192, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "machinegun_up_attacked_00",
+      "frame": { "x": 208, "y": 192, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "machinegun_right_attacked_00",
+      "frame": { "x": 224, "y": 192, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "machinegun_left_attacked_00",
+      "frame": { "x": 240, "y": 192, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rocketlaucher_down_00",
+      "frame": { "x": 224, "y": 240, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rocketlaucher_up_00",
+      "frame": { "x": 240, "y": 240, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rocketlaucher_right_00",
+      "frame": { "x": 288, "y": 224, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rocketlaucher_left_00",
+      "frame": { "x": 304, "y": 224, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rocketlaucher_down_attacked_00",
+      "frame": { "x": 256, "y": 240, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rocketlaucher_up_attacked_00",
+      "frame": { "x": 274, "y": 240, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rocketlaucher_right_attacked_00",
+      "frame": { "x": 290, "y": 240, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "rocketlaucher_left_attacked_00",
+      "frame": { "x": 306, "y": 240, "w": 16, "h": 16 }
+    },
+
 
 
     {
-      "filename": "stone_projectile_00",
+      "filename": "rock_projectile_00",
       "frame": { "x": 272, "y": 16, "w": 11, "h": 8 }
     },
     {
-      "filename": "stone_projectile_01",
+      "filename": "rock_projectile_01",
       "frame": { "x": 288, "y": 16, "w": 11, "h": 8 }
     },
     {
-      "filename": "stone_projectile_02",
+      "filename": "rock_projectile_02",
       "frame": { "x": 272, "y": 24, "w": 11, "h": 8 }
     },
     {
-      "filename": "stone_projectile_03",
+      "filename": "rock_projectile_03",
       "frame": { "x": 288, "y": 24, "w": 11, "h": 8 }
+    },
+    {
+      "filename": "stick_projectile_00",
+      "frame": { "x": 254, "y": 0, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "stick_projectile_01",
+      "frame": { "x": 270, "y": 0, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "stick_projectile_02",
+      "frame": { "x": 286, "y": 0, "w": 16, "h": 16 }
+    },
+    {
+      "filename": "stick_projectile_03",
+      "frame": { "x": 304, "y": 0, "w": 16, "h": 16 }
     }
   ],
   "meta": {

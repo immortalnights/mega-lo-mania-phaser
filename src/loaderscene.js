@@ -34,7 +34,6 @@ export default class LoaderScene extends Phaser.Scene
     this.load.image('paletteswap-template', '/link-palette.png')
 
     this.load.image('sunrise', './mlm_sunrise.png')
-
   }
 
   create()

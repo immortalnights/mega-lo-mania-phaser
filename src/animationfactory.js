@@ -1,4 +1,4 @@
-import { Teams, UnitTypes } from './defines.js'
+import { Teams } from './defines.js'
 import paletteSwap from './paletteswap.js'
 
 const WALK_ANIMATION_FRAMERATE = 12
@@ -80,11 +80,25 @@ export const createUnitAnimations = scene => {
   })
 
   Object.values(Teams).forEach(team => {
-    Object.values(UnitTypes).forEach(unit => {
+    const unitTypes = [ 'rock', 'sling', 'pike', 'longbow', 'catapult', 'cannon' ]
+    Object.values(unitTypes).forEach(unit => {
       createUnitAnimationSet(scene.anims, 'mlm_units', team, unit)
     })
   })
 }
+
+// export const DefenderUnitTypes = {
+//   STICK: 'stick',
+//   // SPEAR: 'spear',
+//   // BOW: 'bow',
+//   // OIL: 'oil',
+//   // CROSSBOW: 'crossbow',
+//   RIFLE: 'rifle',
+//   // MACHINE_GUN: 'machinegun',
+//   // ROCKET_LAUNCHER: 'rocketlauncher',
+//   // ANTI_NUKE: 'antinuke',
+//   // LASER: 'laser',
+// }
 
 export const createSpawnAnimation = scene => {
   scene.anims.create({

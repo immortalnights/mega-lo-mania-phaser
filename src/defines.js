@@ -17,38 +17,8 @@ export const Teams = {
   BLUE: 'blue',
 }
 
-export const UnitTypes = {
-  STONE: 'stone',
-  ROCK: 'rock',
-  // SLING: 'sling',
-  PIKE: 'pike',
-  // BOW_AND_ARROW: 'longbow',
-  // CATAPULT: 'catapult',
-  // CANNON: 'cannon',
-  // BIPLANE: 'biplane',
-  JET: 'jet',
-  // NUKE: 'nuke',
-  // FLYING_SAUCER: 'flyingsaucer',
-}
-
 // Cloned for new armies
 export const unitSet = {}
-Object.keys(UnitTypes).forEach(k => {
-  unitSet[k.toLowerCase()] = 0
-})
-
-export const DefenderUnitTypes = {
-  STICK: 'stick',
-  // SPEAR: 'spear',
-  // BOW: 'bow',
-  // OIL: 'oil',
-  // CROSSBOW: 'crossbow',
-  RIFLE: 'rifle',
-  // MACHINE_GUN: 'machinegun',
-  // ROCKET_LAUNCHER: 'rocketlauncher',
-  // ANTI_NUKE: 'antinuke',
-  // LASER: 'laser',
-}
 
 export const BuildingTypes = {
   CASTLE: 'castle',
