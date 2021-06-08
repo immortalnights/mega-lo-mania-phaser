@@ -340,7 +340,7 @@ export default class Arena extends Phaser.Scene
 
       const color = COLORS[team]
 
-      const deplyButton = this.add.text(textXOffset + (index * 75), yOffset + 30, "Deply", { color: color })
+      const deplyButton = this.add.text(textXOffset + (index * 75), yOffset + 30, "Deploy", { color: color })
       deplyButton.setOrigin(0.5, 1)
       deplyButton.setInteractive()
       deplyButton.on(Phaser.Input.Events.POINTER_DOWN, () => {

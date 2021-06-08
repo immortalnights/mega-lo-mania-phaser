@@ -38,10 +38,11 @@ export default class GroundUnit extends Phaser.Physics.Arcade.Sprite
     this.state = config.spawn ? UnitStates.SPAWNING : UnitStates.WANDERING
 
     // Do something different after 0.5s to 2s
-    // this.cooldown = Phaser.Math.RND.between(500, 2000)
-    // this.lastAttack = 0
+    this.cooldown = Phaser.Math.RND.between(500, 2000)
+    this.lastAttack = 0
 
     const onSpawnCompleted = function() {
+      this.state = UnitStates.WANDERING
       this.setTexture(this.type === 'stone' ? `mlm_icons-${this.team}` : `mlm_units-${this.team}`)
       this.changeDirection()
     }
