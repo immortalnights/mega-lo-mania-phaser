@@ -1,7 +1,8 @@
 import Phaser from 'phaser'
-import Unit from './island/unit'
+import Unit, { FlyingUnit, NuclearMissile } from './island/unit'
 import ValueControl from './components/valuecontrol'
 import { Teams, UserEvents } from './defines'
+import GroundUnit from './island/unit'
 
 // Render no more then this amount of sprites
 const ARMY_SPRITE_LIMIT = 250
@@ -129,7 +130,7 @@ class Army extends Phaser.Physics.Arcade.Group
 
     const currentSprites = {}
     this.getChildren().forEach(child => {
-      const type = child.unitType
+      const type = child.type
       if (currentSprites[type] == null)
       {
         currentSprites[type] = 0
@@ -149,7 +150,8 @@ class Army extends Phaser.Physics.Arcade.Group
         // add some sprites
         for (let i = 0; i < diff; i++)
         {
-          this.add(new Unit(this.scene, 150, 150, { type: key, team: this.team, spawn: true }), true)
+          const pos = this.zone.getRandomPoint()
+          const u = this.add(this.spawn(key, this.team, true), true)
         }
       }
       else if (diff < 0)
@@ -157,6 +159,83 @@ class Army extends Phaser.Physics.Arcade.Group
         // kill some sprites
       }
     }
+  }
+
+  /**
+   * 
+   * @param {String} type 
+   * @param {String} team 
+   * @param {Boolean} spawn true if the unit should play the spawn animation
+   */
+  spawn(type, team, spawn=false)
+  {
+    let unit = undefined
+
+    switch (type)
+    {
+      case 'stone':
+      case 'rock':
+      case 'sling':
+      case 'pike':
+      case 'longbow':
+      case 'catapult':
+      case 'cannon':
+      {
+        // Spawn at a random location within the movement zone
+        const pos = this.zone.getRandomPoint()
+        unit = new GroundUnit(this.scene, pos.x, pos.y, {
+          type,
+          team,
+          spawn
+        })
+
+        if (this.zone instanceof Phaser.Geom.Rectangle)
+        {
+          unit.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, (obj) => {
+            obj.setCollideWorldBounds(true)
+            obj.body.setBoundsRectangle(this.zone)
+          })
+        }
+        break
+      }
+      case 'biplane':
+      case 'jet':
+      case 'flyingsaucer':
+      {
+        // Spawn at a random location off screen
+        const pos = { x: 0, y: 0 }
+        unit = new FlyingUnit(this.scene, pos.x, pos.y, {
+          type,
+          team
+        })
+        const line = Phaser.Geom.Line.Clone(this.scene.flyingUnitSpawn.geom)
+        line.x = this.scene.flyingUnitSpawn.x
+        line.y = this.scene.flyingUnitSpawn.y
+        Phaser.Actions.RandomLine([ unit ], line)
+        unit.x += line.x
+        unit.y += line.y
+        console.log(unit.x, unit.y)
+        break
+      }
+      case 'nuke':
+      {
+        // Spawn at the sector castle location
+        const canvas = this.scene.sys.game.canvas
+        const pos = { x: canvas.width / 2, y: canvas.height / 2 }
+        unit = new NuclearMissile(this.scene, pos.x, pos.y, {
+          type,
+          team
+        })
+        break
+      }
+      default:
+      {
+        console.error(`Unhandled unit type '${type}'`)
+        break
+      }
+    }
+
+    return unit
   }
 }
 
@@ -192,17 +271,28 @@ export default class Arena extends Phaser.Scene
     console.log("Arena.create")
     const { width, height } = this.sys.game.canvas
 
+    this.cameras.main.setBackgroundColor('#444444')
+
     this.armyInHand = new Army(this)
     this.armyInHand.setActive(false)
     this.armyInHand.name = 'ArmyInHand'
-
+    
     this.armies = {}
     
-    const yOffset = 260
+    const yOffset = height - 40
     
-    const area = this.add.arc(width / 2, height / 2 - 25, 120)
+    const radius = 120
+    const area = this.add.rectangle(width / 2, radius + 20, radius * 2, radius * 2)
     area.setStrokeStyle(1, 0xddddff, 1)
-    const zone = null // area.geom()
+
+    this.flyingUnitSpawn = this.add.line(width + 25, height + 25, 0, 100, 100, 0, 0xddddff, 1)
+
+    // This isn't nice, but it works...
+    const zone = Phaser.Geom.Rectangle.Clone(area.geom)
+    zone.x = area.x - 10
+    zone.y = area.y - 10
+    zone.x -= radius
+    zone.y -= radius
 
     // Create icons
     const technologies = this.game.cache.json.get('technologies')
