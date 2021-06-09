@@ -271,19 +271,26 @@ export default class Arena extends Phaser.Scene
     console.log("Arena.create")
     const { width, height } = this.sys.game.canvas
 
-    this.cameras.main.setBackgroundColor('#444444')
+    this.cameras.main.setBackgroundColor('#222222')
+
+    this.data.set('activeTeam', null)
 
     this.armyInHand = new Army(this)
     this.armyInHand.setActive(false)
     this.armyInHand.name = 'ArmyInHand'
-    
+
     this.armies = {}
-    
-    const yOffset = height - 40
-    
-    const radius = 120
-    const area = this.add.rectangle(width / 2, radius + 20, radius * 2, radius * 2)
+    const shields = []
+    const counters = []
+
+    const radius = 160
+    const area = this.add.rectangle(width - radius - 40, radius + 40, radius * 2, radius * 2)
     area.setStrokeStyle(1, 0xddddff, 1)
+    area.setFillStyle(0x004400, 1)
+    area.setInteractive()
+    area.on(Phaser.Input.Events.POINTER_DOWN, () => {
+      this.deplyInHandArmy(this.data.get('activeTeam'))
+    })
 
     this.flyingUnitSpawn = this.add.line(width + 25, height + 25, 0, 100, 100, 0, 0xddddff, 1)
 
@@ -297,31 +304,50 @@ export default class Arena extends Phaser.Scene
     // Create icons
     const technologies = this.game.cache.json.get('technologies')
 
-    const offenseTechnologies = technologies.filter(technology => technology.category === 'offense')
-    const xOffset = (width / 2) - ((offenseTechnologies.length * 34) / 2)
-    console.log(offenseTechnologies.length, xOffset)
+    const offenseTechnologies = technologies.filter(technology => technology.category === 'offense' && technology.id != 'nuke')
+    const defenseTechnologies = technologies.filter(technology => technology.category === 'defense')
 
-    const technologyButtons = []
+    const spacing = 28
+    const yOffset = 40
+    const xOffset = 30
+
+    const offensiveButtons = []
     offenseTechnologies.forEach((technology, index) => {
-      const vc = this.add.existing(new ValueControl(this, xOffset + (index * 34), yOffset, technology.blueprintIcon, 0))
+      const x = xOffset + ((index % 2) * spacing)
+      const y = yOffset + 40 + (Math.floor(index / 2) * spacing)
+      const vc = this.add.existing(new ValueControl(this, x, y, technology.blueprintIcon, 0))
       vc.name = technology.id
       vc.on(UserEvents.VALUE_CHANGE, inc => {
         this.armyInHand.deply({ [technology.id]: inc })
       })
 
-      technologyButtons.push(vc)
+      offensiveButtons.push(vc)
+    })
+
+    const defensiveButtons = []
+    defenseTechnologies.forEach((technology, index) => {
+      const x = xOffset + ((index % 2) * spacing)
+      const y = yOffset + 200 + (Math.floor(index / 2) * (spacing - 8))
+      const sprite = this.add.sprite(x, y, 'mlm_icons', technology.blueprintIcon)
+      sprite.name = technology.id
+      sprite.setInteractive()
+      sprite.on(Phaser.Input.Events.POINTER_DOWN, () => {
+        
+      })
+
+      defensiveButtons.push(sprite)
     })
 
     this.armyInHand.on(Phaser.Data.Events.CHANGE_DATA, (obj, name, val, prev  ) => {
       console.log(obj.name, name, val, prev)
 
-      const vc = technologyButtons.find(vc => vc.name === name)
+      const vc = offensiveButtons.find(vc => vc.name === name)
       vc.setValue(val)
     })
     this.armyInHand.on(Phaser.Data.Events.REMOVE_DATA, (obj, name, val, prev  ) => {
       console.log(obj.name, name, val, prev)
 
-      const vc = technologyButtons.find(vc => vc.name === name)
+      const vc = offensiveButtons.find(vc => vc.name === name)
       vc.setValue(val)
     })
 
@@ -332,23 +358,45 @@ export default class Arena extends Phaser.Scene
       [Teams.BLUE]: '#0000ff',
     }
 
-    const textXOffset = (width / 2) - 125
+    const activeTeamText = this.add.text(area.x, area.y + radius, ``).setOrigin(0.5, 0)
+    const marker = this.add.image(0, 0, 'mlm_icons', 'sector_selected_icon')
+    marker.setVisible(false)
+
+    this.events.on('changedata-activeTeam', (obj, val, prev) => {
+      activeTeamText.setText(`Deploy as ${val} team`)
+      activeTeamText.setColor(COLORS[val])
+
+      const shield = shields.find(item => item.name === val)
+      marker.setPosition(shield.x, shield.y - 1).setVisible(true)
+    })
+
+    // const textXOffset = (width / 2) - 125
     Object.values(Teams).forEach((team, index) => {
-      // Create deployed army
       this.armies[team] = new Army(this, zone, team)
       this.armies[team].name = `${team}Army`
 
-      const color = COLORS[team]
-
-      const deplyButton = this.add.text(textXOffset + (index * 75), yOffset + 30, "Deploy", { color: color })
-      deplyButton.setOrigin(0.5, 1)
-      deplyButton.setInteractive()
-      deplyButton.on(Phaser.Input.Events.POINTER_DOWN, () => {
-        this.deplyInHandArmy(team)
+      const shield = this.add.image(xOffset / 1.5 + (index * 18), yOffset, 'mlm_icons', `team_shield_${team}`)
+      shield.name = team
+      shield.setInteractive()
+      shield.on(Phaser.Input.Events.POINTER_DOWN, () => {
+        this.data.set('activeTeam', team)
       })
+      shields.push(shield)
+
+      const armyCount = this.add.text(area.x - 95 + (index * 60), 20, '000', { color: COLORS[team] })
+      armyCount.name = team
+      counters.push(armyCount)
     })
 
-    // console.log(deplyButton.x, deplyButton.y)
+    this.data.set('activeTeam', 'red')
+
+    this.debugText = this.add.text(5, height - 16, '')
+  }
+
+  update()
+  {
+    const pointer = this.input.activePointer
+    this.debugText.setText(`${pointer.x.toFixed(1)}, ${pointer.y.toFixed(1)}`)
   }
 
   deplyInHandArmy(team)

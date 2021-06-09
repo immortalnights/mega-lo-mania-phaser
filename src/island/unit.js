@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { textChangeRangeIsUnchanged } from 'typescript'
 import { Teams, UnitTypes } from '../defines.js'
 
 const UNIT_WALK_VELOCITY = 20
@@ -21,9 +22,76 @@ const PROJECTILE_MULTIPLIER = new Phaser.Math.Vector2({
   y: 6
 })
 
+const SpawnComponent = {
+  spawn()
+  {
+    return new Promise((resolve, reject) => {
+      this.state = UnitStates.SPAWNING
+      this.setTexture('mlm_icons')
+      this.setFrame('spawn_00')
+
+      this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, () => {
+        this.once('animationcomplete', resolve, this)
+        this.play('spawn', true)
+      })
+    })
+  },
+
+  despawn(dead)
+  {
+    return new Promise((resolve, reject) => {
+      if (dead)
+      {
+        this.once('animationcomplete', resolve, this)
+        this.play('despawn', true)
+      }
+      else
+      {
+        this.once('animationcomplete', resolve, this)
+        this.playReverse('spawn', true)
+      }
+    })
+  }
+}
+
 export class DefenseUnit extends Phaser.GameObjects.Sprite
 {
+  constructor(scene, x, y, config)
+  {
+    super(scene, x, y, undefined, undefined)
 
+    this.type = config.type
+    this.team = config.team
+    this.direction = ''
+    this.state = config.spawn
+
+    Object.assign(this, SpawnComponent)
+
+    this.cooldown = Phaser.Math.RND.between(500, 2000)
+    this.lastAttack = 0
+
+    const onSpawned = () => {
+      this.state = UnitStates.WANDERING
+      this.setTexture(`mlm_units-${this.team}`)
+      this.changeDirection()
+    }
+
+    if (config.spawn)
+    {
+      this.spawn().then(onSpawned)
+    }
+    else
+    {
+      this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, onSpawn, this)
+    }
+  }
+
+  changeDirection()
+  {
+    // stick_down_00
+    
+    this.setFrame(`${this.type}_${this.direction}_00`)
+  }
 }
 
 export default class GroundUnit extends Phaser.Physics.Arcade.Sprite
@@ -37,11 +105,13 @@ export default class GroundUnit extends Phaser.Physics.Arcade.Sprite
     this.direction = ''
     this.state = config.spawn ? UnitStates.SPAWNING : UnitStates.WANDERING
 
+    Object.assign(this, SpawnComponent)
+
     // Do something different after 0.5s to 2s
     this.cooldown = Phaser.Math.RND.between(500, 2000)
     this.lastAttack = 0
 
-    const onSpawnCompleted = function() {
+    const onSpawned = () => {
       this.state = UnitStates.WANDERING
       this.setTexture(this.type === 'stone' ? `mlm_icons-${this.team}` : `mlm_units-${this.team}`)
       this.changeDirection()
@@ -49,17 +119,11 @@ export default class GroundUnit extends Phaser.Physics.Arcade.Sprite
 
     if (config.spawn)
     {
-      this.state = UnitStates.SPAWNING
-      this.setTexture('mlm_icons')
-      this.setFrame('spawn_00')
-      this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, () => {
-        this.once('animationcomplete', onSpawnCompleted, this)
-        this.play('spawn', true)
-      })
+      this.spawn().then(onSpawned)
     }
     else
     {
-      this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, onSpawnCompleted, this)
+      this.once(Phaser.GameObjects.Events.ADDED_TO_SCENE, onSpawn, this)
     }
   }
 
@@ -169,22 +233,6 @@ export default class GroundUnit extends Phaser.Physics.Arcade.Sprite
     this.body.setVelocity(x, y)
 
     this.play(`${this.team}_${this.type}_walk_${this.direction}`, true)
-  }
-
-  despawn(dead)
-  {
-    return new Promise((resolve, reject) => {
-      if (dead)
-      {
-        this.once('animationcomplete', resolve())
-        this.play('despawn', true)
-      }
-      else
-      {
-        this.once('animationcomplete', resolve())
-        this.playReverse('spawn', true)
-      }
-    })
   }
 }
 

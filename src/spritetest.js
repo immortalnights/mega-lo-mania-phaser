@@ -20,5 +20,13 @@ export default class SpriteTest extends Scene
     sprites.frames.forEach(frame => {
       this.add.image(2 + (frame.frame.w / 2) + frame.frame.x, 2 + (frame.frame.h / 2) + frame.frame.y, 'mlm_units', frame.filename)
     })
+
+    this.debugText = this.add.text(0, height - 20, '')
+  }
+
+  update()
+  {
+    const pointer = this.input.activePointer
+    this.debugText.setText(`${pointer.x.toFixed(1)}, ${pointer.y.toFixed(1)}`)
   }
 }
