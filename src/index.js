@@ -12,11 +12,11 @@ import Sandbox from './sandbox'
 
 const config = {
   type: Phaser.WEBGL,
-  width: 450, // 320,
-  height: 300, // 200,
+  width: 365,
+  height: 220,
   zoom: 3,
   scene: [
-    () => {
+    function() {
       const initData = {
         setup: {
           island: {
